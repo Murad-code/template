@@ -207,6 +207,10 @@ This email verification flow prevents unauthorized access to order details. The 
 
 **Security note:** Order confirmation emails should include the order ID so guests can use the "Find Order" feature. The access token is only sent via the verification email to prevent enumeration attacks.
 
+### Refunds
+
+Admins can refund an order from the order edit view in the admin panel (sidebar "Refund order" button). This calls the Stripe refund API and updates the order status to `refunded`. Optional: set `refundAmount` for partial refunds via `POST /api/orders/[orderId]/refund` with body `{ "amount": cents }`.
+
 ### Invoices
 
 Admins can download an invoice PDF for any order. Set `SMTP_*` in `.env` to enable order access and form emails. Set `COMPANY_NAME` and optionally `COMPANY_ADDRESS` (and `SITE_NAME`) for invoice branding. Download: `GET /api/invoices/[orderId]` when logged in as admin (or use a "Download invoice" link from the order detail page pointing to this URL).

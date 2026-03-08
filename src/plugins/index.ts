@@ -114,6 +114,34 @@ export const plugins: Plugin[] = [
               ],
             },
           },
+          {
+            name: 'refundedAt',
+            type: 'date',
+            admin: {
+              position: 'sidebar',
+              readOnly: true,
+              description: 'Set when order is refunded via Stripe.',
+            },
+          },
+          {
+            name: 'refundAmount',
+            type: 'number',
+            admin: {
+              position: 'sidebar',
+              readOnly: true,
+              description: 'Refunded amount in cents (for partial refunds).',
+            },
+          },
+          {
+            name: 'refundAction',
+            type: 'ui',
+            admin: {
+              position: 'sidebar',
+              components: {
+                Field: '@/components/OrderRefundButton#OrderRefundButton',
+              },
+            },
+          },
         ],
       }),
     },
