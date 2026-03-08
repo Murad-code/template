@@ -24,7 +24,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
   ...defaultCollection,
   admin: {
     ...defaultCollection?.admin,
-    defaultColumns: ['title', 'enableVariants', '_status', 'variants.variants'],
+    defaultColumns: ['title', 'inventory', 'lowStockThreshold', 'enableVariants', '_status', 'variants.variants'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -164,6 +164,15 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
               },
               hasMany: true,
               relationTo: 'products',
+            },
+            {
+              name: 'lowStockThreshold',
+              type: 'number',
+              admin: {
+                position: 'sidebar',
+                description: 'Show low-stock warning when inventory is at or below this value. Used for admin visibility and optional alerts.',
+              },
+              defaultValue: 10,
             },
           ],
           label: 'Product Details',

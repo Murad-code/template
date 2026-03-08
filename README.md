@@ -105,7 +105,7 @@ See the [Collections](https://payloadcms.com/docs/configuration/collections) doc
 
 - ### Products and Variants
 
-  Primary collections for product details such as pricing per currency and optionally supports variants per product. Added by the [ecommerce plugin](https://payloadcms.com/docs/ecommerce/plugin#products).
+  Primary collections for product details such as pricing per currency and optionally supports variants per product. Added by the [ecommerce plugin](https://payloadcms.com/docs/ecommerce/plugin#products). Each product (or variant) has **inventory**; optional **low stock threshold** (`lowStockThreshold`) can be set so the admin list shows when stock is at or below that value. Cart and checkout enforce inventory (no over-sale).
 
 ### Globals
 

@@ -308,6 +308,10 @@ export interface Product {
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
   relatedProducts?: (number | Product)[] | null;
+  /**
+   * Show low-stock warning when inventory is at or below this value. Used for admin visibility and optional alerts.
+   */
+  lowStockThreshold?: number | null;
   meta?: {
     title?: string | null;
     /**
@@ -1717,6 +1721,7 @@ export interface ProductsSelect<T extends boolean = true> {
   priceInUSDEnabled?: T;
   priceInUSD?: T;
   relatedProducts?: T;
+  lowStockThreshold?: T;
   meta?:
     | T
     | {
