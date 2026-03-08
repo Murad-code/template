@@ -207,6 +207,10 @@ This email verification flow prevents unauthorized access to order details. The 
 
 **Security note:** Order confirmation emails should include the order ID so guests can use the "Find Order" feature. The access token is only sent via the verification email to prevent enumeration attacks.
 
+### Invoices
+
+Admins can download an invoice PDF for any order. Set `SMTP_*` in `.env` to enable order access and form emails. Set `COMPANY_NAME` and optionally `COMPANY_ADDRESS` (and `SITE_NAME`) for invoice branding. Download: `GET /api/invoices/[orderId]` when logged in as admin (or use a "Download invoice" link from the order detail page pointing to this URL).
+
 ## Currencies
 
 By default the template ships with support only for USD however you can change the supported currencies via the [plugin configuration](https://payloadcms.com/docs/ecommerce/plugin#currencies). You will need to ensure that the supported currencies in Payload are also configured in your Payment platforms.

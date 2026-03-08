@@ -8,6 +8,8 @@ export type ProjectType = 'ecommerce' | 'booking' | 'hybrid'
 export interface SiteConfig {
   siteName: string
   companyName: string
+  /** Optional address lines for invoices (e.g. "123 Main St", "City, Country") */
+  companyAddress?: string
   serverURL: string
   projectType: ProjectType
   enableBooking: boolean
@@ -36,6 +38,7 @@ export function getSiteConfig(): SiteConfig {
   return {
     siteName: process.env.SITE_NAME || 'Payload Commerce',
     companyName: process.env.COMPANY_NAME || process.env.SITE_NAME || '',
+    companyAddress: process.env.COMPANY_ADDRESS || undefined,
     serverURL,
     projectType: parseProjectType(process.env.PROJECT_TYPE),
     enableBooking: process.env.ENABLE_BOOKING === 'true',

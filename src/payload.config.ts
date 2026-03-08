@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import {
   BoldFeature,
   EXPERIMENTAL_TableFeature,
@@ -24,6 +25,24 @@ import { plugins } from './plugins'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const emailAdapter =
+  process.env.SMTP_HOST && process.env.SMTP_FROM_EMAIL
+    ? await nodemailerAdapter({
+        defaultFromAddress: process.env.SMTP_FROM_EMAIL,
+        defaultFromName: process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site',
+        transportOptions: {
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || '587', 10),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth:
+            process.env.SMTP_USER && process.env.SMTP_PASS
+              ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+              : undefined,
+        },
+        skipVerify: true,
+      })
+    : undefined
 
 export default buildConfig({
   admin: {
@@ -78,7 +97,7 @@ export default buildConfig({
       ]
     },
   }),
-  //email: nodemailerAdapter(),
+  email: emailAdapter,
   endpoints: [],
   globals: [Header, Footer],
   plugins,
