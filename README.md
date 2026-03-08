@@ -168,8 +168,14 @@ Create unique page layouts for any type of content using a powerful layout build
 - Media
 - Call To Action
 - Archive
+- Carousel
+- Three Item Grid
+- Banner
+- Form
+- **FAQ** – accordion of question/answer items
+- **Features** – grid of feature title + description cards
 
-Each block is fully designed and built into the front-end website that comes with this template. See [Website](#website) for more details.
+Each block is fully designed and built into the front-end website that comes with this template. Frontend UI components live in `src/components/ui` (buttons, cards, accordion, input, etc.) and are themed via CSS variables from `src/config/theme.ts`. See [Website](#website) for more details.
 
 ## Lexical editor
 
