@@ -53,6 +53,14 @@ That's it! Changes made in `./src` will be reflected in your app. Follow the on-
 
 **Production deployment:** We recommend deploying this template as a **Docker container on a VPS/VM** for a robust, repeatable setup without serverless cold starts. See [Deployment](#deployment) and `docs/DEPLOYMENT.md` (when available) for the Dockerfile and docker-compose setup.
 
+## Customising for a new client (template use)
+
+After cloning this template for a new project:
+
+1. **Branding**: Set `SITE_NAME`, `COMPANY_NAME`, and server URLs in `.env`. Replace `public/favicon.ico` and `public/favicon.svg` (and header logo if desired) with the client’s assets.
+2. **Theme**: Colours and fonts are driven by `src/config/theme.ts`. The default palette matches the current design; edit that file to change primary/accent colours (oklch values). Optional env: `FONT_SANS`, `FONT_MONO` (preset keys; default `geist`).
+3. **Project type**: Set `PROJECT_TYPE=ecommerce|booking|hybrid` and feature flags (`ENABLE_BOOKING`, `ENABLE_INVOICES`) as needed.
+
 ## How it works
 
 The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:

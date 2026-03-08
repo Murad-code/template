@@ -8,10 +8,17 @@ import { ensureStartsWith } from '@/utilities/ensureStartsWith'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getSiteConfig } from '@/config/site'
+import { getThemeConfig } from '@/config/theme'
+import { ThemeStyles } from '@/components/ThemeStyles'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import React from 'react'
 import './globals.css'
+
+const fontMap = {
+  sans: { geist: GeistSans },
+  mono: { geist: GeistMono },
+} as const
 
 export async function generateMetadata() {
   const { siteName, serverURL, twitterCreator: rawCreator, twitterSite: rawSite } = getSiteConfig()
@@ -40,14 +47,19 @@ export async function generateMetadata() {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const { fontSans, fontMono } = getThemeConfig()
+  const SansFont = fontMap.sans[fontSans as keyof typeof fontMap.sans] ?? GeistSans
+  const MonoFont = fontMap.mono[fontMono as keyof typeof fontMap.mono] ?? GeistMono
+
   return (
     <html
-      className={[GeistSans.variable, GeistMono.variable].filter(Boolean).join(' ')}
+      className={[SansFont.variable, MonoFont.variable].filter(Boolean).join(' ')}
       lang="en"
       suppressHydrationWarning
     >
       <head>
         <InitTheme />
+        <ThemeStyles />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
