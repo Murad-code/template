@@ -76,6 +76,7 @@ export interface Config {
     pages: Page;
     categories: Category;
     media: Media;
+    bookings: Booking;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -109,6 +110,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -132,11 +134,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'blocked-dates': BlockedDate;
+    'booking-settings': BookingSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'blocked-dates': BlockedDatesSelect<false> | BlockedDatesSelect<true>;
+    'booking-settings': BookingSettingsSelect<false> | BookingSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1119,6 +1123,28 @@ export interface Address {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  /**
+   * Leave empty for guest bookings.
+   */
+  customer?: (number | null) | User;
+  guestEmail: string;
+  guestName?: string | null;
+  slotDate: string;
+  /**
+   * Time slot (e.g. "09:00").
+   */
+  slotTime: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1173,6 +1199,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1484,6 +1514,21 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  customer?: T;
+  guestEmail?: T;
+  guestName?: T;
+  slotDate?: T;
+  slotTime?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1960,6 +2005,29 @@ export interface BlockedDate {
   createdAt?: string | null;
 }
 /**
+ * Configure availability and slot duration. Used when booking is enabled (ENABLE_BOOKING or PROJECT_TYPE=booking|hybrid).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-settings".
+ */
+export interface BookingSetting {
+  id: number;
+  /**
+   * Length of each bookable slot in minutes.
+   */
+  slotDurationMinutes: number;
+  /**
+   * Start hour (0–23) for generating slots.
+   */
+  defaultStartHour: number;
+  /**
+   * End hour (0–23) for generating slots.
+   */
+  defaultEndHour: number;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2018,6 +2086,18 @@ export interface BlockedDatesSelect<T extends boolean = true> {
         reason?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-settings_select".
+ */
+export interface BookingSettingsSelect<T extends boolean = true> {
+  slotDurationMinutes?: T;
+  defaultStartHour?: T;
+  defaultEndHour?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

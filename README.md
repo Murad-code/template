@@ -123,6 +123,14 @@ See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for de
 
   Date ranges when the business is closed or bookings are disabled. Managed in Admin → Globals → Blocked dates. Used by the booking flow (when enabled) to hide slots. Exposed as `GET /api/blocked-dates` for the frontend.
 
+- `Booking settings`
+
+  When booking is enabled (`ENABLE_BOOKING=true` or `PROJECT_TYPE=booking|hybrid`): slot duration and default start/end hours for generating available slots. Managed in Admin → Globals → Booking settings.
+
+- `Bookings`
+
+  Collection for booking records (customer, guest email/name, slot date/time, status). Admins manage in Admin → Bookings. Frontend booking flow at `/book` (only when booking is enabled). Add a "Book" link in Header nav (Admin → Globals → Header) when using booking.
+
 ## Access control
 
 Basic access control is setup to limit access to various content based based on publishing status.

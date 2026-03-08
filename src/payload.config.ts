@@ -15,11 +15,13 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { Bookings } from '@/collections/Bookings'
 import { Categories } from '@/collections/Categories'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { Users } from '@/collections/Users'
 import { BlockedDates } from '@/globals/BlockedDates'
+import { BookingSettings } from '@/globals/BookingSettings'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
@@ -57,7 +59,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media],
+  collections: [Users, Pages, Categories, Media, Bookings],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
@@ -100,7 +102,7 @@ export default buildConfig({
   }),
   email: emailAdapter,
   endpoints: [],
-  globals: [Header, Footer, BlockedDates],
+  globals: [Header, Footer, BlockedDates, BookingSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

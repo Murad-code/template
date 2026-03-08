@@ -13,6 +13,8 @@ export interface SiteConfig {
   serverURL: string
   projectType: ProjectType
   enableBooking: boolean
+  /** True when booking is enabled via ENABLE_BOOKING or PROJECT_TYPE=booking|hybrid */
+  bookingEnabled: boolean
   enableInvoices: boolean
   twitterCreator?: string
   twitterSite?: string
@@ -42,6 +44,9 @@ export function getSiteConfig(): SiteConfig {
     serverURL,
     projectType: parseProjectType(process.env.PROJECT_TYPE),
     enableBooking: process.env.ENABLE_BOOKING === 'true',
+    bookingEnabled:
+      process.env.ENABLE_BOOKING === 'true' ||
+      ['booking', 'hybrid'].includes(parseProjectType(process.env.PROJECT_TYPE)),
     enableInvoices: process.env.ENABLE_INVOICES !== 'false',
     twitterCreator: twitterCreator || undefined,
     twitterSite: twitterSite || undefined,
