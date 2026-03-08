@@ -51,6 +51,8 @@ pnpx create-payload-app my-project -t ecommerce
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
+**Production deployment:** We recommend deploying this template as a **Docker container on a VPS/VM** for a robust, repeatable setup without serverless cold starts. See [Deployment](#deployment) and `docs/DEPLOYMENT.md` (when available) for the Dockerfile and docker-compose setup.
+
 ## How it works
 
 The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
@@ -377,9 +379,8 @@ export default buildConfig({
 Before deploying your app, you need to:
 
 1. Ensure your app builds and serves in production. See [Production](#production) for more details.
-2. You can then deploy Payload as you would any other Node.js or Next.js application either directly on a VPS, DigitalOcean's Apps Platform, via Coolify or more. More guides coming soon.
-
-You can also deploy your app manually, check out the [deployment documentation](https://payloadcms.com/docs/production/deployment) for full details.
+2. **Recommended:** Deploy as a Docker container on any VPS/VM (DigitalOcean, Linode, Hetzner, EC2, etc.). See `docs/DEPLOYMENT.md` for the production Dockerfile and docker-compose.
+3. You can also deploy Payload as you would any other Node.js or Next.js application (e.g. directly on a VPS, DigitalOcean's Apps Platform, via Coolify). Check out the [deployment documentation](https://payloadcms.com/docs/production/deployment) for full details.
 
 ## Questions
 

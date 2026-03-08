@@ -1,6 +1,8 @@
 import type { Category, Media } from '@/payload-types'
 import { RequiredDataFromCollectionSlug } from 'payload'
 
+const defaultSiteName = process.env.SITE_NAME || 'Payload Ecommerce Template'
+
 type ProductArgs = {
   metaImage: Media
   contentImage: Media
@@ -46,7 +48,7 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Payload Ecommerce Template',
+                  text: defaultSiteName,
                   version: 1,
                 },
               ],
@@ -612,7 +614,7 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
       description: 'An open-source ecommerce site built with Payload and Next.js.',
       // @ts-ignore
       image: metaImage,
-      title: 'Payload Ecommerce Template',
+      title: defaultSiteName,
     },
     title: 'Home',
   }

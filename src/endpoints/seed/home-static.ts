@@ -1,5 +1,7 @@
 import { RequiredDataFromCollectionSlug } from 'payload'
 
+const defaultSiteName = process.env.SITE_NAME || 'Payload Ecommerce Template'
+
 export const homeStaticData: () => RequiredDataFromCollectionSlug<'pages'> = () => {
   return {
     slug: 'home',
@@ -19,7 +21,7 @@ export const homeStaticData: () => RequiredDataFromCollectionSlug<'pages'> = () 
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Payload Ecommerce Template',
+                  text: defaultSiteName,
                   version: 1,
                 },
               ],
@@ -82,7 +84,7 @@ export const homeStaticData: () => RequiredDataFromCollectionSlug<'pages'> = () 
     layout: [],
     meta: {
       description: 'An open-source ecommerce site built with Payload and Next.js.',
-      title: 'Payload Ecommerce Template',
+      title: defaultSiteName,
     },
     title: 'Home',
   }
