@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 
 export default async function BookPage() {
-  const { enableBooking } = getSiteConfig()
-  if (!enableBooking) {
+  const { bookingEnabled } = getSiteConfig()
+  if (!bookingEnabled) {
     redirect('/')
   }
   return (

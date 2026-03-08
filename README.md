@@ -51,7 +51,7 @@ pnpx create-payload-app my-project -t ecommerce
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
-**Production deployment:** We recommend deploying this template as a **Docker container on a VPS/VM** for a robust, repeatable setup without serverless cold starts. See [Deployment](#deployment) and `docs/DEPLOYMENT.md` (when available) for the Dockerfile and docker-compose setup.
+**Production deployment:** We recommend deploying this template as a **Docker container on a VPS/VM** for a robust, repeatable setup without serverless cold starts. See [Deployment](#deployment) and **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for the Dockerfile, docker-compose, and step-by-step instructions. Use **[docs/CHECKLIST.md](docs/CHECKLIST.md)** before going live.
 
 ## Customising for a new client (template use)
 

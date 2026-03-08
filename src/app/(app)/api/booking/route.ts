@@ -3,8 +3,8 @@ import configPromise from '@payload-config'
 import { getSiteConfig } from '@/config/site'
 
 export async function POST(request: Request): Promise<Response> {
-  const { enableBooking } = getSiteConfig()
-  if (!enableBooking) {
+  const { bookingEnabled } = getSiteConfig()
+  if (!bookingEnabled) {
     return new Response(JSON.stringify({ error: 'Booking is disabled' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },

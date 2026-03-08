@@ -1,0 +1,33 @@
+# Dependencies and build outputs
+node_modules
+.next
+out
+build
+.pnp
+.pnp.js
+
+# Git and env (build does not need .env; run uses env_file or -e)
+.git
+.gitignore
+.env
+.env.*
+
+# Docs and dev
+docs
+.cursor
+*.md
+!README.md
+
+# Tests and tooling
+coverage
+.playwright
+playwright-report
+*.spec.*
+*.test.*
+vitest.config.*
+playwright.config.*
+
+# Misc
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
