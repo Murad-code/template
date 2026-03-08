@@ -131,10 +131,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'blocked-dates': BlockedDate;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'blocked-dates': BlockedDatesSelect<false> | BlockedDatesSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1933,6 +1935,31 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Date ranges when the business is closed or bookings are disabled. Used to hide slots in booking flows.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blocked-dates".
+ */
+export interface BlockedDate {
+  id: number;
+  /**
+   * Add ranges when you are closed or cannot take bookings.
+   */
+  ranges?:
+    | {
+        start: string;
+        end: string;
+        /**
+         * Optional label (e.g. "Bank holiday", "Closed for repairs").
+         */
+        reason?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -1972,6 +1999,23 @@ export interface FooterSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blocked-dates_select".
+ */
+export interface BlockedDatesSelect<T extends boolean = true> {
+  ranges?:
+    | T
+    | {
+        start?: T;
+        end?: T;
+        reason?: T;
         id?: T;
       };
   updatedAt?: T;

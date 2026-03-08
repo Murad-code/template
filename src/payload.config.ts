@@ -19,6 +19,7 @@ import { Categories } from '@/collections/Categories'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { Users } from '@/collections/Users'
+import { BlockedDates } from '@/globals/BlockedDates'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
@@ -99,7 +100,7 @@ export default buildConfig({
   }),
   email: emailAdapter,
   endpoints: [],
-  globals: [Header, Footer],
+  globals: [Header, Footer, BlockedDates],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

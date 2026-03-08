@@ -119,6 +119,10 @@ See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for de
 
   Same as above but for the footer of your site.
 
+- `Blocked dates`
+
+  Date ranges when the business is closed or bookings are disabled. Managed in Admin → Globals → Blocked dates. Used by the booking flow (when enabled) to hide slots. Exposed as `GET /api/blocked-dates` for the frontend.
+
 ## Access control
 
 Basic access control is setup to limit access to various content based based on publishing status.
