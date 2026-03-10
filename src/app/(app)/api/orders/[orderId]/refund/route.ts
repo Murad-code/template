@@ -68,10 +68,17 @@ export async function POST(
   }
 
   const stripe = new Stripe(secretKey)
-  const refundAmount = amountCents ?? order.amount ?? 0
+  const orderTotalCents = order.amount ?? 0
+  const refundAmount = amountCents ?? orderTotalCents
   if (refundAmount <= 0) {
     return new Response(
       JSON.stringify({ error: 'Invalid refund amount' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } },
+    )
+  }
+  if (refundAmount > orderTotalCents) {
+    return new Response(
+      JSON.stringify({ error: 'Refund amount cannot exceed order total' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } },
     )
   }
