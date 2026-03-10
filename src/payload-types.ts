@@ -260,7 +260,7 @@ export interface Order {
   transactions?: (number | Transaction)[] | null;
   status?: OrderStatus;
   amount?: number | null;
-  currency?: 'USD' | null;
+  currency?: 'GBP' | null;
   accessToken?: string | null;
   /**
    * Set when order is refunded via Stripe.
@@ -311,8 +311,8 @@ export interface Product {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  priceInUSDEnabled?: boolean | null;
-  priceInUSD?: number | null;
+  priceInGBPEnabled?: boolean | null;
+  priceInGBP?: number | null;
   relatedProducts?: (number | Product)[] | null;
   /**
    * Show low-stock warning when inventory is at or below this value. Used for admin visibility and optional alerts.
@@ -1048,8 +1048,8 @@ export interface Variant {
   product: number | Product;
   options: (number | VariantOption)[];
   inventory?: number | null;
-  priceInUSDEnabled?: boolean | null;
-  priceInUSD?: number | null;
+  priceInGBPEnabled?: boolean | null;
+  priceInGBP?: number | null;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -1093,7 +1093,7 @@ export interface Transaction {
   order?: (number | null) | Order;
   cart?: (number | null) | Cart;
   amount?: number | null;
-  currency?: 'USD' | null;
+  currency?: 'GBP' | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1116,7 +1116,7 @@ export interface Cart {
   purchasedAt?: string | null;
   status?: ('active' | 'purchased' | 'abandoned') | null;
   subtotal?: number | null;
-  currency?: 'USD' | null;
+  currency?: 'GBP' | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1802,8 +1802,8 @@ export interface VariantsSelect<T extends boolean = true> {
   product?: T;
   options?: T;
   inventory?: T;
-  priceInUSDEnabled?: T;
-  priceInUSD?: T;
+  priceInGBPEnabled?: T;
+  priceInGBP?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1859,8 +1859,8 @@ export interface ProductsSelect<T extends boolean = true> {
   enableVariants?: T;
   variantTypes?: T;
   variants?: T;
-  priceInUSDEnabled?: T;
-  priceInUSD?: T;
+  priceInGBPEnabled?: T;
+  priceInGBP?: T;
   relatedProducts?: T;
   lowStockThreshold?: T;
   meta?:

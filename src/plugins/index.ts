@@ -3,7 +3,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { Plugin } from 'payload'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
+import { ecommercePlugin, GBP } from '@payloadcms/plugin-ecommerce'
 
 import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 
@@ -16,6 +16,7 @@ import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { customerOnlyFieldAccess } from '@/access/customerOnlyFieldAccess'
 import { isAdmin } from '@/access/isAdmin'
 import { isDocumentOwner } from '@/access/isDocumentOwner'
+import { sendOrderConfirmationEmail } from '@/utilities/sendOrderConfirmationEmail'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
   const { siteName } = getSiteConfig()
@@ -79,6 +80,10 @@ export const plugins: Plugin[] = [
     },
   }),
   ecommercePlugin({
+    currencies: {
+      defaultCurrency: 'GBP',
+      supportedCurrencies: [GBP],
+    },
     access: {
       adminOnlyFieldAccess,
       adminOrPublishedStatus,
@@ -92,6 +97,26 @@ export const plugins: Plugin[] = [
     orders: {
       ordersCollectionOverride: ({ defaultCollection }) => ({
         ...defaultCollection,
+        hooks: {
+          ...defaultCollection.hooks,
+          afterChange: [
+            ...(defaultCollection.hooks?.afterChange ?? []),
+            async ({ doc, operation, req }) => {
+              if (operation !== 'create' || !doc?.id || !doc.customerEmail) return
+              try {
+                const order = await req.payload.findByID({
+                  collection: 'orders',
+                  id: doc.id,
+                  depth: 2,
+                  req,
+                })
+                if (order) await sendOrderConfirmationEmail({ order, req })
+              } catch (err) {
+                req.payload.logger.error({ msg: 'Failed to send order confirmation email', err })
+              }
+            },
+          ],
+        },
         fields: [
           ...defaultCollection.fields,
           {

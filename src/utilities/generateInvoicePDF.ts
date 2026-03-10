@@ -3,8 +3,8 @@ import type { Order } from '@/payload-types'
 import { getSiteConfig } from '@/config/site'
 
 type OrderItem = NonNullable<Order['items']>[number]
-type ProductLike = { title?: string | null; priceInUSD?: number | null }
-type VariantLike = { title?: string | null; priceInUSD?: number | null }
+type ProductLike = { title?: string | null; priceInGBP?: number | null }
+type VariantLike = { title?: string | null; priceInGBP?: number | null }
 
 function getItemTitle(item: OrderItem): string {
   const product = item.product as ProductLike | undefined
@@ -16,7 +16,7 @@ function getItemTitle(item: OrderItem): string {
 function getItemUnitPriceCents(item: OrderItem): number {
   const variant = item.variant as VariantLike | undefined
   const product = item.product as ProductLike | undefined
-  const price = variant?.priceInUSD ?? product?.priceInUSD
+  const price = variant?.priceInGBP ?? product?.priceInGBP
   return typeof price === 'number' ? price : 0
 }
 
@@ -89,7 +89,7 @@ export async function generateInvoicePDF(order: Order): Promise<Uint8Array> {
     const unitPrice = (unitCents / 100).toFixed(2)
     drawText(title.length > 50 ? title.slice(0, 47) + '...' : title, colDesc, 10)
     page.drawText(String(qty), { x: colQty, y, size: 10, font, color: rgb(0.1, 0.1, 0.1) })
-    page.drawText(`$${lineTotal}`, { x: colPrice, y, size: 10, font, color: rgb(0.1, 0.1, 0.1) })
+    page.drawText(`£${lineTotal}`, { x: colPrice, y, size: 10, font, color: rgb(0.1, 0.1, 0.1) })
     y -= 16
   }
 
@@ -104,7 +104,7 @@ export async function generateInvoicePDF(order: Order): Promise<Uint8Array> {
   const totalCents = order.amount ?? 0
   const total = (totalCents / 100).toFixed(2)
   drawText('Total', colDesc, 11, true)
-  page.drawText(`$${total} USD`, { x: colPrice, y, size: 11, font: fontBold, color: rgb(0.1, 0.1, 0.1) })
+  page.drawText(`£${total} GBP`, { x: colPrice, y, size: 11, font: fontBold, color: rgb(0.1, 0.1, 0.1) })
 
   const pdfBytes = await doc.save()
   return pdfBytes

@@ -29,20 +29,32 @@ import { plugins } from './plugins'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// SendGrid: set SENDGRID_API_KEY (and SMTP_FROM_EMAIL) to use SendGrid SMTP. Otherwise use SMTP_* vars.
+const sendgridApiKey = process.env.SENDGRID_API_KEY
+const fromEmail = process.env.SMTP_FROM_EMAIL
+const fromName = process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site'
+
 const emailAdapter =
-  process.env.SMTP_HOST && process.env.SMTP_FROM_EMAIL
+  fromEmail && (sendgridApiKey || process.env.SMTP_HOST)
     ? await nodemailerAdapter({
-        defaultFromAddress: process.env.SMTP_FROM_EMAIL,
-        defaultFromName: process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site',
-        transportOptions: {
-          host: process.env.SMTP_HOST,
-          port: parseInt(process.env.SMTP_PORT || '587', 10),
-          secure: process.env.SMTP_SECURE === 'true',
-          auth:
-            process.env.SMTP_USER && process.env.SMTP_PASS
-              ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-              : undefined,
-        },
+        defaultFromAddress: fromEmail,
+        defaultFromName: fromName,
+        transportOptions: sendgridApiKey
+          ? {
+              host: 'smtp.sendgrid.net',
+              port: 587,
+              secure: false,
+              auth: { user: 'apikey', pass: sendgridApiKey },
+            }
+          : {
+              host: process.env.SMTP_HOST,
+              port: parseInt(process.env.SMTP_PORT || '587', 10),
+              secure: process.env.SMTP_SECURE === 'true',
+              auth:
+                process.env.SMTP_USER && process.env.SMTP_PASS
+                  ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+                  : undefined,
+            },
         skipVerify: true,
       })
     : undefined
@@ -56,6 +68,8 @@ export default buildConfig({
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
+      // Link to the frontend products page in the admin sidebar.
+      afterNavLinks: ['@/components/ViewProductsLink'],
     },
     user: Users.slug,
   },

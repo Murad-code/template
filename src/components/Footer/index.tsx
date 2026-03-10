@@ -1,12 +1,12 @@
 import type { Footer } from '@/payload-types'
 
 import { FooterMenu } from '@/components/Footer/menu'
+import { LogoIcon } from '@/components/icons/logo'
+import { getSiteConfig } from '@/config/site'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import { getSiteConfig } from '@/config/site'
 import Link from 'next/link'
-import React, { Suspense } from 'react'
-import { LogoIcon } from '@/components/icons/logo'
+import { Suspense } from 'react'
 
 export async function Footer() {
   const { companyName, siteName } = getSiteConfig()
@@ -54,12 +54,7 @@ export async function Footer() {
             {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
           </p>
           <hr className="mx-4 hidden h-4 w-px border-l border-neutral-400 md:inline-block" />
-          <p>Designed in Michigan</p>
-          <p className="md:ml-auto">
-            <a className="text-black dark:text-white" href="https://payloadcms.com">
-              Crafted by Payload
-            </a>
-          </p>
+          <p>Designed in London</p>
         </div>
       </div>
     </footer>

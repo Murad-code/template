@@ -338,7 +338,7 @@ export const seed = async ({
     depth: 0,
     data: {
       customer: customer.id,
-      ...(baseAddressUSData as Address),
+      ...(baseAddressUKData as Address),
     },
   })
 
@@ -356,7 +356,7 @@ export const seed = async ({
   const pendingTransaction = await payload.create({
     collection: 'transactions',
     data: {
-      currency: 'USD',
+      currency: 'GBP',
       customer: customer.id,
       paymentMethod: 'stripe',
       stripe: {
@@ -364,14 +364,14 @@ export const seed = async ({
         paymentIntentID: 'pi_123',
       },
       status: 'pending',
-      billingAddress: baseAddressUSData,
+      billingAddress: baseAddressUKData,
     },
   })
 
   const succeededTransaction = await payload.create({
     collection: 'transactions',
     data: {
-      currency: 'USD',
+      currency: 'GBP',
       customer: customer.id,
       paymentMethod: 'stripe',
       stripe: {
@@ -379,7 +379,7 @@ export const seed = async ({
         paymentIntentID: 'pi_123',
       },
       status: 'succeeded',
-      billingAddress: baseAddressUSData,
+      billingAddress: baseAddressUKData,
     },
   })
 
@@ -396,7 +396,7 @@ export const seed = async ({
     collection: 'carts',
     data: {
       customer: customer.id,
-      currency: 'USD',
+      currency: 'GBP',
       items: [
         {
           product: productTshirt.id,
@@ -413,7 +413,7 @@ export const seed = async ({
   const abandonedCart = await payload.create({
     collection: 'carts',
     data: {
-      currency: 'USD',
+      currency: 'GBP',
       createdAt: oldTimestamp,
       items: [
         {
@@ -429,7 +429,7 @@ export const seed = async ({
     collection: 'carts',
     data: {
       customer: customer.id,
-      currency: 'USD',
+      currency: 'GBP',
       purchasedAt: new Date().toISOString(),
       subtotal: 7499,
       items: [
@@ -459,9 +459,9 @@ export const seed = async ({
     collection: 'orders',
     data: {
       amount: 7499,
-      currency: 'USD',
+      currency: 'GBP',
       customer: customer.id,
-      shippingAddress: baseAddressUSData,
+      shippingAddress: baseAddressUKData,
       items: [
         {
           product: productTshirt.id,
@@ -483,9 +483,9 @@ export const seed = async ({
     collection: 'orders',
     data: {
       amount: 7499,
-      currency: 'USD',
+      currency: 'GBP',
       customer: customer.id,
-      shippingAddress: baseAddressUSData,
+      shippingAddress: baseAddressUKData,
       items: [
         {
           product: productTshirt.id,
@@ -520,7 +520,7 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
-              label: 'Shop',
+              label: 'Products',
               url: '/shop',
             },
           },

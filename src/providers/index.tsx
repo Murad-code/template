@@ -1,5 +1,5 @@
 import { AuthProvider } from '@/providers/Auth'
-import { EcommerceProvider } from '@payloadcms/plugin-ecommerce/client/react'
+import { EcommerceProvider, GBP } from '@payloadcms/plugin-ecommerce/client/react'
 import { stripeAdapterClient } from '@payloadcms/plugin-ecommerce/payments/stripe'
 import React from 'react'
 
@@ -16,6 +16,10 @@ export const Providers: React.FC<{
         <HeaderThemeProvider>
           <SonnerProvider />
           <EcommerceProvider
+            currenciesConfig={{
+              defaultCurrency: 'GBP',
+              supportedCurrencies: [GBP],
+            }}
             enableVariants={true}
             api={{
               cartsFetchQuery: {
