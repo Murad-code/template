@@ -102,15 +102,27 @@ export const plugins: Plugin[] = [
           afterChange: [
             ...(defaultCollection.hooks?.afterChange ?? []),
             async ({ doc, operation, req }) => {
-              if (operation !== 'create' || !doc?.id || !doc.customerEmail) return
+              req.payload.logger.info({
+                msg: 'Orders afterChange hook called',
+                operation,
+                orderId: doc?.id,
+                hasCustomerEmail: Boolean(doc?.customerEmail),
+                hasCustomer: Boolean(doc?.customer),
+              })
+              // Only send confirmation on order create; recipient email is resolved in sendOrderConfirmationEmail
+              // (from customerEmail for guests, or from populated customer.email for logged-in users)
+              if (operation !== 'create' || !doc?.id) return
               try {
                 const order = await req.payload.findByID({
                   collection: 'orders',
                   id: doc.id,
-                  depth: 2,
+                  depth: 2, // needed so order.customer is populated with user email for logged-in customers
                   req,
                 })
-                if (order) await sendOrderConfirmationEmail({ order, req })
+                if (order) {
+                  req.payload.logger.info({ msg: 'Sending order confirmation email', orderId: order.id })
+                  await sendOrderConfirmationEmail({ order, req })
+                }
               } catch (err) {
                 req.payload.logger.error({ msg: 'Failed to send order confirmation email', err })
               }

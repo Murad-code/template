@@ -8,6 +8,24 @@ type ProductLike = { title?: string | null }
 type VariantLike = { title?: string | null }
 type OrderItem = NonNullable<Order['items']>[number]
 
+/** Customer when populated (depth >= 1); User has email. */
+type CustomerLike = { email?: string | null } | number | null
+
+/**
+ * Resolves the recipient email for an order.
+ * Guest orders have customerEmail; logged-in orders have customer (user) and we use their email.
+ */
+function getOrderRecipientEmail(order: Order): string | null {
+  if (order.customerEmail && typeof order.customerEmail === 'string') {
+    return order.customerEmail
+  }
+  const customer = order.customer as CustomerLike | undefined
+  if (customer && typeof customer === 'object' && customer.email) {
+    return customer.email
+  }
+  return null
+}
+
 function getItemTitle(item: OrderItem): string {
   const product = item.product as ProductLike | undefined
   const variant = item.variant as VariantLike | undefined
@@ -30,8 +48,19 @@ export async function sendOrderConfirmationEmail({
   order: Order
   req: PayloadRequest
 }): Promise<void> {
-  const email = order.customerEmail
-  if (!email || !req.payload.config.email) {
+  const email = getOrderRecipientEmail(order)
+  if (!email) {
+    req.payload.logger.warn({
+      msg: 'Order confirmation email skipped: no recipient email (order has no customerEmail and no populated customer with email)',
+      orderId: order.id,
+    })
+    return
+  }
+  if (!req.payload.config.email) {
+    req.payload.logger.warn({
+      msg: 'Order confirmation email skipped: no email adapter configured (set RESEND_API_KEY or SENDGRID_API_KEY/SMTP_*)',
+      orderId: order.id,
+    })
     return
   }
 
@@ -70,10 +99,22 @@ export async function sendOrderConfirmationEmail({
     req.payload.logger.warn({ msg: 'Could not generate invoice PDF for order confirmation email', err })
   }
 
+  req.payload.logger.info({
+    msg: 'Sending order confirmation email',
+    orderId: order.id,
+    to: email,
+  })
+
   await req.payload.sendEmail({
     to: email,
     subject: `Order confirmed #${order.id} – ${siteName}`,
     html,
     ...(attachments.length > 0 ? { attachments } : {}),
+  })
+
+  req.payload.logger.info({
+    msg: 'Order confirmation email sent',
+    orderId: order.id,
+    to: email,
   })
 }

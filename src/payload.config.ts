@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import {
   BoldFeature,
@@ -29,35 +30,43 @@ import { plugins } from './plugins'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// SendGrid: set SENDGRID_API_KEY (and SMTP_FROM_EMAIL) to use SendGrid SMTP. Otherwise use SMTP_* vars.
+// Email: Resend (RESEND_API_KEY or SENDGRID_API_KEY starting with "re_"), SendGrid SMTP, or SMTP_* vars.
 const sendgridApiKey = process.env.SENDGRID_API_KEY
+const resendApiKey =
+  process.env.RESEND_API_KEY ?? (sendgridApiKey?.startsWith('re_') ? sendgridApiKey : undefined)
 const fromEmail = process.env.SMTP_FROM_EMAIL
 const fromName = process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site'
 
 const emailAdapter =
-  fromEmail && (sendgridApiKey || process.env.SMTP_HOST)
-    ? await nodemailerAdapter({
+  fromEmail && resendApiKey
+    ? resendAdapter({
+        apiKey: resendApiKey,
         defaultFromAddress: fromEmail,
         defaultFromName: fromName,
-        transportOptions: sendgridApiKey
-          ? {
-              host: 'smtp.sendgrid.net',
-              port: 587,
-              secure: false,
-              auth: { user: 'apikey', pass: sendgridApiKey },
-            }
-          : {
-              host: process.env.SMTP_HOST,
-              port: parseInt(process.env.SMTP_PORT || '587', 10),
-              secure: process.env.SMTP_SECURE === 'true',
-              auth:
-                process.env.SMTP_USER && process.env.SMTP_PASS
-                  ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-                  : undefined,
-            },
-        skipVerify: true,
       })
-    : undefined
+    : fromEmail && (sendgridApiKey || process.env.SMTP_HOST)
+      ? await nodemailerAdapter({
+          defaultFromAddress: fromEmail,
+          defaultFromName: fromName,
+          transportOptions: sendgridApiKey
+            ? {
+                host: 'smtp.sendgrid.net',
+                port: 587,
+                secure: false,
+                auth: { user: 'apikey', pass: sendgridApiKey },
+              }
+            : {
+                host: process.env.SMTP_HOST,
+                port: parseInt(process.env.SMTP_PORT || '587', 10),
+                secure: process.env.SMTP_SECURE === 'true',
+                auth:
+                  process.env.SMTP_USER && process.env.SMTP_PASS
+                    ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+                    : undefined,
+              },
+          skipVerify: true,
+        })
+      : undefined
 
 export default buildConfig({
   admin: {
