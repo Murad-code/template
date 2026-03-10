@@ -99,6 +99,61 @@ export const plugins: Plugin[] = [
         ...defaultCollection,
         hooks: {
           ...defaultCollection.hooks,
+          afterRead: [
+            ...(defaultCollection.hooks?.afterRead ?? []),
+            async ({ doc, req }) => {
+              if (doc.customerEmail) return doc
+              const customer = doc.customer
+              if (typeof customer === 'object' && customer !== null && 'email' in customer && customer.email) {
+                doc.customerEmail = customer.email as string
+                return doc
+              }
+              if (typeof customer === 'number') {
+                try {
+                  const user = await req.payload.findByID({
+                    collection: 'users',
+                    id: customer,
+                    depth: 0,
+                    req,
+                    overrideAccess: false,
+                  })
+                  if (user?.email) {
+                    doc.customerEmail = user.email
+                  }
+                } catch {
+                  // ignore lookup errors
+                }
+              }
+              return doc
+            },
+          ],
+          beforeChange: [
+            ...(defaultCollection.hooks?.beforeChange ?? []),
+            async ({ data, req }) => {
+              const customerId =
+                typeof data.customer === 'number'
+                  ? data.customer
+                  : typeof data.customer === 'object' && data.customer !== null && typeof (data.customer as { id?: number }).id === 'number'
+                    ? (data.customer as { id: number }).id
+                    : null
+              if (!customerId || (data.customerEmail != null && data.customerEmail !== '')) return data
+              try {
+                const user = await req.payload.findByID({
+                  collection: 'users',
+                  id: customerId,
+                  depth: 0,
+                  req,
+                  overrideAccess: false,
+                })
+                if (user?.email) {
+                  data.customerEmail = user.email
+                }
+              } catch {
+                // ignore lookup errors
+              }
+              return data
+            },
+          ],
           afterChange: [
             ...(defaultCollection.hooks?.afterChange ?? []),
             async ({ doc, operation, req }) => {
@@ -166,7 +221,10 @@ export const plugins: Plugin[] = [
             admin: {
               position: 'sidebar',
               readOnly: true,
-              description: 'Refunded amount in cents (for partial refunds).',
+              description: 'Refunded amount (stored in pence; displayed in pounds).',
+              components: {
+                Field: '@/components/RefundAmountField#RefundAmountField',
+              },
             },
           },
           {
@@ -174,6 +232,9 @@ export const plugins: Plugin[] = [
             type: 'ui',
             admin: {
               position: 'sidebar',
+              description:
+                'Issue a refund via Stripe. Refunded At and Refund Amount are set automatically after a successful refund.',
+              label: 'Refund order',
               components: {
                 Field: '@/components/OrderRefundButton#OrderRefundButton',
               },

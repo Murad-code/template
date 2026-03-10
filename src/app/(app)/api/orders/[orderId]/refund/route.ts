@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import configPromise from '@payload-config'
 import Stripe from 'stripe'
 import { checkRole } from '@/access/utilities'
+import { sendRefundConfirmationEmail } from '@/utilities/sendRefundConfirmationEmail'
 import type { Order, Transaction } from '@/payload-types'
 
 export async function POST(
@@ -105,6 +106,21 @@ export async function POST(
     req,
     overrideAccess: false,
   })
+
+  try {
+    const updatedOrder = await payload.findByID({
+      collection: 'orders',
+      id: orderId,
+      depth: 2,
+      req,
+      overrideAccess: false,
+    }) as Order & { refundedAt?: string; refundAmount?: number }
+    if (updatedOrder) {
+      await sendRefundConfirmationEmail({ order: updatedOrder, req })
+    }
+  } catch (err) {
+    payload.logger.error({ err, orderId }, 'Failed to send refund confirmation email')
+  }
 
   return new Response(
     JSON.stringify({ success: true, refundAmount }),

@@ -22,6 +22,7 @@ import { VariantOptionsSelector as VariantOptionsSelector_b91672ccd6e8b071c11142
 import { PriceCell as PriceCell_e27bf7b8cc50640dcdd584767b8eac3c } from '@payloadcms/plugin-ecommerce/client'
 import { PriceInput as PriceInput_b91672ccd6e8b071c11142ab941fedfb } from '@payloadcms/plugin-ecommerce/rsc'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { RefundAmountField as RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd } from '@/components/RefundAmountField'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
 import { BeforeDashboard as BeforeDashboard_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
@@ -53,6 +54,7 @@ export const importMap = {
   "@payloadcms/plugin-ecommerce/client#PriceCell": PriceCell_e27bf7b8cc50640dcdd584767b8eac3c,
   "@payloadcms/plugin-ecommerce/rsc#PriceInput": PriceInput_b91672ccd6e8b071c11142ab941fedfb,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/components/RefundAmountField#RefundAmountField": RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,
   "@/components/BeforeDashboard#BeforeDashboard": BeforeDashboard_1a7510af427896d367a49dbf838d2de6,

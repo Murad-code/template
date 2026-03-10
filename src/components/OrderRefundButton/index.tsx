@@ -41,11 +41,12 @@ export function OrderRefundButton() {
         <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>Order is refunded.</span>
       ) : (
         <Button
-          buttonStyle="secondary"
-          label={loading ? 'Refunding…' : 'Refund order'}
+          buttonStyle="primary"
           onClick={handleRefund}
           disabled={loading}
-        />
+        >
+          {loading ? 'Refunding…' : 'Refund order'}
+        </Button>
       )}
       {message && (
         <span style={{ color: message.type === 'error' ? 'var(--theme-error-500)' : 'var(--theme-success-500)', fontSize: 12 }}>

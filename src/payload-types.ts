@@ -267,7 +267,7 @@ export interface Order {
    */
   refundedAt?: string | null;
   /**
-   * Refunded amount in cents (for partial refunds).
+   * Refunded amount (stored in pence; displayed in pounds).
    */
   refundAmount?: number | null;
   updatedAt: string;
