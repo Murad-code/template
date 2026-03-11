@@ -25,6 +25,12 @@ export const Bookings: CollectionConfig = {
   },
   fields: [
     {
+      name: 'product',
+      type: 'relationship',
+      relationTo: 'products',
+      admin: { position: 'sidebar', description: 'The marquee or bookable product this booking is for.' },
+    },
+    {
       name: 'customer',
       type: 'relationship',
       relationTo: 'users',
