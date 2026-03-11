@@ -1,15 +1,13 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest } from 'payload'
 
 import { contactFormData } from './contact-form'
 import { contactPageData } from './contact-page'
-import { productHatData } from './product-hat'
-import { productTshirtData, productTshirtVariant } from './product-tshirt'
 import { homePageData } from './home'
-import { imageHatData } from './image-hat'
-import { imageTshirtBlackData } from './image-tshirt-black'
-import { imageTshirtWhiteData } from './image-tshirt-white'
-import { imageHero1Data } from './image-hero-1'
-import { Address, Transaction, VariantOption } from '@/payload-types'
+import { discoverSeedDir } from './discover'
+import { readLocalFile } from './localFile'
+import { marqueeProductData, slugify } from './marquee-product'
+import { Address, Transaction } from '@/payload-types'
+import type { Header, Footer, Media, Product } from '@/payload-types'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -25,37 +23,10 @@ const collections: CollectionSlug[] = [
   'transactions',
   'addresses',
   'orders',
-]
-
-const categories = ['Accessories', 'T-Shirts', 'Hats']
-
-const sizeVariantOptions = [
-  { label: 'Small', value: 'small' },
-  { label: 'Medium', value: 'medium' },
-  { label: 'Large', value: 'large' },
-  { label: 'X Large', value: 'xlarge' },
-]
-
-const colorVariantOptions = [
-  { label: 'Black', value: 'black' },
-  { label: 'White', value: 'white' },
+  'bookings',
 ]
 
 const globals: GlobalSlug[] = ['header', 'footer']
-
-const baseAddressUSData: Transaction['billingAddress'] = {
-  title: 'Dr.',
-  firstName: 'Otto',
-  lastName: 'Octavius',
-  phone: '1234567890',
-  company: 'Oscorp',
-  addressLine1: '123 Main St',
-  addressLine2: 'Suite 100',
-  city: 'New York',
-  state: 'NY',
-  postalCode: '10001',
-  country: 'US',
-}
 
 const baseAddressUKData: Transaction['billingAddress'] = {
   title: 'Mr.',
@@ -68,33 +39,27 @@ const baseAddressUKData: Transaction['billingAddress'] = {
   country: 'GB',
 }
 
+export type SeedMode = 'ecommerce' | 'booking'
+
 // Next.js revalidation errors are normal when seeding the database without a server running
-// i.e. running `yarn seed` locally instead of using the admin UI within an active app
-// The app is not running to revalidate the pages and so the API routes are not available
-// These error messages can be ignored: `Error hitting revalidate route for...`
 export const seed = async ({
   payload,
   req,
+  mode = 'ecommerce',
 }: {
   payload: Payload
   req: PayloadRequest
+  mode?: SeedMode
 }): Promise<void> => {
-  payload.logger.info('Seeding database...')
+  payload.logger.info(`Seeding database (mode: ${mode})...`)
 
-  // we need to clear the media directory before seeding
-  // as well as the collections and globals
-  // this is because while `yarn seed` drops the database
-  // the custom `/api/seed` endpoint does not
   payload.logger.info(`— Clearing collections and globals...`)
 
-  // clear the database
   await Promise.all(
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: { navItems: [] } as Partial<Header> & Partial<Footer>,
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -104,204 +69,109 @@ export const seed = async ({
   )
 
   for (const collection of collections) {
+    if (!payload.collections[collection]) continue
     await payload.db.deleteMany({ collection, req, where: {} })
     if (payload.collections[collection].config.versions) {
       await payload.db.deleteVersions({ collection, req, where: {} })
     }
   }
 
-  payload.logger.info(`— Seeding customer and customer data...`)
+  payload.logger.info(`— Deleting demo customer...`)
 
   await payload.delete({
     collection: 'users',
     depth: 0,
     where: {
-      email: {
-        equals: 'customer@example.com',
-      },
+      email: { equals: 'customer@example.com' },
     },
   })
+
+  payload.logger.info(`— Discovering seed content...`)
+
+  const { productFolders, heroImagePath } = await discoverSeedDir()
+
+  if (productFolders.length === 0) {
+    throw new Error('Seed directory contains no product folders with images.')
+  }
 
   payload.logger.info(`— Seeding media...`)
 
-  const [imageHatBuffer, imageTshirtBlackBuffer, imageTshirtWhiteBuffer, heroBuffer] =
-    await Promise.all([
-      fetchFileByURL(
-        'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/ecommerce/src/endpoints/seed/hat-logo.png',
-      ),
-      fetchFileByURL(
-        'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/ecommerce/src/endpoints/seed/tshirt-black.png',
-      ),
-      fetchFileByURL(
-        'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/ecommerce/src/endpoints/seed/tshirt-white.png',
-      ),
-      fetchFileByURL(
-        'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
-      ),
-    ])
+  const heroFile = heroImagePath ? await readLocalFile(heroImagePath) : null
+  const heroMedia: Media | null = heroFile
+    ? await payload.create({
+        collection: 'media',
+        data: { alt: 'Homepage hero' },
+        file: heroFile,
+      })
+    : null
 
-  const [
-    customer,
-    imageHat,
-    imageTshirtBlack,
-    imageTshirtWhite,
-    imageHero,
-    accessoriesCategory,
-    tshirtsCategory,
-    hatsCategory,
-  ] = await Promise.all([
-    payload.create({
-      collection: 'users',
-      data: {
-        name: 'Customer',
-        email: 'customer@example.com',
-        password: 'password',
-        roles: ['customer'],
-      },
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHatData,
-      file: imageHatBuffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageTshirtBlackData,
-      file: imageTshirtBlackBuffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageTshirtWhiteData,
-      file: imageTshirtWhiteBuffer,
-    }),
-    payload.create({
-      collection: 'media',
-      data: imageHero1Data,
-      file: heroBuffer,
-    }),
-    ...categories.map((category) =>
-      payload.create({
-        collection: 'categories',
-        data: {
-          title: category,
-          slug: category,
-        },
-      }),
-    ),
-  ])
-
-  payload.logger.info(`— Seeding variant types and options...`)
-
-  const sizeVariantType = await payload.create({
-    collection: 'variantTypes',
-    data: {
-      name: 'size',
-      label: 'Size',
-    },
-  })
-
-  const sizeVariantOptionsResults: VariantOption[] = []
-
-  for (const option of sizeVariantOptions) {
-    const result = await payload.create({
-      collection: 'variantOptions',
-      data: {
-        ...option,
-        variantType: sizeVariantType.id,
-      },
-    })
-    sizeVariantOptionsResults.push(result)
+  const pathToMedia = new Map<string, Media>()
+  for (const folder of productFolders) {
+    for (const imagePath of folder.imagePaths) {
+      if (pathToMedia.has(imagePath)) continue
+      const file = await readLocalFile(imagePath)
+      const doc = await payload.create({
+        collection: 'media',
+        data: { alt: `${folder.title} - ${file.name}` },
+        file,
+      })
+      pathToMedia.set(imagePath, doc)
+    }
   }
 
-  const [small, medium, large, xlarge] = sizeVariantOptionsResults
+  payload.logger.info(`— Seeding category...`)
 
-  const colorVariantType = await payload.create({
-    collection: 'variantTypes',
-    data: {
-      name: 'color',
-      label: 'Color',
-    },
+  const marqueesCategory = await payload.create({
+    collection: 'categories',
+    data: { title: 'Marquees', slug: 'marquees' },
   })
-
-  const [black, white] = await Promise.all(
-    colorVariantOptions.map((option) => {
-      return payload.create({
-        collection: 'variantOptions',
-        data: {
-          ...option,
-          variantType: colorVariantType.id,
-        },
-      })
-    }),
-  )
 
   payload.logger.info(`— Seeding products...`)
 
-  const productHat = await payload.create({
-    collection: 'products',
-    depth: 0,
-    data: productHatData({
-      galleryImage: imageHat,
-      metaImage: imageHat,
-      variantTypes: [colorVariantType],
-      categories: [hatsCategory],
-      relatedProducts: [],
-    }),
-  })
+  const MARQUEE_PRICE = 50000 // £500
+  const products: Product[] = []
 
-  const productTshirt = await payload.create({
-    collection: 'products',
-    depth: 0,
-    data: productTshirtData({
-      galleryImages: [
-        { image: imageTshirtBlack, variantOption: black },
-        { image: imageTshirtWhite, variantOption: white },
-      ],
-      metaImage: imageTshirtBlack,
-      contentImage: imageHero,
-      variantTypes: [colorVariantType, sizeVariantType],
-      categories: [tshirtsCategory],
-      relatedProducts: [productHat],
-    }),
-  })
+  for (const folder of productFolders) {
+    const galleryMedia = folder.imagePaths
+      .map((p) => pathToMedia.get(p))
+      .filter((m): m is Media => m != null)
+    if (galleryMedia.length === 0) continue
 
-  let hoodieID: number | string = productTshirt.id
+    const firstImage = galleryMedia[0]
+    const slug = slugify(folder.title)
+    const data = marqueeProductData({
+      title: folder.title,
+      slug,
+      gallery: galleryMedia.map((image) => ({ image })),
+      metaImage: firstImage,
+      category: marqueesCategory,
+      priceInGBP: MARQUEE_PRICE,
+    })
 
-  if (payload.db.defaultIDType === 'text') {
-    hoodieID = `"${hoodieID}"`
+    const product = await payload.create({
+      collection: 'products',
+      depth: 0,
+      data,
+    })
+    products.push(product as Product)
   }
 
-  const [
-    smallTshirtHoodieVariant,
-    mediumTshirtHoodieVariant,
-    largeTshirtHoodieVariant,
-    xlargeTshirtHoodieVariant,
-  ] = await Promise.all(
-    [small, medium, large, xlarge].map((variantOption) =>
-      payload.create({
-        collection: 'variants',
-        depth: 0,
-        data: productTshirtVariant({
-          product: productTshirt,
-          variantOptions: [variantOption, white],
-        }),
-      }),
-    ),
-  )
+  const firstProduct = products[0]
+  if (!firstProduct) {
+    throw new Error('No products created.')
+  }
 
-  await Promise.all(
-    [small, medium, large, xlarge].map((variantOption) =>
-      payload.create({
-        collection: 'variants',
-        depth: 0,
-        data: productTshirtVariant({
-          product: productTshirt,
-          variantOptions: [variantOption, black],
-          ...(variantOption.value === 'medium' ? { inventory: 0 } : {}),
-        }),
-      }),
-    ),
-  )
+  payload.logger.info(`— Seeding customer...`)
+
+  const customer = await payload.create({
+    collection: 'users',
+    data: {
+      name: 'Customer',
+      email: 'customer@example.com',
+      password: 'password',
+      roles: ['customer'],
+    },
+  })
 
   payload.logger.info(`— Seeding contact form...`)
 
@@ -313,285 +183,136 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: homePageData({
-        contentImage: imageHero,
-        metaImage: imageHat,
-      }),
-    }),
-    payload.create({
-      collection: 'pages',
-      depth: 0,
-      data: contactPageData({
-        contactForm: contactForm,
-      }),
-    }),
-  ])
-
-  payload.logger.info(`— Seeding addresses...`)
-
-  const customerUSAddress = await payload.create({
-    collection: 'addresses',
+  const fallbackImage = pathToMedia.get(productFolders[0].imagePaths[0])
+  const homeImage = heroMedia ?? fallbackImage ?? null
+  if (!homeImage) throw new Error('No images available for homepage.')
+  await payload.create({
+    collection: 'pages',
     depth: 0,
-    data: {
-      customer: customer.id,
-      ...(baseAddressUKData as Address),
-    },
+    data: homePageData({
+      contentImage: homeImage,
+      metaImage: homeImage,
+    }),
   })
-
-  const customerUKAddress = await payload.create({
-    collection: 'addresses',
+  await payload.create({
+    collection: 'pages',
     depth: 0,
-    data: {
-      customer: customer.id,
-      ...(baseAddressUKData as Address),
-    },
-  })
-
-  payload.logger.info(`— Seeding transactions...`)
-
-  const pendingTransaction = await payload.create({
-    collection: 'transactions',
-    data: {
-      currency: 'GBP',
-      customer: customer.id,
-      paymentMethod: 'stripe',
-      stripe: {
-        customerID: 'cus_123',
-        paymentIntentID: 'pi_123',
-      },
-      status: 'pending',
-      billingAddress: baseAddressUKData,
-    },
-  })
-
-  const succeededTransaction = await payload.create({
-    collection: 'transactions',
-    data: {
-      currency: 'GBP',
-      customer: customer.id,
-      paymentMethod: 'stripe',
-      stripe: {
-        customerID: 'cus_123',
-        paymentIntentID: 'pi_123',
-      },
-      status: 'succeeded',
-      billingAddress: baseAddressUKData,
-    },
-  })
-
-  let succeededTransactionID: number | string = succeededTransaction.id
-
-  if (payload.db.defaultIDType === 'text') {
-    succeededTransactionID = `"${succeededTransactionID}"`
-  }
-
-  payload.logger.info(`— Seeding carts...`)
-
-  // This cart is open as it's created now
-  const openCart = await payload.create({
-    collection: 'carts',
-    data: {
-      customer: customer.id,
-      currency: 'GBP',
-      items: [
-        {
-          product: productTshirt.id,
-          variant: mediumTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-      ],
-    },
-  })
-
-  const oldTimestamp = new Date('2023-01-01T00:00:00Z').toISOString()
-
-  // Cart is abandoned because it was created long in the past
-  const abandonedCart = await payload.create({
-    collection: 'carts',
-    data: {
-      currency: 'GBP',
-      createdAt: oldTimestamp,
-      items: [
-        {
-          product: productHat.id,
-          quantity: 1,
-        },
-      ],
-    },
-  })
-
-  // Cart is purchased because it has a purchasedAt date
-  const completedCart = await payload.create({
-    collection: 'carts',
-    data: {
-      customer: customer.id,
-      currency: 'GBP',
-      purchasedAt: new Date().toISOString(),
-      subtotal: 7499,
-      items: [
-        {
-          product: productTshirt.id,
-          variant: smallTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-        {
-          product: productTshirt.id,
-          variant: mediumTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-      ],
-    },
-  })
-
-  let completedCartID: number | string = completedCart.id
-
-  if (payload.db.defaultIDType === 'text') {
-    completedCartID = `"${completedCartID}"`
-  }
-
-  payload.logger.info(`— Seeding orders...`)
-
-  const orderInCompleted = await payload.create({
-    collection: 'orders',
-    data: {
-      amount: 7499,
-      currency: 'GBP',
-      customer: customer.id,
-      shippingAddress: baseAddressUKData,
-      items: [
-        {
-          product: productTshirt.id,
-          variant: smallTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-        {
-          product: productTshirt.id,
-          variant: mediumTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-      ],
-      status: 'completed',
-      transactions: [succeededTransaction.id],
-    },
-  })
-
-  const orderInProcessing = await payload.create({
-    collection: 'orders',
-    data: {
-      amount: 7499,
-      currency: 'GBP',
-      customer: customer.id,
-      shippingAddress: baseAddressUKData,
-      items: [
-        {
-          product: productTshirt.id,
-          variant: smallTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-        {
-          product: productTshirt.id,
-          variant: mediumTshirtHoodieVariant.id,
-          quantity: 1,
-        },
-      ],
-      status: 'processing',
-      transactions: [succeededTransaction.id],
-    },
+    data: contactPageData({ contactForm }),
   })
 
   payload.logger.info(`— Seeding globals...`)
 
-  await Promise.all([
-    payload.updateGlobal({
-      slug: 'header',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Home',
-              url: '/',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Products',
-              url: '/shop',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Account',
-              url: '/account',
-            },
-          },
-        ],
-      },
-    }),
-    payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Find my order',
-              url: '/find-order',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
-        ],
-      },
-    }),
-  ])
-
-  payload.logger.info('Seeded database successfully!')
-}
-
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
+  const headerNav = [
+    { link: { type: 'custom' as const, label: 'Home', url: '/' } },
+    { link: { type: 'custom' as const, label: 'Products', url: '/shop' } },
+    { link: { type: 'custom' as const, label: 'Account', url: '/account' } },
+  ]
+  const footerNav = [
+    { link: { type: 'custom' as const, label: 'Admin', url: '/admin' } },
+    { link: { type: 'custom' as const, label: 'Find my order', url: '/find-order' } },
+    { link: { type: 'custom' as const, label: 'Payload', newTab: true, url: 'https://payloadcms.com/' } },
+  ]
+  await payload.updateGlobal({
+    slug: 'header',
+    data: { navItems: headerNav } as Partial<Header>,
+  })
+  await payload.updateGlobal({
+    slug: 'footer',
+    data: { navItems: footerNav } as Partial<Footer>,
   })
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
+  if (mode === 'ecommerce') {
+    payload.logger.info(`— Seeding addresses...`)
+
+    await payload.create({
+      collection: 'addresses',
+      depth: 0,
+      data: {
+        customer: customer.id,
+        ...(baseAddressUKData as Address),
+      },
+    })
+
+    payload.logger.info(`— Seeding transactions...`)
+
+    const succeededTransaction = await payload.create({
+      collection: 'transactions',
+      data: {
+        currency: 'GBP',
+        customer: customer.id,
+        paymentMethod: 'stripe',
+        stripe: { customerID: 'cus_123', paymentIntentID: 'pi_123' },
+        status: 'succeeded',
+        billingAddress: baseAddressUKData,
+      },
+    })
+
+    payload.logger.info(`— Seeding carts...`)
+
+    await payload.create({
+      collection: 'carts',
+      data: {
+        customer: customer.id,
+        currency: 'GBP',
+        purchasedAt: new Date().toISOString(),
+        subtotal: MARQUEE_PRICE,
+        items: [{ product: firstProduct.id, quantity: 1 }],
+      },
+    })
+
+    payload.logger.info(`— Seeding orders...`)
+
+    await payload.create({
+      collection: 'orders',
+      data: {
+        amount: MARQUEE_PRICE,
+        currency: 'GBP',
+        customer: customer.id,
+        shippingAddress: baseAddressUKData,
+        items: [{ product: firstProduct.id, quantity: 1 }],
+        status: 'completed',
+        transactions: [succeededTransaction.id],
+      },
+    })
   }
 
-  const data = await res.arrayBuffer()
+  if (mode === 'booking') {
+    payload.logger.info(`— Seeding demo bookings...`)
 
-  return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
-    size: data.byteLength,
+    const productA = firstProduct
+    const productB = products[1]
+
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    const dayAfter = new Date()
+    dayAfter.setDate(dayAfter.getDate() + 2)
+
+    await payload.create({
+      collection: 'bookings',
+      data: {
+        product: productA.id,
+        guestEmail: 'customer@example.com',
+        guestName: 'Demo Customer',
+        slotDate: tomorrow.toISOString().slice(0, 10),
+        slotTime: '10:00',
+        status: 'confirmed',
+      },
+    })
+
+    if (productB) {
+      await payload.create({
+        collection: 'bookings',
+        data: {
+          product: productB.id,
+          guestEmail: 'guest@example.com',
+          guestName: 'Guest User',
+          slotDate: dayAfter.toISOString().slice(0, 10),
+          slotTime: '14:00',
+          status: 'pending',
+        },
+      })
+    }
   }
+
+  payload.logger.info('Seeded database successfully!')
 }
