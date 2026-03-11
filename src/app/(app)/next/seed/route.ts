@@ -1,17 +1,24 @@
 import { createLocalReq, getPayload } from 'payload'
-import { seed } from '@/endpoints/seed'
+import { seed, type SeedMode } from '@/endpoints/seed'
 import config from '@payload-config'
 import { headers } from 'next/headers'
 
+import { getSiteConfig } from '@/config/site'
 import { checkRole } from '@/access/utilities'
 
 export const maxDuration = 300 // This function can run for a maximum of 300 seconds
 
-export async function POST(): Promise<Response> {
+function normalizeMode(mode: unknown): SeedMode {
+  if (mode === 'ecommerce' || mode === 'booking') return mode
+  const { projectType } = getSiteConfig()
+  if (projectType === 'booking') return 'booking'
+  return 'ecommerce'
+}
+
+export async function POST(request: Request): Promise<Response> {
   const payload = await getPayload({ config })
   const requestHeaders = await headers()
 
-  // Authenticate by passing request headers
   const { user } = await payload.auth({ headers: requestHeaders })
 
   if (!user || !checkRole(['admin'], user)) {
@@ -19,11 +26,12 @@ export async function POST(): Promise<Response> {
   }
 
   try {
-    // Create a Payload request object to pass to the Local API for transactions
-    // At this point you should pass in a user, locale, and any other context you need for the Local API
+    const body = await request.json().catch(() => ({}))
+    const mode = normalizeMode(body.mode)
+
     const payloadReq = await createLocalReq({ user }, payload)
 
-    await seed({ payload, req: payloadReq })
+    await seed({ payload, req: payloadReq, mode })
 
     return Response.json({ success: true })
   } catch (e) {
