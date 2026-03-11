@@ -1188,6 +1188,10 @@ export interface Address {
 export interface Booking {
   id: number;
   /**
+   * The marquee or bookable product this booking is for.
+   */
+  product?: (number | null) | Product;
+  /**
    * Leave empty for guest bookings.
    */
   customer?: (number | null) | User;
@@ -1614,6 +1618,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "bookings_select".
  */
 export interface BookingsSelect<T extends boolean = true> {
+  product?: T;
   customer?: T;
   guestEmail?: T;
   guestName?: T;
