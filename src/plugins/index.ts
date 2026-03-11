@@ -207,6 +207,18 @@ export const plugins: Plugin[] = [
             },
           },
           {
+            name: 'downloadInvoice',
+            type: 'ui',
+            admin: {
+              position: 'sidebar',
+              description: 'Download the order invoice as a PDF (UK Gov compliant).',
+              label: 'Download invoice',
+              components: {
+                Field: '@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton',
+              },
+            },
+          },
+          {
             name: 'refundedAt',
             type: 'date',
             admin: {
