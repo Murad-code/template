@@ -33,6 +33,14 @@ Use this before going live with a new client project cloned from this template.
 - [ ] Point DNS at the server and confirm SSL (reverse proxy)
 - [ ] Test admin login, frontend, checkout (if `ecommerce` or `hybrid`), and booking (if `booking` or `hybrid`)
 
+## E2E (Playwright)
+
+Run against a dev server on `http://localhost:3000` (Playwright `webServer` can reuse an existing server). Use separate commands so `PROJECT_TYPE` matches what you are testing:
+
+- `pnpm test:e2e:shop` — `PROJECT_TYPE=ecommerce`, shop/cart tests (`tests/e2e/frontend.e2e.spec.ts`)
+- `pnpm test:e2e:booking` — `PROJECT_TYPE=booking`, booking happy path (`tests/e2e/booking.e2e.spec.ts`)
+- `pnpm test:e2e:hybrid` — `PROJECT_TYPE=hybrid`, smoke for `/shop` + `/book` (`tests/e2e/hybrid.e2e.spec.ts`)
+
 ## Post-launch
 
 - [ ] Confirm Stripe webhook is receiving events (Stripe Dashboard)

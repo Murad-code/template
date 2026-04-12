@@ -24,7 +24,7 @@ type PageProps = {
 }
 
 export default async function Order({ params, searchParams }: PageProps) {
-  const { ecommerceEnabled, bookingEnabled } = getSiteConfig()
+  const { ecommerceEnabled, bookingEnabled, enableInvoices } = getSiteConfig()
   if (!ecommerceEnabled) {
     redirect(bookingEnabled ? '/account/bookings' : '/account')
   }
@@ -118,6 +118,15 @@ export default async function Order({ params, searchParams }: PageProps) {
     notFound()
   }
 
+  const invoicePdfHref =
+    enableInvoices && order.amount != null && order.amount > 0
+      ? user
+        ? `/api/invoices/${order.id}`
+        : accessToken && email
+          ? `/api/invoices/${order.id}?accessToken=${encodeURIComponent(accessToken)}&email=${encodeURIComponent(email)}`
+          : null
+      : null
+
   return (
     <div className="">
       <div className="flex gap-8 justify-between items-center mb-6">
@@ -162,6 +171,14 @@ export default async function Order({ params, searchParams }: PageProps) {
             </div>
           )}
         </div>
+
+        {invoicePdfHref ? (
+          <div>
+            <Button asChild variant="outline" className="w-fit">
+              <a href={invoicePdfHref}>Download PDF invoice</a>
+            </Button>
+          </div>
+        ) : null}
 
         {order.items && (
           <div>

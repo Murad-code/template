@@ -13,12 +13,18 @@ import { Page, Product } from '@/payload-types'
 import { getSiteConfig } from '@/config/site'
 import { getServerSideURL } from '@/utilities/getURL'
 import { ProductsCollection } from '@/collections/Products'
+import { VariantsCollection } from '@/collections/Variants'
 import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { customerOnlyFieldAccess } from '@/access/customerOnlyFieldAccess'
 import { isAdmin } from '@/access/isAdmin'
 import { isDocumentOwner } from '@/access/isDocumentOwner'
 import { sendOrderConfirmationEmail } from '@/utilities/sendOrderConfirmationEmail'
+import {
+  cartReservationAfterChange,
+  cartReservationBeforeChange,
+  cartReservationBeforeDelete,
+} from '@/utilities/cartStockReservationHooks'
 
 const generateTitle: GenerateTitle<Product | Page> = ({ doc }) => {
   const { siteName } = getSiteConfig()
@@ -263,8 +269,22 @@ export const plugins: Plugin[] = [
         }),
       ],
     },
+    carts: {
+      cartsCollectionOverride: ({ defaultCollection }) => ({
+        ...defaultCollection,
+        hooks: {
+          ...defaultCollection.hooks,
+          beforeChange: [cartReservationBeforeChange, ...(defaultCollection.hooks?.beforeChange ?? [])],
+          afterChange: [...(defaultCollection.hooks?.afterChange ?? []), cartReservationAfterChange],
+          beforeDelete: [...(defaultCollection.hooks?.beforeDelete ?? []), cartReservationBeforeDelete],
+        },
+      }),
+    },
     products: {
       productsCollectionOverride: ProductsCollection,
+      variants: {
+        variantsCollectionOverride: VariantsCollection,
+      },
     },
   }),
 ]

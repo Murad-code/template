@@ -7,6 +7,13 @@ import type { Booking } from '@/payload-types'
 import { createBookingCancelToken } from '@/utilities/bookingCancelToken'
 import { toDateOnlyString } from '@/utilities/dateOnly'
 import { sendBookingConfirmationEmail } from '@/utilities/sendBookingConfirmationEmail'
+import { validateSlotOfferingForBooking } from '@/utilities/bookingSlotOffering'
+
+function parseOptionalNumericId(value: unknown): number | undefined {
+  if (value == null || value === '') return undefined
+  const n = Number(value)
+  return Number.isFinite(n) ? n : undefined
+}
 
 function stripeCurrencyToBookingCurrency(currency: string | undefined): 'GBP' {
   if (currency?.toLowerCase() === 'gbp') return 'GBP'
@@ -29,6 +36,7 @@ export async function POST(request: Request): Promise<Response> {
     guestName: bodyGuestName,
     slotDate: bodySlotDate,
     slotTime: bodySlotTime,
+    slotOfferingId: bodySlotOfferingId,
     paymentIntentId,
   } = body
 
@@ -37,6 +45,7 @@ export async function POST(request: Request): Promise<Response> {
   let guestName = bodyGuestName
   let slotDate = bodySlotDate
   let slotTime = bodySlotTime
+  let slotOfferingId = parseOptionalNumericId(bodySlotOfferingId)
 
   const payload = await getPayload({ config: configPromise })
   const requestHeaders = await headers()
@@ -74,6 +83,7 @@ export async function POST(request: Request): Promise<Response> {
     const mSlotDate = meta.slotDate
     const mSlotTime = meta.slotTime
     const mGuestName = meta.guestName
+    const metaSlotOfferingId = parseOptionalNumericId(meta.slotOfferingId)
     if (!mServiceId || !mGuestEmail || !mSlotDate || !mSlotTime) {
       return new Response(JSON.stringify({ error: 'Payment metadata is incomplete' }), {
         status: 400,
@@ -98,13 +108,29 @@ export async function POST(request: Request): Promise<Response> {
           headers: { 'Content-Type': 'application/json' },
         })
       }
-    } else {
-      serviceId = mServiceId
-      guestEmail = mGuestEmail
-      slotDate = mSlotDate
-      slotTime = mSlotTime
-      guestName = mGuestName || undefined
+      if (metaSlotOfferingId != null && slotOfferingId != null && metaSlotOfferingId !== slotOfferingId) {
+        return new Response(JSON.stringify({ error: 'Payment does not match slot selection' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      }
+      if (metaSlotOfferingId != null && slotOfferingId == null) {
+        slotOfferingId = metaSlotOfferingId
+      }
+      if (metaSlotOfferingId == null && slotOfferingId != null) {
+        return new Response(
+          JSON.stringify({ error: 'Payment was not started for this managed slot' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } },
+        )
+      }
     }
+    // Stripe metadata is the canonical slot for paid bookings (incl. /book/confirm with body omitted).
+    serviceId = String(mServiceId)
+    guestEmail = String(mGuestEmail).trim()
+    slotDate = toDateOnlyString(String(mSlotDate))
+    slotTime = String(mSlotTime)
+    guestName = mGuestName ? String(mGuestName).trim() : undefined
+    slotOfferingId = metaSlotOfferingId ?? slotOfferingId
     stripePaymentIntentId = pi.id
     const rawAmount = typeof pi.amount_received === 'number' ? pi.amount_received : pi.amount
     if (typeof rawAmount === 'number') {
@@ -130,7 +156,7 @@ export async function POST(request: Request): Promise<Response> {
     .findByID({
       collection: 'services',
       id: typeof serviceId === 'string' ? serviceId : String(serviceId),
-      depth: 0,
+      depth: 1,
     })
     .catch(() => null)
   if (!service || !(service as { active?: boolean }).active) {
@@ -138,6 +164,27 @@ export async function POST(request: Request): Promise<Response> {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     })
+  }
+
+  const linkedProductField = (service as { linkedProduct?: number | { id: number } | null }).linkedProduct
+  const linkedProductId =
+    typeof linkedProductField === 'object' && linkedProductField && 'id' in linkedProductField
+      ? linkedProductField.id
+      : linkedProductField
+
+  if (slotOfferingId != null) {
+    const slotErr = await validateSlotOfferingForBooking(payload, {
+      slotOfferingId,
+      serviceId: String(serviceId),
+      slotDate,
+      slotTime: String(slotTime),
+    })
+    if (slotErr) {
+      return new Response(JSON.stringify({ error: slotErr }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
   }
 
   if (stripePaymentIntentId) {
@@ -173,6 +220,8 @@ export async function POST(request: Request): Promise<Response> {
       slotTime: String(slotTime),
       status: 'pending',
       ...(user?.id ? { customer: user.id } : {}),
+      ...(linkedProductId != null ? { product: linkedProductId } : {}),
+      ...(slotOfferingId != null ? { slotOffering: slotOfferingId } : {}),
       ...(stripePaymentIntentId
         ? {
             stripePaymentIntentId,

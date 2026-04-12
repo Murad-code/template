@@ -3,6 +3,10 @@ import configPromise from '@payload-config'
 import { getBlockedRanges, isDateBlocked } from '@/utilities/getBlockedRanges'
 import { getSiteConfig } from '@/config/site'
 import { toDateOnlyString } from '@/utilities/dateOnly'
+import { getBookingHoursForDate } from '@/utilities/getBookingHoursForDate'
+import { countActiveBookingsOnSlotOffering } from '@/utilities/bookingSlotOffering'
+
+export type SlotOptionJson = { time: string; slotOfferingId?: number }
 
 function pad(n: number) {
   return n < 10 ? `0${n}` : String(n)
@@ -53,38 +57,70 @@ export async function GET(request: Request): Promise<Response> {
   ])
 
   if (isDateBlocked(date, blockedRanges)) {
-    return Response.json([])
+    return Response.json([] as SlotOptionJson[])
   }
 
   const slotDuration =
     (service as { durationMinutes?: number } | null)?.durationMinutes ??
     (settings as { slotDurationMinutes?: number })?.slotDurationMinutes ??
     30
-  const startHour = (settings as { defaultStartHour?: number })?.defaultStartHour ?? 9
-  const endHour = (settings as { defaultEndHour?: number })?.defaultEndHour ?? 17
+
+  if (serviceId) {
+    const { docs: managed } = await payload.find({
+      collection: 'booking-slots',
+      where: {
+        and: [
+          { service: { equals: serviceId } },
+          { slotDate: { equals: date } },
+          { active: { equals: true } },
+        ],
+      },
+      depth: 0,
+      limit: 200,
+      sort: 'slotTime',
+    })
+
+    if (managed.length > 0) {
+      const out: SlotOptionJson[] = []
+      for (const row of managed) {
+        const id = (row as { id: number }).id
+        const time = String((row as { slotTime?: string }).slotTime ?? '').trim()
+        if (!time) continue
+        const cap = (row as { capacity?: number }).capacity ?? 1
+        const used = await countActiveBookingsOnSlotOffering(payload, id)
+        if (used < cap) {
+          out.push({ time, slotOfferingId: id })
+        }
+      }
+      return Response.json(out)
+    }
+  }
+
+  const dayHours = getBookingHoursForDate(date, settings as Parameters<typeof getBookingHoursForDate>[1])
+  if (dayHours.closed) {
+    return Response.json([] as SlotOptionJson[])
+  }
+  const { startHour, endHour } = dayHours
 
   const startMins = startHour * 60
   const endMins = endHour * 60
-  const slots: string[] = []
+  const generated: string[] = []
   for (let mins = startMins; mins + slotDuration <= endMins; mins += slotDuration) {
     const h = Math.floor(mins / 60)
     const m = mins % 60
-    slots.push(`${pad(h)}:${pad(m)}`)
+    generated.push(`${pad(h)}:${pad(m)}`)
   }
 
   const { docs: existing } = await payload.find({
     collection: 'bookings',
     where: {
-      and: [
-        { slotDate: { equals: date } },
-        { status: { not_equals: 'cancelled' } },
-      ],
+      and: [{ slotDate: { equals: date } }, { status: { not_equals: 'cancelled' } }],
     },
     depth: 1,
     limit: 500,
   })
 
-  const available = slots.filter((slot) => {
+  const available = generated.filter((slot) => {
     const slotMins = timeToMinutes(slot)
     const blockedByBooking = (existing as { slotTime?: string; service?: { durationMinutes?: number } }[]).some(
       (b) => {
@@ -96,5 +132,5 @@ export async function GET(request: Request): Promise<Response> {
     return !blockedByBooking
   })
 
-  return Response.json(available)
+  return Response.json(available.map((time) => ({ time })) satisfies SlotOptionJson[])
 }

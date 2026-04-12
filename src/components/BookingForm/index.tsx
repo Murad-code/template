@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,6 +10,8 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { Price } from '@/components/Price'
 import type { BlockedRange } from '@/utilities/getBlockedRanges'
+import type { BookingHoursSettings } from '@/utilities/getBookingHoursForDate'
+import { getBookingHoursForDate } from '@/utilities/getBookingHoursForDate'
 import { getServerSideURL } from '@/utilities/getURL'
 import { BookingPaymentStep } from './BookingPaymentStep'
 
@@ -39,6 +41,7 @@ const stripePromise =
 
 type ServiceOption = {
   id: string | number
+  slug?: string
   name: string
   durationMinutes: number
   description?: string
@@ -46,22 +49,41 @@ type ServiceOption = {
   priceInGBP?: number | null
 }
 
-export function BookingForm() {
+type SlotRow = { time: string; slotOfferingId?: number }
+
+export type BookingFormProps = {
+  initialServiceSlugOrId?: string | null
+  initialProductId?: string | null
+}
+
+export function BookingForm({
+  initialServiceSlugOrId = null,
+  initialProductId: _initialProductId = null,
+}: BookingFormProps = {}) {
   const router = useRouter()
   const [services, setServices] = useState<ServiceOption[]>([])
   const [loadingServices, setLoadingServices] = useState(true)
   const [blockedRanges, setBlockedRanges] = useState<BlockedRange[]>([])
   const [selectedServiceId, setSelectedServiceId] = useState('')
   const [date, setDate] = useState('')
-  const [slots, setSlots] = useState<string[]>([])
+  const [slots, setSlots] = useState<SlotRow[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState('')
+  const [selectedSlotOfferingId, setSelectedSlotOfferingId] = useState<number | null>(null)
   const [guestEmail, setGuestEmail] = useState('')
   const [guestName, setGuestName] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null)
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
+  const [bookingHoursSettings, setBookingHoursSettings] = useState<BookingHoursSettings | null>(null)
+
+  const bookingSelectionRef = useRef({ date: '', serviceId: '', slot: '' })
+  bookingSelectionRef.current = {
+    date,
+    serviceId: selectedServiceId,
+    slot: selectedSlot,
+  }
 
   useEffect(() => {
     fetch('/api/booking/services')
@@ -77,24 +99,77 @@ export function BookingForm() {
   }, [])
 
   useEffect(() => {
+    if (!initialServiceSlugOrId || services.length === 0) return
+    const match = services.find(
+      (s) =>
+        String(s.id) === initialServiceSlugOrId ||
+        (s.slug != null && s.slug === initialServiceSlugOrId),
+    )
+    if (match) setSelectedServiceId(String(match.id))
+  }, [initialServiceSlugOrId, services])
+
+  useEffect(() => {
     fetch('/api/blocked-dates')
       .then((res) => res.json())
       .then((data) => (Array.isArray(data) ? setBlockedRanges(data) : setBlockedRanges([])))
       .catch(() => setBlockedRanges([]))
   }, [])
 
+  useEffect(() => {
+    fetch('/api/booking/calendar-settings')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: unknown) => {
+        if (!data || typeof data !== 'object') {
+          setBookingHoursSettings(null)
+          return
+        }
+        const o = data as Record<string, unknown>
+        setBookingHoursSettings({
+          defaultStartHour: typeof o.defaultStartHour === 'number' ? o.defaultStartHour : undefined,
+          defaultEndHour: typeof o.defaultEndHour === 'number' ? o.defaultEndHour : undefined,
+          weekdayHours: Array.isArray(o.weekdayHours) ? (o.weekdayHours as BookingHoursSettings['weekdayHours']) : null,
+        })
+      })
+      .catch(() => setBookingHoursSettings(null))
+  }, [])
+
+  useEffect(() => {
+    if (!date || !bookingHoursSettings) return
+    if (getBookingHoursForDate(date, bookingHoursSettings).closed) {
+      setDate('')
+      setSlots([])
+      setSelectedSlot('')
+      setSelectedSlotOfferingId(null)
+    }
+  }, [bookingHoursSettings, date])
+
   const fetchSlots = async () => {
     if (!date || !selectedServiceId) return
     setLoadingSlots(true)
     setSlots([])
     setSelectedSlot('')
+    setSelectedSlotOfferingId(null)
     setMessage(null)
     try {
       const params = new URLSearchParams({ date, serviceId: selectedServiceId })
       const res = await fetch(`/api/booking/slots?${params}`)
       const data = await res.json()
-      if (Array.isArray(data)) setSlots(data)
-      else setSlots([])
+      if (!Array.isArray(data)) {
+        setSlots([])
+        return
+      }
+      const normalized: SlotRow[] = data.map((item: unknown) => {
+        if (typeof item === 'string') return { time: item }
+        if (item && typeof item === 'object' && 'time' in item) {
+          const o = item as { time: string; slotOfferingId?: number }
+          return {
+            time: String(o.time),
+            ...(typeof o.slotOfferingId === 'number' ? { slotOfferingId: o.slotOfferingId } : {}),
+          }
+        }
+        return { time: '' }
+      })
+      setSlots(normalized.filter((s) => s.time.length > 0))
     } catch {
       setSlots([])
     } finally {
@@ -105,6 +180,12 @@ export function BookingForm() {
   useEffect(() => {
     if (date && selectedServiceId) fetchSlots()
   }, [date, selectedServiceId])
+
+  /** Stripe PI metadata is fixed at creation — clear so a date/slot change cannot reuse an old intent (wrong day after 3DS). */
+  useEffect(() => {
+    setPaymentClientSecret(null)
+    setPaymentAmount(null)
+  }, [date, selectedServiceId, selectedSlot])
 
   const selectedService = services.find((s) => String(s.id) === selectedServiceId)
   const hasPrice = Boolean(
@@ -130,7 +211,7 @@ export function BookingForm() {
             setMessage({ type: 'error', text: data.error || 'Booking failed' })
             return
           }
-          if (paymentIntentId && data.id != null && data.accessToken) {
+          if (data.id != null && data.accessToken) {
             pushBookingInvoice(router, {
               id: data.id,
               accessToken: data.accessToken,
@@ -165,6 +246,7 @@ export function BookingForm() {
             guestName: guestName || undefined,
             slotDate: date,
             slotTime: selectedSlot,
+            ...(selectedSlotOfferingId != null ? { slotOfferingId: selectedSlotOfferingId } : {}),
             ...(paymentIntentId ? { paymentIntentId } : {}),
           }),
         })
@@ -173,7 +255,7 @@ export function BookingForm() {
           setMessage({ type: 'error', text: data.error || 'Booking failed' })
           return
         }
-        if (paymentIntentId && data.id != null && data.accessToken) {
+        if (data.id != null && data.accessToken) {
           pushBookingInvoice(router, {
             id: data.id,
             accessToken: data.accessToken,
@@ -200,7 +282,7 @@ export function BookingForm() {
         setSubmitting(false)
       }
     },
-    [router, selectedServiceId, date, selectedSlot, guestEmail, guestName],
+    [router, selectedServiceId, date, selectedSlot, selectedSlotOfferingId, guestEmail, guestName],
   )
 
   /** After Stripe 3DS redirect, URL contains payment_intent + redirect_status (form state is empty). */
@@ -233,6 +315,11 @@ export function BookingForm() {
     if (!hasPrice || !stripeKey) return
     setMessage(null)
     setSubmitting(true)
+    const requested = {
+      date,
+      serviceId: selectedServiceId,
+      slot: selectedSlot,
+    }
     try {
       const res = await fetch('/api/booking/create-payment-intent', {
         method: 'POST',
@@ -243,11 +330,20 @@ export function BookingForm() {
           slotTime: selectedSlot,
           guestEmail,
           guestName: guestName || undefined,
+          ...(selectedSlotOfferingId != null ? { slotOfferingId: selectedSlotOfferingId } : {}),
         }),
       })
       const data = await res.json()
       if (!res.ok) {
         setMessage({ type: 'error', text: data.error || 'Could not start payment' })
+        return
+      }
+      const latest = bookingSelectionRef.current
+      if (
+        latest.date !== requested.date ||
+        latest.serviceId !== requested.serviceId ||
+        latest.slot !== requested.slot
+      ) {
         return
       }
       setPaymentClientSecret(data.clientSecret)
@@ -296,6 +392,7 @@ export function BookingForm() {
             setSelectedServiceId(e.target.value)
             setSlots([])
             setSelectedSlot('')
+            setSelectedSlotOfferingId(null)
           }}
           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           required
@@ -315,6 +412,7 @@ export function BookingForm() {
             selected={date}
             onSelect={(d) => setDate(d)}
             blockedRanges={blockedRanges}
+            bookingHoursSettings={bookingHoursSettings}
           />
         </div>
       </div>
@@ -329,16 +427,22 @@ export function BookingForm() {
             <div className="flex flex-wrap gap-2 mt-2">
               {slots.map((slot) => (
                 <button
-                  key={slot}
+                  key={`${slot.time}-${slot.slotOfferingId ?? 'g'}`}
                   type="button"
-                  onClick={() => setSelectedSlot(slot)}
+                  onClick={() => {
+                    setSelectedSlot(slot.time)
+                    setSelectedSlotOfferingId(
+                      typeof slot.slotOfferingId === 'number' ? slot.slotOfferingId : null,
+                    )
+                  }}
                   className={`px-3 py-1.5 rounded text-sm border ${
-                    selectedSlot === slot
+                    selectedSlot === slot.time &&
+                    (slot.slotOfferingId ?? null) === selectedSlotOfferingId
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'border-border hover:bg-muted'
                   }`}
                 >
-                  {slot}
+                  {slot.time}
                 </button>
               ))}
             </div>

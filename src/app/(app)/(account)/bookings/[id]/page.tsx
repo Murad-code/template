@@ -12,6 +12,7 @@ import { ChevronLeftIcon } from 'lucide-react'
 import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getSiteConfig } from '@/config/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,6 +25,7 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
+  const { enableInvoices } = getSiteConfig()
 
   const { id } = await params
   const { email = '', accessToken = '' } = await searchParams
@@ -103,6 +105,15 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
   const service =
     booking.service && typeof booking.service === 'object' ? (booking.service as Service) : null
 
+  const invoicePdfHref =
+    enableInvoices && booking.amount != null && booking.amount > 0
+      ? user
+        ? `/api/invoices/bookings/${booking.id}`
+        : accessToken && email
+          ? `/api/invoices/bookings/${booking.id}?accessToken=${encodeURIComponent(accessToken)}&email=${encodeURIComponent(email)}`
+          : null
+      : null
+
   return (
     <div className="">
       <div className="flex gap-8 justify-between items-center mb-6">
@@ -157,6 +168,14 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
             </div>
           )}
         </div>
+
+        {invoicePdfHref ? (
+          <div>
+            <Button asChild variant="outline" className="w-fit">
+              <a href={invoicePdfHref}>Download PDF invoice</a>
+            </Button>
+          </div>
+        ) : null}
 
         {service && (
           <div>

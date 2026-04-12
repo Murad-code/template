@@ -107,4 +107,15 @@ This template is designed for **long-running containers**, not serverless (e.g. 
 - **Predictable runtime** – Same Node process and memory across requests; no per-request isolation limits.
 - **Migrations and background work** – Easier to run Payload migrations and any cron-style jobs in the same environment.
 
+### Stock reservation cleanup (optional)
+
+If you enable `ENABLE_CART_STOCK_RESERVATION`, schedule a periodic request to remove expired reservation rows (for example every 5–15 minutes):
+
+```bash
+curl -sS -X POST "$PAYLOAD_PUBLIC_SERVER_URL/api/stock-reservations/cleanup-expired" \
+  -H "Authorization: Bearer $STOCK_RESERVATION_CLEANUP_SECRET"
+```
+
+Set `STOCK_RESERVATION_CLEANUP_SECRET` in the app environment to a long random value; it must match the `Authorization: Bearer` header.
+
 If you still want to deploy to Vercel, use the Vercel Postgres adapter and see the main README for Vercel-specific notes; the recommended path for this template remains Docker on a VPS/VM.

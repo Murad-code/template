@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getSiteConfig } from '@/config/site'
 import { toDateOnlyString } from '@/utilities/dateOnly'
+import { validateSlotOfferingForBooking } from '@/utilities/bookingSlotOffering'
 import Stripe from 'stripe'
 
 /**
@@ -19,7 +20,17 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const body = await request.json().catch(() => ({}))
-  const { serviceId, slotDate, slotTime, guestEmail, guestName } = body
+  const { serviceId, slotDate, slotTime, guestEmail, guestName, slotOfferingId: rawSlotOffering } = body
+  const slotOfferingId =
+    rawSlotOffering != null && rawSlotOffering !== ''
+      ? Number(rawSlotOffering)
+      : undefined
+  if (rawSlotOffering != null && rawSlotOffering !== '' && Number.isNaN(slotOfferingId)) {
+    return new Response(JSON.stringify({ error: 'Invalid slotOfferingId' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
   if (!serviceId || !slotDate || !slotTime || !guestEmail) {
     return new Response(
       JSON.stringify({ error: 'Missing serviceId, slotDate, slotTime, or guestEmail' }),
@@ -70,6 +81,21 @@ export async function POST(request: Request): Promise<Response> {
     })
   }
 
+  if (slotOfferingId != null) {
+    const err = await validateSlotOfferingForBooking(payload, {
+      slotOfferingId,
+      serviceId: String(serviceId),
+      slotDate: slotDateOnly,
+      slotTime: String(slotTime),
+    })
+    if (err) {
+      return new Response(JSON.stringify({ error: err }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
   const stripe = new Stripe(secretKey)
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(svc.priceInGBP),
@@ -82,6 +108,7 @@ export async function POST(request: Request): Promise<Response> {
       slotTime: String(slotTime),
       guestEmail: String(guestEmail).trim(),
       ...(guestName ? { guestName: String(guestName).trim() } : {}),
+      ...(slotOfferingId != null ? { slotOfferingId: String(slotOfferingId) } : {}),
     },
     receipt_email: String(guestEmail).trim(),
   })

@@ -25,6 +25,8 @@ const collections: CollectionSlug[] = [
   'orders',
   'booking-transactions',
   'bookings',
+  'booking-waitlist',
+  'booking-slots',
   'services',
 ]
 

@@ -37,17 +37,17 @@ Tick items off as you go; none of this blocks shipping a minimal booking or shop
 
 ### Phase 7 (booking)
 
-- [ ] **Per-weekday availability** — different open hours Mon–Sun (today: single `defaultStartHour` / `defaultEndHour`).
-- [ ] **First-class slot documents** — capacity, waitlist, or staff assignment (today: generated slots only).
-- [ ] **Hybrid UX** — deeper link between a product and a bookable service (beyond optional `product` on booking).
-- [ ] **Booking refunds** — mirror order refund pattern against `booking-transactions` + Stripe PI.
-- [ ] **PDF invoice for bookings** — optional; customer page already summarises the booking.
-- [ ] **E2E tests** — booking happy path + `PROJECT_TYPE` matrix.
+- [x] **Per-weekday availability** — different open hours Mon–Sun (today: single `defaultStartHour` / `defaultEndHour`).
+- [x] **First-class slot documents** — capacity, waitlist, or staff assignment (today: generated slots only).
+- [x] **Hybrid UX** — deeper link between a product and a bookable service (beyond optional `product` on booking).
+- [x] **Booking refunds** — mirror order refund pattern against `booking-transactions` + Stripe PI.
+- [x] **PDF invoice for bookings** — optional; customer page already summarises the booking.
+- [x] **E2E tests** — booking happy path + `PROJECT_TYPE` matrix.
 
 ### Phase 5 (stock)
 
-- [ ] Optional **email alert** when inventory crosses low-stock threshold.
-- [ ] **Reserve-on-cart** (TTL) if you need to prevent oversell under high concurrency.
+- [x] Optional **email alert** when inventory crosses low-stock threshold.
+- [x] **Reserve-on-cart** (TTL) if you need to prevent oversell under high concurrency.
 
 ### Phase 8 (blocks / UI)
 

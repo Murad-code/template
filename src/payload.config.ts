@@ -16,7 +16,11 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { BookingSlots } from '@/collections/BookingSlots'
+import { cleanupExpiredStockReservationsEndpoint } from '@/endpoints/cleanupExpiredStockReservations'
+import { StockReservations } from '@/collections/StockReservations'
 import { BookingTransactions } from '@/collections/BookingTransactions'
+import { BookingWaitlist } from '@/collections/BookingWaitlist'
 import { Bookings } from '@/collections/Bookings'
 import { Categories } from '@/collections/Categories'
 import { Services } from '@/collections/Services'
@@ -75,7 +79,18 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Bookings, BookingTransactions, Services],
+  collections: [
+    Users,
+    Pages,
+    Categories,
+    Media,
+    BookingSlots,
+    Bookings,
+    BookingTransactions,
+    BookingWaitlist,
+    Services,
+    StockReservations,
+  ],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
@@ -117,7 +132,7 @@ export default buildConfig({
     },
   }),
   email: emailAdapter,
-  endpoints: [],
+  endpoints: [cleanupExpiredStockReservationsEndpoint],
   globals: [Header, Footer, BlockedDates, BookingSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',

@@ -79,5 +79,14 @@ export const Services: CollectionConfig = {
       defaultValue: true,
       admin: { description: 'Inactive services are hidden from the booking form.' },
     },
+    {
+      name: 'linkedProduct',
+      type: 'relationship',
+      relationTo: 'products',
+      admin: {
+        description:
+          'Hybrid shops: optional product tied to this service (booking confirmation can link commerce + booking).',
+      },
+    },
   ],
 }

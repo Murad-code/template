@@ -18,12 +18,15 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugField as SlugField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
+import { BookingDownloadInvoiceButton as BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4 } from '@/components/BookingDownloadInvoiceButton'
+import { RefundAmountField as RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd } from '@/components/RefundAmountField'
+import { BookingRefundButton as BookingRefundButton_e3468909190ebf3c0433e3209a2bd141 } from '@/components/BookingRefundButton'
 import { PriceCell as PriceCell_e27bf7b8cc50640dcdd584767b8eac3c } from '@payloadcms/plugin-ecommerce/client'
 import { PriceInput as PriceInput_b91672ccd6e8b071c11142ab941fedfb } from '@payloadcms/plugin-ecommerce/rsc'
 import { VariantOptionsSelector as VariantOptionsSelector_b91672ccd6e8b071c11142ab941fedfb } from '@payloadcms/plugin-ecommerce/rsc'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { InventoryCell as InventoryCell_5db5f93db0d6a12915a59d276d573534 } from '@/components/admin/InventoryCell'
 import { OrderDownloadInvoiceButton as OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451 } from '@/components/OrderDownloadInvoiceButton'
-import { RefundAmountField as RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd } from '@/components/RefundAmountField'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
 import { BeforeDashboard as BeforeDashboard_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
@@ -51,12 +54,15 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/next/client#SlugField": SlugField_2b8867833a34864a02ddf429b0728a40,
+  "@/components/BookingDownloadInvoiceButton#BookingDownloadInvoiceButton": BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4,
+  "@/components/RefundAmountField#RefundAmountField": RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd,
+  "@/components/BookingRefundButton#BookingRefundButton": BookingRefundButton_e3468909190ebf3c0433e3209a2bd141,
   "@payloadcms/plugin-ecommerce/client#PriceCell": PriceCell_e27bf7b8cc50640dcdd584767b8eac3c,
   "@payloadcms/plugin-ecommerce/rsc#PriceInput": PriceInput_b91672ccd6e8b071c11142ab941fedfb,
   "@payloadcms/plugin-ecommerce/rsc#VariantOptionsSelector": VariantOptionsSelector_b91672ccd6e8b071c11142ab941fedfb,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/components/admin/InventoryCell#InventoryCell": InventoryCell_5db5f93db0d6a12915a59d276d573534,
   "@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton": OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451,
-  "@/components/RefundAmountField#RefundAmountField": RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,
   "@/components/BeforeDashboard#BeforeDashboard": BeforeDashboard_1a7510af427896d367a49dbf838d2de6,

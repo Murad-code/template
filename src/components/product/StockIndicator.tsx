@@ -39,13 +39,17 @@ export const StockIndicator: React.FC<Props> = ({ product }) => {
     return product.inventory || 0
   }, [product.enableVariants, selectedVariant, product.inventory])
 
+  const lowStockThreshold = product.lowStockThreshold ?? 10
+
   if (product.enableVariants && !selectedVariant) {
     return null
   }
 
   return (
     <div className="uppercase font-mono text-sm font-medium text-gray-500">
-      {stockQuantity < 10 && stockQuantity > 0 && <p>Only {stockQuantity} left in stock</p>}
+      {stockQuantity <= lowStockThreshold && stockQuantity > 0 && (
+        <p>Only {stockQuantity} left in stock</p>
+      )}
       {(stockQuantity === 0 || !stockQuantity) && <p>Out of stock</p>}
     </div>
   )

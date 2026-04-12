@@ -109,7 +109,9 @@ See the [Collections](https://payloadcms.com/docs/configuration/collections) doc
 
 - ### Products and Variants
 
-  Primary collections for product details such as pricing per currency and optionally supports variants per product. Added by the [ecommerce plugin](https://payloadcms.com/docs/ecommerce/plugin#products). Each product (or variant) has **inventory**; optional **low stock threshold** (`lowStockThreshold`) can be set so the admin list shows when stock is at or below that value. Cart and checkout enforce inventory (no over-sale).
+  Primary collections for product details such as pricing per currency and optionally supports variants per product. Added by the [ecommerce plugin](https://payloadcms.com/docs/ecommerce/plugin#products). Each product (or variant) has **inventory**; optional **low stock threshold** (`lowStockThreshold`) drives storefront “only X left” copy, an admin list **Low** badge on inventory, and optional **email alerts** when stock crosses from above the threshold to at or below it (`ENABLE_LOW_STOCK_ALERTS`, `LOW_STOCK_ALERT_TO`). Variant SKUs use the parent product’s threshold for alerts.
+
+  **Cart stock reservations (optional):** Set `ENABLE_CART_STOCK_RESERVATION=true` to record short-lived `stock-reservations` rows when carts change so **other** carts cannot exceed sellable quantity at add-to-cart / cart update time (`CART_RESERVATION_TTL_MINUTES`, default 15). Expired rows should be removed with a cron job calling `POST /api/stock-reservations/cleanup-expired` with `Authorization: Bearer <STOCK_RESERVATION_CLEANUP_SECRET>` (see [DEPLOYMENT.md](docs/DEPLOYMENT.md)). The plugin’s payment initiation step still validates raw inventory; reservations mainly reduce oversell between cart updates and payment—document any stricter needs in your deployment notes.
 
 ### Globals
 

@@ -5,12 +5,20 @@ import { RichText } from '@/components/RichText'
 import { AddToCart } from '@/components/Cart/AddToCart'
 import { Price } from '@/components/Price'
 import React, { Suspense } from 'react'
+import Link from 'next/link'
 
 import { VariantSelector } from './VariantSelector'
 import { useCurrency } from '@payloadcms/plugin-ecommerce/client/react'
 import { StockIndicator } from '@/components/product/StockIndicator'
+import { Button } from '@/components/ui/button'
 
-export function ProductDescription({ product }: { product: Product }) {
+export function ProductDescription({
+  product,
+  bookScheduleHref = null,
+}: {
+  product: Product
+  bookScheduleHref?: string | null
+}) {
   const { currency } = useCurrency()
   let amount = 0,
     lowestAmount = 0,
@@ -82,10 +90,15 @@ export function ProductDescription({ product }: { product: Product }) {
         </Suspense>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center gap-3 justify-between">
         <Suspense fallback={null}>
           <AddToCart product={product} />
         </Suspense>
+        {bookScheduleHref ? (
+          <Button asChild variant="outline" type="button">
+            <Link href={bookScheduleHref}>Book / Schedule</Link>
+          </Button>
+        ) : null}
       </div>
     </div>
   )

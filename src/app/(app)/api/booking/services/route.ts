@@ -26,6 +26,7 @@ export async function GET(): Promise<Response> {
   const body = docs.map((d) => {
     const doc = d as {
       id: number
+      slug?: string | null
       name?: string
       durationMinutes?: number
       description?: string | null
@@ -34,6 +35,7 @@ export async function GET(): Promise<Response> {
     }
     return {
       id: doc.id,
+      slug: doc.slug ?? undefined,
       name: doc.name,
       durationMinutes: doc.durationMinutes ?? 30,
       description: doc.description ?? undefined,

@@ -19,6 +19,9 @@
     "stripe-webhooks": "stripe listen --forward-to localhost:3000/api/payments/stripe/webhooks",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
+    "test:e2e:shop": "cross-env PROJECT_TYPE=ecommerce NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts tests/e2e/frontend.e2e.spec.ts",
+    "test:e2e:booking": "cross-env PROJECT_TYPE=booking NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts tests/e2e/booking.e2e.spec.ts",
+    "test:e2e:hybrid": "cross-env PROJECT_TYPE=hybrid NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts tests/e2e/hybrid.e2e.spec.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {

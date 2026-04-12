@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
+import { getSiteConfig } from '@/config/site'
 
 type Args = {
   params: Promise<{
@@ -111,6 +112,22 @@ export default async function ProductPage({ params }: Args) {
   const relatedProducts =
     product.relatedProducts?.filter((relatedProduct) => typeof relatedProduct === 'object') ?? []
 
+  const site = getSiteConfig()
+  const linkedService = (product as { linkedService?: { slug?: string; id?: number } | number | null })
+    .linkedService
+  let bookScheduleHref: string | null = null
+  if (site.ecommerceEnabled && site.bookingEnabled && linkedService) {
+    if (typeof linkedService === 'object' && linkedService) {
+      if (linkedService.slug) {
+        bookScheduleHref = `/book?service=${encodeURIComponent(linkedService.slug)}`
+      } else if (linkedService.id != null) {
+        bookScheduleHref = `/book?service=${encodeURIComponent(String(linkedService.id))}`
+      }
+    } else if (typeof linkedService === 'number') {
+      bookScheduleHref = `/book?service=${encodeURIComponent(String(linkedService))}`
+    }
+  }
+
   return (
     <React.Fragment>
       <script
@@ -138,7 +155,7 @@ export default async function ProductPage({ params }: Args) {
           </div>
 
           <div className="basis-full lg:basis-1/2">
-            <ProductDescription product={product} />
+            <ProductDescription product={product} bookScheduleHref={bookScheduleHref} />
           </div>
         </div>
       </div>

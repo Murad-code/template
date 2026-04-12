@@ -29,6 +29,7 @@ export const Providers: React.FC<{
                     title: true,
                     gallery: true,
                     inventory: true,
+                    lowStockThreshold: true,
                   },
                   variants: {
                     title: true,

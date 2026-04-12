@@ -18,10 +18,35 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import type { Field } from 'payload'
 import { DefaultDocumentIDType, Where } from 'payload'
+
+import { lowStockProductAfterChange } from '@/collections/Products/lowStockHooks'
+
+function withInventoryListCell(fields: Field[]): Field[] {
+  return fields.map((field) => {
+    if ('name' in field && field.name === 'inventory' && field.type === 'number') {
+      return {
+        ...field,
+        admin: {
+          ...(field.admin && typeof field.admin === 'object' ? field.admin : {}),
+          components: {
+            ...(field.admin && typeof field.admin === 'object' && field.admin.components ? field.admin.components : {}),
+            Cell: '@/components/admin/InventoryCell#InventoryCell',
+          },
+        },
+      }
+    }
+    return field
+  })
+}
 
 export const ProductsCollection: CollectionOverride = ({ defaultCollection }) => ({
   ...defaultCollection,
+  hooks: {
+    ...defaultCollection.hooks,
+    afterChange: [...(defaultCollection.hooks?.afterChange ?? []), lowStockProductAfterChange],
+  },
   admin: {
     ...defaultCollection?.admin,
     defaultColumns: ['title', 'inventory', 'lowStockThreshold', 'enableVariants', '_status', 'variants.variants'],
@@ -51,6 +76,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
     gallery: true,
     priceInGBP: true,
     inventory: true,
+    lowStockThreshold: true,
     meta: true,
   },
   fields: [
@@ -141,7 +167,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
           label: 'Content',
         },
         {
-          fields: [
+          fields: withInventoryListCell([
             ...defaultCollection.fields,
             {
               name: 'relatedProducts',
@@ -166,6 +192,14 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
               relationTo: 'products',
             },
             {
+              name: 'linkedService',
+              type: 'relationship',
+              relationTo: 'services',
+              admin: {
+                description: 'Hybrid: link a bookable service to show a “Book / Schedule” action on the storefront.',
+              },
+            },
+            {
               name: 'lowStockThreshold',
               type: 'number',
               admin: {
@@ -174,7 +208,7 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
               },
               defaultValue: 10,
             },
-          ],
+          ]),
           label: 'Product Details',
         },
         {

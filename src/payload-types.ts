@@ -76,9 +76,12 @@ export interface Config {
     pages: Page;
     categories: Category;
     media: Media;
+    'booking-slots': BookingSlot;
     bookings: Booking;
     'booking-transactions': BookingTransaction;
+    'booking-waitlist': BookingWaitlist;
     services: Service;
+    'stock-reservations': StockReservation;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -112,9 +115,12 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'booking-slots': BookingSlotsSelect<false> | BookingSlotsSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     'booking-transactions': BookingTransactionsSelect<false> | BookingTransactionsSelect<true>;
+    'booking-waitlist': BookingWaitlistSelect<false> | BookingWaitlistSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    'stock-reservations': StockReservationsSelect<false> | StockReservationsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -318,6 +324,10 @@ export interface Product {
   priceInGBPEnabled?: boolean | null;
   priceInGBP?: number | null;
   relatedProducts?: (number | Product)[] | null;
+  /**
+   * Hybrid: link a bookable service to show a “Book / Schedule” action on the storefront.
+   */
+  linkedService?: (number | null) | Service;
   /**
    * Show low-stock warning when inventory is at or below this value. Used for admin visibility and optional alerts.
    */
@@ -1060,6 +1070,47 @@ export interface Variant {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Bookable services (e.g. Consultation, Session). Each booking is for one service.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  /**
+   * Display name (e.g. "30 min Consultation").
+   */
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Optional short description shown when selecting a service.
+   */
+  description?: string | null;
+  /**
+   * Length of the appointment in minutes. Used to generate time slots.
+   */
+  durationMinutes: number;
+  /**
+   * When enabled, customers pay this amount (minor units) at booking via Stripe.
+   */
+  enabledPriceInGBP?: boolean | null;
+  priceInGBP?: number | null;
+  /**
+   * Inactive services are hidden from the booking form.
+   */
+  active?: boolean | null;
+  /**
+   * Hybrid shops: optional product tied to this service (booking confirmation can link commerce + booking).
+   */
+  linkedProduct?: (number | null) | Product;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "transactions".
  */
@@ -1186,6 +1237,32 @@ export interface Address {
   createdAt: string;
 }
 /**
+ * Optional managed slots for a service and date. When rows exist for a date, only these times are offered (instead of generated grid).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-slots".
+ */
+export interface BookingSlot {
+  id: number;
+  service: number | Service;
+  slotDate: string;
+  /**
+   * Start time HH:mm (24h).
+   */
+  slotTime: string;
+  /**
+   * Max concurrent bookings for this start time.
+   */
+  capacity: number;
+  /**
+   * Optional staff member assigned to this slot.
+   */
+  staff?: (number | null) | User;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings".
  */
@@ -1210,8 +1287,20 @@ export interface Booking {
    * Time slot (e.g. "09:00").
    */
   slotTime: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  /**
+   * Set when the customer books a managed slot row (capacity-tracked).
+   */
+  slotOffering?: (number | null) | BookingSlot;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'refunded';
   notes?: string | null;
+  /**
+   * Set when a refund is issued via Stripe from this screen.
+   */
+  refundedAt?: string | null;
+  /**
+   * Refunded amount in pence.
+   */
+  refundAmount?: number | null;
   /**
    * Set when the customer paid at booking time (pay on book).
    */
@@ -1229,43 +1318,6 @@ export interface Booking {
    * Payment transaction rows for this booking.
    */
   transactions?: (number | BookingTransaction)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Bookable services (e.g. Consultation, Session). Each booking is for one service.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services".
- */
-export interface Service {
-  id: number;
-  /**
-   * Display name (e.g. "30 min Consultation").
-   */
-  name: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  /**
-   * Optional short description shown when selecting a service.
-   */
-  description?: string | null;
-  /**
-   * Length of the appointment in minutes. Used to generate time slots.
-   */
-  durationMinutes: number;
-  /**
-   * When enabled, customers pay this amount (minor units) at booking via Stripe.
-   */
-  enabledPriceInGBP?: boolean | null;
-  priceInGBP?: number | null;
-  /**
-   * Inactive services are hidden from the booking form.
-   */
-  active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1297,6 +1349,48 @@ export interface BookingTransaction {
      */
     paymentIntentID?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Waitlist signups when a managed slot is full.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-waitlist".
+ */
+export interface BookingWaitlist {
+  id: number;
+  service: number | Service;
+  slotDate: string;
+  /**
+   * Preferred start time (HH:mm), or leave empty for “any time that day”. Required when joining a specific managed slot.
+   */
+  slotTime?: string | null;
+  /**
+   * Managed slot row, if applicable.
+   */
+  slotOffering?: (number | null) | BookingSlot;
+  guestEmail: string;
+  guestName?: string | null;
+  status: 'pending' | 'notified' | 'cancelled';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stock-reservations".
+ */
+export interface StockReservation {
+  id: number;
+  cart: number | Cart;
+  /**
+   * Payload cart line array row id
+   */
+  cartItemId: string;
+  product: number | Product;
+  variant?: (number | null) | Variant;
+  quantity: number;
+  expiresAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1358,6 +1452,10 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'booking-slots';
+        value: number | BookingSlot;
+      } | null)
+    | ({
         relationTo: 'bookings';
         value: number | Booking;
       } | null)
@@ -1366,8 +1464,16 @@ export interface PayloadLockedDocument {
         value: number | BookingTransaction;
       } | null)
     | ({
+        relationTo: 'booking-waitlist';
+        value: number | BookingWaitlist;
+      } | null)
+    | ({
         relationTo: 'services';
         value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'stock-reservations';
+        value: number | StockReservation;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1716,6 +1822,20 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-slots_select".
+ */
+export interface BookingSlotsSelect<T extends boolean = true> {
+  service?: T;
+  slotDate?: T;
+  slotTime?: T;
+  capacity?: T;
+  staff?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "bookings_select".
  */
 export interface BookingsSelect<T extends boolean = true> {
@@ -1726,8 +1846,11 @@ export interface BookingsSelect<T extends boolean = true> {
   guestName?: T;
   slotDate?: T;
   slotTime?: T;
+  slotOffering?: T;
   status?: T;
   notes?: T;
+  refundedAt?: T;
+  refundAmount?: T;
   stripePaymentIntentId?: T;
   amount?: T;
   currency?: T;
@@ -1756,6 +1879,21 @@ export interface BookingTransactionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-waitlist_select".
+ */
+export interface BookingWaitlistSelect<T extends boolean = true> {
+  service?: T;
+  slotDate?: T;
+  slotTime?: T;
+  slotOffering?: T;
+  guestEmail?: T;
+  guestName?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
@@ -1767,6 +1905,21 @@ export interface ServicesSelect<T extends boolean = true> {
   enabledPriceInGBP?: T;
   priceInGBP?: T;
   active?: T;
+  linkedProduct?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stock-reservations_select".
+ */
+export interface StockReservationsSelect<T extends boolean = true> {
+  cart?: T;
+  cartItemId?: T;
+  product?: T;
+  variant?: T;
+  quantity?: T;
+  expiresAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2008,6 +2161,7 @@ export interface ProductsSelect<T extends boolean = true> {
   priceInGBPEnabled?: T;
   priceInGBP?: T;
   relatedProducts?: T;
+  linkedService?: T;
   lowStockThreshold?: T;
   meta?:
     | T
@@ -2255,7 +2409,7 @@ export interface BlockedDate {
   createdAt?: string | null;
 }
 /**
- * Configure default hours and fallback slot length.
+ * Configure slot length and hours. Add **seven** weekday rows (Sun–Sat, weekday 0–6) to use per-day hours; otherwise defaults apply every day.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "booking-settings".
@@ -2267,13 +2421,37 @@ export interface BookingSetting {
    */
   slotDurationMinutes: number;
   /**
-   * Start hour (0–23) for generating slots.
+   * Start hour (0–23) when **weekday hours** below is empty or has fewer than 7 rows. Ignored per day once a full week is configured.
    */
   defaultStartHour: number;
   /**
-   * End hour (0–23) for generating slots.
+   * End hour (0–23) when **weekday hours** is incomplete. Must be greater than default start hour.
    */
   defaultEndHour: number;
+  /**
+   * Optional: add **exactly 7** rows (weekdays 0–6, 0 = Sunday) to set different hours or mark a day closed. Fewer than 7 rows are ignored; defaults above are used instead.
+   */
+  weekdayHours?:
+    | {
+        /**
+         * Matches UTC calendar day of the selected booking date.
+         */
+        weekday: '0' | '1' | '2' | '3' | '4' | '5' | '6';
+        /**
+         * No generated slots on this weekday.
+         */
+        closed?: boolean | null;
+        /**
+         * Start hour when open
+         */
+        startHour?: number | null;
+        /**
+         * End hour when open (exclusive upper bound for slot grid)
+         */
+        endHour?: number | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2348,6 +2526,15 @@ export interface BookingSettingsSelect<T extends boolean = true> {
   slotDurationMinutes?: T;
   defaultStartHour?: T;
   defaultEndHour?: T;
+  weekdayHours?:
+    | T
+    | {
+        weekday?: T;
+        closed?: T;
+        startHour?: T;
+        endHour?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

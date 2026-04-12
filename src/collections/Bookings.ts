@@ -1,11 +1,15 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
-import { toDateOnlyString } from '@/utilities/dateOnly'
+import { dateOnlyToUtcNoonDate, toDateOnlyString } from '@/utilities/dateOnly'
 import { checkRole } from '@/access/utilities'
+import { notifyWaitlistOnCancel } from '@/collections/Bookings/hooks/notifyWaitlistOnCancel'
 
 export const Bookings: CollectionConfig = {
   slug: 'bookings',
+  hooks: {
+    afterChange: [notifyWaitlistOnCancel],
+  },
   admin: {
     useAsTitle: 'id',
     group: 'Booking',
@@ -72,13 +76,15 @@ export const Bookings: CollectionConfig = {
         beforeValidate: [
           ({ value }) => {
             if (value == null || value === '') return value
-            return toDateOnlyString(String(value))
+            const ymd = toDateOnlyString(value as string | Date)
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return value
+            return dateOnlyToUtcNoonDate(ymd)
           },
         ],
         afterRead: [
           ({ value }) => {
             if (value == null || value === '') return value
-            return toDateOnlyString(String(value))
+            return toDateOnlyString(value as string | Date)
           },
         ],
       },
@@ -90,6 +96,15 @@ export const Bookings: CollectionConfig = {
       admin: { description: 'Time slot (e.g. "09:00").' },
     },
     {
+      name: 'slotOffering',
+      type: 'relationship',
+      relationTo: 'booking-slots',
+      admin: {
+        position: 'sidebar',
+        description: 'Set when the customer books a managed slot row (capacity-tracked).',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       required: true,
@@ -98,11 +113,53 @@ export const Bookings: CollectionConfig = {
         { label: 'Pending', value: 'pending' },
         { label: 'Confirmed', value: 'confirmed' },
         { label: 'Cancelled', value: 'cancelled' },
+        { label: 'Refunded', value: 'refunded' },
       ],
     },
     {
       name: 'notes',
       type: 'textarea',
+    },
+    {
+      name: 'downloadBookingInvoice',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/BookingDownloadInvoiceButton#BookingDownloadInvoiceButton',
+        },
+      },
+    },
+    {
+      name: 'refundedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Set when a refund is issued via Stripe from this screen.',
+      },
+    },
+    {
+      name: 'refundAmount',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Refunded amount in pence.',
+        components: {
+          Field: '@/components/RefundAmountField#RefundAmountField',
+        },
+      },
+    },
+    {
+      name: 'refundAction',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/BookingRefundButton#BookingRefundButton',
+        },
+      },
     },
     {
       name: 'stripePaymentIntentId',
