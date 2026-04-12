@@ -55,7 +55,7 @@ Seeding is done via `POST /next/seed` with body `{ "mode": "ecommerce" }` or `{ 
 ## Booking mode only
 
 - No carts, orders, or transactions.
-- Two demo **bookings**: one confirmed and one pending, each linked to a marquee product (tomorrow and day-after dates).
+- Two demo **services** (30 min and 60 min) and two demo **bookings** (one confirmed, one pending) for tomorrow and the day after.
 
 ## Troubleshooting
 

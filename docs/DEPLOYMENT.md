@@ -33,7 +33,7 @@ The included `docker-compose.yml` runs the app and a Postgres database. On the s
    - `NEXT_PUBLIC_SERVER_URL` and `PAYLOAD_PUBLIC_SERVER_URL` to your public URL (e.g. `https://yourdomain.com`)
    - Stripe keys and (optional) SMTP if you use payments and email
 2. If using the compose Postgres, leave `DATABASE_URL` unset in `.env` or let the compose `environment` override it to `postgresql://payload:payload@db:5432/payload`.
-3. Run migrations and start:
+3. Start the stack. This template defaults to **schema push** in non-production (`push: true` in `payload.config.ts`), so you usually **do not** need `payload migrate` unless you have committed migrations.
 
 ```bash
 docker compose up -d db

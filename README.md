@@ -28,6 +28,10 @@ Core features:
 - [Currencies](#currencies)
 - [Automated Tests](#tests)
 
+## Template roadmap (phases & backlog)
+
+This repo is evolving toward a **configurable SaaS-style template** (ecommerce, booking, or hybrid via `PROJECT_TYPE`). A concise phase overview, what is already covered for booking, and a **mini todo list** for future improvements lives in **[docs/TEMPLATE_PHASES.md](docs/TEMPLATE_PHASES.md)**.
+
 ## Quick Start
 
 To spin up this example locally, follow these steps:
@@ -59,7 +63,7 @@ After cloning this template for a new project:
 
 1. **Branding**: Set `SITE_NAME`, `COMPANY_NAME`, and server URLs in `.env`. Replace `public/favicon.ico` and `public/favicon.svg` (and header logo if desired) with the client’s assets.
 2. **Theme**: Colours and fonts are driven by `src/config/theme.ts`. The default palette matches the current design; edit that file to change primary/accent colours (oklch values). Optional env: `FONT_SANS`, `FONT_MONO` (preset keys; default `geist`).
-3. **Project type**: Set `PROJECT_TYPE=ecommerce|booking|hybrid` and feature flags (`ENABLE_BOOKING`, `ENABLE_INVOICES`) as needed.
+3. **Project type**: Set `PROJECT_TYPE` to `ecommerce` (shop only), `booking` (bookable services only), or `hybrid` (both). Use `ENABLE_INVOICES=false` only if you need invoices off.
 
 ## How it works
 
@@ -125,11 +129,24 @@ See the [Globals](https://payloadcms.com/docs/configuration/globals) docs for de
 
 - `Booking settings`
 
-  When booking is enabled (`ENABLE_BOOKING=true` or `PROJECT_TYPE=booking|hybrid`): slot duration and default start/end hours for generating available slots. Managed in Admin → Globals → Booking settings.
+  When `PROJECT_TYPE` is `booking` or `hybrid`: default start/end hours for slot generation (per-service duration is used when the customer picks a service). Managed in Admin → Globals → Booking settings.
+
+- `Services`
+
+  Bookable services (e.g. Consultation, Session) with name, duration, and GBP pricing: **`enabledPriceInGBP`** + **`priceInGBP`** (same `PriceInput` as products; minor units). **`GET /api/booking/services`** maps the flag to **`priceInGBPEnabled`** for the `/book` client. When booking is enabled, customers pick a service, date, and time at `/book`. Managed in Admin → Services.
 
 - `Bookings`
 
-  Collection for booking records (customer, guest email/name, slot date/time, status). Admins manage in Admin → Bookings. Frontend booking flow at `/book` (only when booking is enabled). Add a "Book" link in Header nav (Admin → Globals → Header) when using booking.
+  Collection for booking records (service, customer, guest email/name, slot date/time, status). Admins manage in Admin → Bookings. Frontend booking flow at `/book` when `PROJECT_TYPE` is `booking` or `hybrid`. A confirmation email is sent after each booking with an optional cancel link. Logged-in users can view and cancel from **Account → My bookings**. Add a "Book" link in Header nav (Admin → Globals → Header) when using booking; the seed adds it when run with booking mode.
+
+### Booking flow (`PROJECT_TYPE` is `booking` or `hybrid`)
+
+1. **Services** – Define bookable services in Admin → Services (name, duration, optional GBP price like products for pay-at-book).
+2. **Blocked dates** – Configure closed periods in Admin → Globals → Blocked dates; the calendar and slots API exclude these.
+3. **Booking settings** – Set slot duration and default hours in Admin → Globals → Booking settings.
+4. **/book** – Customer selects service → date (calendar) → time → guest details; submits to create a booking.
+5. **Confirmation email** – Sent after booking (if email adapter is configured) with service, date, time and a cancel link.
+6. **My bookings** – Logged-in users see Account → My bookings and can cancel there; guests use the link in the email.
 
 ## Access control
 

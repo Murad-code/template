@@ -11,7 +11,7 @@ Use this before going live with a new client project cloned from this template.
 - [ ] Stripe keys (live) and `STRIPE_WEBHOOKS_SIGNING_SECRET` – webhook URL: `https://yourdomain.com/api/payments/stripe/webhooks`
 - [ ] SMTP vars if using order emails / form emails / invoices
 - [ ] `SITE_NAME`, `COMPANY_NAME` (and optional `COMPANY_ADDRESS` for invoices)
-- [ ] `PROJECT_TYPE` and feature flags (`ENABLE_BOOKING`, etc.) if needed
+- [ ] `PROJECT_TYPE` (`ecommerce` | `booking` | `hybrid`) for shop vs booking vs both
 
 ## Branding and theme
 
@@ -23,6 +23,7 @@ Use this before going live with a new client project cloned from this template.
 
 - [ ] Create first admin user after first deploy
 - [ ] Configure Globals: Header, Footer (nav), Blocked dates (if using booking), Booking settings (if using booking)
+- [ ] If using booking: add Services in Admin → Services and configure Booking settings
 - [ ] Run seed only if you need demo content (seed is destructive)
 
 ## Deployment
@@ -30,7 +31,7 @@ Use this before going live with a new client project cloned from this template.
 - [ ] Build and run with Docker (see [DEPLOYMENT.md](./DEPLOYMENT.md))
 - [ ] Run Payload migrations: `payload migrate` (or `docker compose run app node node_modules/.bin/payload migrate`)
 - [ ] Point DNS at the server and confirm SSL (reverse proxy)
-- [ ] Test admin login, frontend, checkout (if ecommerce), and booking (if enabled)
+- [ ] Test admin login, frontend, checkout (if `ecommerce` or `hybrid`), and booking (if `booking` or `hybrid`)
 
 ## Post-launch
 
