@@ -1,5 +1,7 @@
-import type { PayloadRequest } from 'payload'
+import type { Payload, PayloadRequest } from 'payload'
 import type { BlockedDate } from '@/payload-types'
+
+import { toDateOnlyString } from '@/utilities/dateOnly'
 
 export type BlockedRange = {
   start: string
@@ -11,26 +13,27 @@ export type BlockedRange = {
  * Fetch blocked date ranges from the BlockedDates global.
  * Use in booking flows to exclude these ranges from available slots.
  */
-export async function getBlockedRanges(payload: { getGlobal: (args: unknown) => Promise<unknown> }, req?: PayloadRequest): Promise<BlockedRange[]> {
-  const global = await payload.getGlobal({
+export async function getBlockedRanges(payload: Payload, req?: PayloadRequest): Promise<BlockedRange[]> {
+  const global = (await payload.findGlobal({
     slug: 'blocked-dates',
+    depth: 0,
     ...(req && { req }),
-  }) as BlockedDate | null
+  })) as BlockedDate | null
 
   const ranges = global?.ranges ?? []
   return ranges
     .filter((r): r is { start: string; end: string; reason?: string | null } => Boolean(r?.start && r?.end))
     .map((r) => ({
-      start: typeof r.start === 'string' ? r.start : new Date(r.start).toISOString().slice(0, 10),
-      end: typeof r.end === 'string' ? r.end : new Date(r.end).toISOString().slice(0, 10),
+      start: toDateOnlyString(r.start as string | Date),
+      end: toDateOnlyString(r.end as string | Date),
       reason: r.reason ?? null,
     }))
 }
 
 /**
- * Check if a given date (YYYY-MM-DD or Date) falls within any blocked range.
+ * Check if a given date (canonical `yyyy-mm-dd` string or Date) falls within any blocked range.
  */
 export function isDateBlocked(date: string | Date, ranges: BlockedRange[]): boolean {
-  const d = typeof date === 'string' ? date : date.toISOString().slice(0, 10)
+  const d = typeof date === 'string' ? toDateOnlyString(date) : toDateOnlyString(date)
   return ranges.some((r) => d >= r.start && d <= r.end)
 }
