@@ -7,9 +7,11 @@ import { usePathname } from 'next/navigation'
 
 type Props = {
   className?: string
+  /** When true, show "My bookings" link (from getSiteConfig().bookingEnabled). */
+  bookingEnabled?: boolean
 }
 
-export const AccountNav: React.FC<Props> = ({ className }) => {
+export const AccountNav: React.FC<Props> = ({ className, bookingEnabled }) => {
   const pathname = usePathname()
 
   return (
@@ -52,6 +54,20 @@ export const AccountNav: React.FC<Props> = ({ className }) => {
             <Link href="/orders">Orders</Link>
           </Button>
         </li>
+
+        {bookingEnabled && (
+          <li>
+            <Button
+              asChild
+              variant="link"
+              className={clsx('text-primary/50 hover:text-primary hover:no-underline', {
+                'text-primary': pathname === '/account/bookings' || pathname.includes('/account/bookings'),
+              })}
+            >
+              <Link href="/account/bookings">My bookings</Link>
+            </Button>
+          </li>
+        )}
       </ul>
 
       <hr className="w-full border-white/5" />
