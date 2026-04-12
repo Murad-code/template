@@ -1,6 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { resendAdapter } from '@payloadcms/email-resend'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { resendAdapter } from '@payloadcms/email-resend'
 import {
   BoldFeature,
   EXPERIMENTAL_TableFeature,
@@ -16,8 +16,10 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
+import { BookingTransactions } from '@/collections/BookingTransactions'
 import { Bookings } from '@/collections/Bookings'
 import { Categories } from '@/collections/Categories'
+import { Services } from '@/collections/Services'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { Users } from '@/collections/Users'
@@ -30,10 +32,8 @@ import { plugins } from './plugins'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Email: Resend (RESEND_API_KEY or SENDGRID_API_KEY starting with "re_"), SendGrid SMTP, or SMTP_* vars.
-const sendgridApiKey = process.env.SENDGRID_API_KEY
-const resendApiKey =
-  process.env.RESEND_API_KEY ?? (sendgridApiKey?.startsWith('re_') ? sendgridApiKey : undefined)
+// Email: Resend (REST, RESEND_API_KEY) by default; optional Nodemailer + SMTP_* if no Resend key.
+const resendApiKey = process.env.RESEND_API_KEY
 const fromEmail = process.env.SMTP_FROM_EMAIL
 const fromName = process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site'
 
@@ -44,26 +44,19 @@ const emailAdapter =
         defaultFromAddress: fromEmail,
         defaultFromName: fromName,
       })
-    : fromEmail && (sendgridApiKey || process.env.SMTP_HOST)
+    : fromEmail && process.env.SMTP_HOST
       ? await nodemailerAdapter({
           defaultFromAddress: fromEmail,
           defaultFromName: fromName,
-          transportOptions: sendgridApiKey
-            ? {
-                host: 'smtp.sendgrid.net',
-                port: 587,
-                secure: false,
-                auth: { user: 'apikey', pass: sendgridApiKey },
-              }
-            : {
-                host: process.env.SMTP_HOST,
-                port: parseInt(process.env.SMTP_PORT || '587', 10),
-                secure: process.env.SMTP_SECURE === 'true',
-                auth:
-                  process.env.SMTP_USER && process.env.SMTP_PASS
-                    ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-                    : undefined,
-              },
+          transportOptions: {
+            host: process.env.SMTP_HOST,
+            port: parseInt(process.env.SMTP_PORT || '587', 10),
+            secure: process.env.SMTP_SECURE === 'true',
+            auth:
+              process.env.SMTP_USER && process.env.SMTP_PASS
+                ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+                : undefined,
+          },
           skipVerify: true,
         })
       : undefined
@@ -82,7 +75,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Bookings],
+  collections: [Users, Pages, Categories, Media, Bookings, BookingTransactions, Services],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',

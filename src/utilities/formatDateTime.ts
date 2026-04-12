@@ -8,7 +8,8 @@ type Props = {
 export const formatDateTime = ({ date, format: formatFromProps }: Props): string => {
   if (!date) return ''
 
-  const dateFormat = formatFromProps ?? 'dd/MM/yyyy'
+  /** Default matches UK-style short date used across the app (`dd-mm-yyyy`). */
+  const dateFormat = formatFromProps ?? 'dd-MM-yyyy'
 
   const formattedDate = format(new Date(date), dateFormat)
 

@@ -3,7 +3,9 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { Plugin } from 'payload'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import { ecommercePlugin, GBP } from '@payloadcms/plugin-ecommerce'
+import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
+
+import { ecommerceCurrenciesConfig } from '@/config/ecommerceCurrencies'
 
 import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 
@@ -80,10 +82,7 @@ export const plugins: Plugin[] = [
     },
   }),
   ecommercePlugin({
-    currencies: {
-      defaultCurrency: 'GBP',
-      supportedCurrencies: [GBP],
-    },
+    currencies: ecommerceCurrenciesConfig,
     access: {
       adminOnlyFieldAccess,
       adminOrPublishedStatus,

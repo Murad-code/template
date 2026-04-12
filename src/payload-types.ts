@@ -77,6 +77,8 @@ export interface Config {
     categories: Category;
     media: Media;
     bookings: Booking;
+    'booking-transactions': BookingTransaction;
+    services: Service;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -111,6 +113,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
+    'booking-transactions': BookingTransactionsSelect<false> | BookingTransactionsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -1188,7 +1192,11 @@ export interface Address {
 export interface Booking {
   id: number;
   /**
-   * The marquee or bookable product this booking is for.
+   * The bookable service (e.g. Consultation, Session).
+   */
+  service: number | Service;
+  /**
+   * Optional: link to a product when using hybrid ecommerce + booking.
    */
   product?: (number | null) | Product;
   /**
@@ -1204,6 +1212,91 @@ export interface Booking {
   slotTime: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   notes?: string | null;
+  /**
+   * Set when the customer paid at booking time (pay on book).
+   */
+  stripePaymentIntentId?: string | null;
+  /**
+   * Total charged (minor units / pence). Set when payment succeeds.
+   */
+  amount?: number | null;
+  currency?: 'GBP' | null;
+  /**
+   * Secret token for guest “view booking” links (with email).
+   */
+  accessToken?: string | null;
+  /**
+   * Payment transaction rows for this booking.
+   */
+  transactions?: (number | BookingTransaction)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Bookable services (e.g. Consultation, Session). Each booking is for one service.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  /**
+   * Display name (e.g. "30 min Consultation").
+   */
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Optional short description shown when selecting a service.
+   */
+  description?: string | null;
+  /**
+   * Length of the appointment in minutes. Used to generate time slots.
+   */
+  durationMinutes: number;
+  /**
+   * When enabled, customers pay this amount (minor units) at booking via Stripe.
+   */
+  enabledPriceInGBP?: boolean | null;
+  priceInGBP?: number | null;
+  /**
+   * Inactive services are hidden from the booking form.
+   */
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Payment records for paid bookings (Stripe).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-transactions".
+ */
+export interface BookingTransaction {
+  id: number;
+  /**
+   * The booking this payment belongs to.
+   */
+  booking: number | Booking;
+  status: 'pending' | 'succeeded' | 'failed' | 'cancelled' | 'expired' | 'refunded';
+  /**
+   * Amount in minor units (pence for GBP).
+   */
+  amount?: number | null;
+  currency?: 'GBP' | null;
+  /**
+   * Guest or payer email (for admin reference).
+   */
+  customerEmail?: string | null;
+  stripe?: {
+    /**
+     * Stripe PaymentIntent ID.
+     */
+    paymentIntentID?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1267,6 +1360,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'bookings';
         value: number | Booking;
+      } | null)
+    | ({
+        relationTo: 'booking-transactions';
+        value: number | BookingTransaction;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1618,6 +1719,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "bookings_select".
  */
 export interface BookingsSelect<T extends boolean = true> {
+  service?: T;
   product?: T;
   customer?: T;
   guestEmail?: T;
@@ -1626,6 +1728,45 @@ export interface BookingsSelect<T extends boolean = true> {
   slotTime?: T;
   status?: T;
   notes?: T;
+  stripePaymentIntentId?: T;
+  amount?: T;
+  currency?: T;
+  accessToken?: T;
+  transactions?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "booking-transactions_select".
+ */
+export interface BookingTransactionsSelect<T extends boolean = true> {
+  booking?: T;
+  status?: T;
+  amount?: T;
+  currency?: T;
+  customerEmail?: T;
+  stripe?:
+    | T
+    | {
+        paymentIntentID?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  description?: T;
+  durationMinutes?: T;
+  enabledPriceInGBP?: T;
+  priceInGBP?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2031,11 +2172,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Core nav links are generated from PROJECT_TYPE (see src/config/nav.ts). Add optional extra links here; URLs that match the generated set are skipped on the site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
   id: number;
+  /**
+   * Optional links appended after Home / Shop / Book / Account. Use for pages like Contact or Pricing.
+   */
   navItems?:
     | {
         link: {
@@ -2055,11 +2201,16 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
+ * Default footer links (Admin, Find my order, Book, Payload) come from PROJECT_TYPE in src/config/nav.ts. Add optional extras below.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
   id: number;
+  /**
+   * Appended after the derived links when the URL is not already listed.
+   */
   navItems?:
     | {
         link: {
@@ -2104,7 +2255,7 @@ export interface BlockedDate {
   createdAt?: string | null;
 }
 /**
- * Configure availability and slot duration. Used when booking is enabled (ENABLE_BOOKING or PROJECT_TYPE=booking|hybrid).
+ * Configure default hours and fallback slot length.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "booking-settings".

@@ -1,13 +1,24 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
+import { toDateOnlyString } from '@/utilities/dateOnly'
 import { checkRole } from '@/access/utilities'
 
 export const Bookings: CollectionConfig = {
   slug: 'bookings',
   admin: {
     useAsTitle: 'id',
-    defaultColumns: ['id', 'slotDate', 'slotTime', 'guestEmail', 'status', 'createdAt'],
+    group: 'Booking',
+    defaultColumns: [
+      'id',
+      'service',
+      'slotDate',
+      'slotTime',
+      'guestEmail',
+      'status',
+      'amount',
+      'createdAt',
+    ],
   },
   access: {
     create: () => true,
@@ -25,10 +36,17 @@ export const Bookings: CollectionConfig = {
   },
   fields: [
     {
+      name: 'service',
+      type: 'relationship',
+      relationTo: 'services',
+      required: true,
+      admin: { description: 'The bookable service (e.g. Consultation, Session).' },
+    },
+    {
       name: 'product',
       type: 'relationship',
       relationTo: 'products',
-      admin: { position: 'sidebar', description: 'The marquee or bookable product this booking is for.' },
+      admin: { position: 'sidebar', description: 'Optional: link to a product when using hybrid ecommerce + booking.' },
     },
     {
       name: 'customer',
@@ -50,6 +68,20 @@ export const Bookings: CollectionConfig = {
       type: 'date',
       required: true,
       admin: { date: { pickerAppearance: 'dayOnly' } },
+      hooks: {
+        beforeValidate: [
+          ({ value }) => {
+            if (value == null || value === '') return value
+            return toDateOnlyString(String(value))
+          },
+        ],
+        afterRead: [
+          ({ value }) => {
+            if (value == null || value === '') return value
+            return toDateOnlyString(String(value))
+          },
+        ],
+      },
     },
     {
       name: 'slotTime',
@@ -71,6 +103,65 @@ export const Bookings: CollectionConfig = {
     {
       name: 'notes',
       type: 'textarea',
+    },
+    {
+      name: 'stripePaymentIntentId',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Set when the customer paid at booking time (pay on book).',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'amount',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+        description: 'Total charged (minor units / pence). Set when payment succeeds.',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'currency',
+      type: 'select',
+      defaultValue: 'GBP',
+      options: [{ label: 'GBP', value: 'GBP' }],
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'accessToken',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Secret token for guest “view booking” links (with email).',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, operation }) => {
+            if (operation === 'create' || !value) {
+              return crypto.randomUUID()
+            }
+            return value
+          },
+        ],
+      },
+    },
+    {
+      name: 'transactions',
+      type: 'relationship',
+      relationTo: 'booking-transactions',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Payment transaction rows for this booking.',
+      },
     },
   ],
 }

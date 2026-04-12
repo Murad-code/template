@@ -6,7 +6,8 @@ export const BookingSettings: GlobalConfig = {
   slug: 'booking-settings',
   label: 'Booking settings',
   admin: {
-    description: 'Configure availability and slot duration. Used when booking is enabled (ENABLE_BOOKING or PROJECT_TYPE=booking|hybrid).',
+    group: 'Booking',
+    description: 'Configure default hours and fallback slot length.',
   },
   access: {
     read: () => true,

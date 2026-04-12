@@ -23,7 +23,9 @@ const collections: CollectionSlug[] = [
   'transactions',
   'addresses',
   'orders',
+  'booking-transactions',
   'bookings',
+  'services',
 ]
 
 const globals: GlobalSlug[] = ['header', 'footer']
@@ -202,23 +204,14 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals...`)
 
-  const headerNav = [
-    { link: { type: 'custom' as const, label: 'Home', url: '/' } },
-    { link: { type: 'custom' as const, label: 'Products', url: '/shop' } },
-    { link: { type: 'custom' as const, label: 'Account', url: '/account' } },
-  ]
-  const footerNav = [
-    { link: { type: 'custom' as const, label: 'Admin', url: '/admin' } },
-    { link: { type: 'custom' as const, label: 'Find my order', url: '/find-order' } },
-    { link: { type: 'custom' as const, label: 'Payload', newTab: true, url: 'https://payloadcms.com/' } },
-  ]
+  // Header/footer primary links are derived from PROJECT_TYPE (see src/config/nav.ts).
   await payload.updateGlobal({
     slug: 'header',
-    data: { navItems: headerNav } as Partial<Header>,
+    data: { navItems: [] } as Partial<Header>,
   })
   await payload.updateGlobal({
     slug: 'footer',
-    data: { navItems: footerNav } as Partial<Footer>,
+    data: { navItems: [] } as Partial<Footer>,
   })
 
   if (mode === 'ecommerce') {
@@ -277,10 +270,29 @@ export const seed = async ({
   }
 
   if (mode === 'booking') {
-    payload.logger.info(`— Seeding demo bookings...`)
+    payload.logger.info(`— Seeding demo services and bookings...`)
 
-    const productA = firstProduct
-    const productB = products[1]
+    const service30 = await payload.create({
+      collection: 'services',
+      data: {
+        name: '30 min Consultation',
+        slug: '30-min-consultation',
+        description: 'A short consultation.',
+        durationMinutes: 30,
+        active: true,
+      },
+    })
+
+    const service60 = await payload.create({
+      collection: 'services',
+      data: {
+        name: '60 min Session',
+        slug: '60-min-session',
+        description: 'Full session.',
+        durationMinutes: 60,
+        active: true,
+      },
+    })
 
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
@@ -290,7 +302,7 @@ export const seed = async ({
     await payload.create({
       collection: 'bookings',
       data: {
-        product: productA.id,
+        service: service30.id,
         guestEmail: 'customer@example.com',
         guestName: 'Demo Customer',
         slotDate: tomorrow.toISOString().slice(0, 10),
@@ -299,19 +311,17 @@ export const seed = async ({
       },
     })
 
-    if (productB) {
-      await payload.create({
-        collection: 'bookings',
-        data: {
-          product: productB.id,
-          guestEmail: 'guest@example.com',
-          guestName: 'Guest User',
-          slotDate: dayAfter.toISOString().slice(0, 10),
-          slotTime: '14:00',
-          status: 'pending',
-        },
-      })
-    }
+    await payload.create({
+      collection: 'bookings',
+      data: {
+        service: service60.id,
+        guestEmail: 'guest@example.com',
+        guestName: 'Guest User',
+        slotDate: dayAfter.toISOString().slice(0, 10),
+        slotTime: '14:00',
+        status: 'pending',
+      },
+    })
   }
 
   payload.logger.info('Seeded database successfully!')

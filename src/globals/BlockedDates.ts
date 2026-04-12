@@ -1,11 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
+import { toDateOnlyString } from '@/utilities/dateOnly'
 
 export const BlockedDates: GlobalConfig = {
   slug: 'blocked-dates',
   label: 'Blocked dates',
   admin: {
+    group: 'Booking',
     description: 'Date ranges when the business is closed or bookings are disabled. Used to hide slots in booking flows.',
   },
   access: {
@@ -28,6 +30,20 @@ export const BlockedDates: GlobalConfig = {
           admin: {
             date: { pickerAppearance: 'dayOnly' },
           },
+          hooks: {
+            beforeValidate: [
+              ({ value }) => {
+                if (value == null || value === '') return value
+                return toDateOnlyString(String(value))
+              },
+            ],
+            afterRead: [
+              ({ value }) => {
+                if (value == null || value === '') return value
+                return toDateOnlyString(String(value))
+              },
+            ],
+          },
         },
         {
           name: 'end',
@@ -35,6 +51,20 @@ export const BlockedDates: GlobalConfig = {
           required: true,
           admin: {
             date: { pickerAppearance: 'dayOnly' },
+          },
+          hooks: {
+            beforeValidate: [
+              ({ value }) => {
+                if (value == null || value === '') return value
+                return toDateOnlyString(String(value))
+              },
+            ],
+            afterRead: [
+              ({ value }) => {
+                if (value == null || value === '') return value
+                return toDateOnlyString(String(value))
+              },
+            ],
           },
         },
         {
