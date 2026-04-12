@@ -5,8 +5,9 @@ import { Price } from '@/components/Price'
 import { Button } from '@/components/ui/button'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getSiteConfig } from '@/config/site'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { ChevronLeftIcon } from 'lucide-react'
 import { ProductItem } from '@/components/ProductItem'
 import { headers as getHeaders } from 'next/headers.js'
@@ -23,6 +24,11 @@ type PageProps = {
 }
 
 export default async function Order({ params, searchParams }: PageProps) {
+  const { ecommerceEnabled, bookingEnabled } = getSiteConfig()
+  if (!ecommerceEnabled) {
+    redirect(bookingEnabled ? '/account/bookings' : '/account')
+  }
+
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
@@ -139,7 +145,7 @@ export default async function Order({ params, searchParams }: PageProps) {
             <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Order Date</p>
             <p className="text-lg">
               <time dateTime={order.createdAt}>
-                {formatDateTime({ date: order.createdAt, format: 'MMMM dd, yyyy' })}
+                {formatDateTime({ date: order.createdAt })}
               </time>
             </p>
           </div>

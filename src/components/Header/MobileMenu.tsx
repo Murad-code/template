@@ -20,9 +20,10 @@ import React, { useEffect, useState } from 'react'
 
 interface Props {
   menu: Header['navItems']
+  ecommerceEnabled: boolean
 }
 
-export function MobileMenu({ menu }: Props) {
+export function MobileMenu({ menu, ecommerceEnabled }: Props) {
   const { user } = useAuth()
 
   const pathname = usePathname()
@@ -75,9 +76,11 @@ export function MobileMenu({ menu }: Props) {
             <h2 className="text-xl mb-4">My account</h2>
             <hr className="my-2" />
             <ul className="flex flex-col gap-2">
-              <li>
-                <Link href="/orders">Orders</Link>
-              </li>
+              {ecommerceEnabled ? (
+                <li>
+                  <Link href="/orders">Orders</Link>
+                </li>
+              ) : null}
               <li>
                 <Link href="/account/addresses">Addresses</Link>
               </li>

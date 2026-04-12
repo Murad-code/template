@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
 import React, { Fragment } from 'react'
 
 import { CheckoutPage } from '@/components/checkout/CheckoutPage'
 
-export default function Checkout() {
+export default async function Checkout() {
+  redirectIfEcommerceDisabled()
   return (
     <div className="container min-h-[90vh] flex">
       {!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY && (

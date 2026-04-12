@@ -58,7 +58,7 @@ export async function sendOrderConfirmationEmail({
   }
   if (!req.payload.config.email) {
     req.payload.logger.warn({
-      msg: 'Order confirmation email skipped: no email adapter configured (set RESEND_API_KEY or SENDGRID_API_KEY/SMTP_*)',
+      msg: 'Order confirmation email skipped: no email adapter configured (set RESEND_API_KEY or SMTP_*)',
       orderId: order.id,
     })
     return

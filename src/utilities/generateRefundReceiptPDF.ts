@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import type { Order } from '@/payload-types'
 import { getSiteConfig } from '@/config/site'
+import { formatDateTime } from '@/utilities/formatDateTime'
 
 type OrderWithRefund = Order & { refundedAt?: string | null; refundAmount?: number | null }
 
@@ -39,11 +40,7 @@ export async function generateRefundReceiptPDF(order: OrderWithRefund): Promise<
   y -= 24
   drawText(`Order #${order.id}`, margin, 11)
   y -= 16
-  const refundDate = order.refundedAt
-    ? new Date(order.refundedAt).toLocaleDateString(undefined, {
-        dateStyle: 'medium',
-      })
-    : ''
+  const refundDate = order.refundedAt ? formatDateTime({ date: order.refundedAt }) : ''
   drawText(`Refund date: ${refundDate}`, margin, 10)
   y -= 16
   if (order.customerEmail) {

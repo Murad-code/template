@@ -1,6 +1,7 @@
 import type { Order } from '@/payload-types'
 import type { PayloadRequest } from 'payload'
 import { getSiteConfig } from '@/config/site'
+import { formatDateTime } from '@/utilities/formatDateTime'
 import { generateRefundReceiptPDF } from '@/utilities/generateRefundReceiptPDF'
 
 type CustomerLike = { email?: string | null } | number | null
@@ -52,9 +53,7 @@ export async function sendRefundConfirmationEmail({
   const { siteName } = getSiteConfig()
   const refundAmountPence = order.refundAmount ?? 0
   const refundFormatted = formatAmount(refundAmountPence)
-  const refundDate = order.refundedAt
-    ? new Date(order.refundedAt).toLocaleDateString(undefined, { dateStyle: 'medium' })
-    : ''
+  const refundDate = order.refundedAt ? formatDateTime({ date: order.refundedAt }) : ''
 
   const html = `
     <h1>Refund processed</h1>

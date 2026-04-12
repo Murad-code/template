@@ -13,6 +13,7 @@ import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
+import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
 
 type Args = {
   params: Promise<{
@@ -60,6 +61,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Args) {
+  redirectIfEcommerceDisabled()
   const { slug } = await params
   const product = await queryProductBySlug({ slug })
 

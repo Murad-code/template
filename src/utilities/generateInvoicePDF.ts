@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import type { Order } from '@/payload-types'
 import { getSiteConfig } from '@/config/site'
+import { formatDateTime } from '@/utilities/formatDateTime'
 
 type OrderItem = NonNullable<Order['items']>[number]
 type ProductLike = { title?: string | null; priceInGBP?: number | null }
@@ -113,7 +114,7 @@ export async function generateInvoicePDF(order: Order): Promise<Uint8Array> {
   // —— Invoice number (unique identification) and dates ——
   drawText(`Invoice number: ${order.id}`, colLeft, 11, true)
   nextLine(lineHeight)
-  const invoiceDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString(undefined, { dateStyle: 'medium' }) : ''
+  const invoiceDate = order.createdAt ? formatDateTime({ date: order.createdAt }) : ''
   drawText(`Invoice date: ${invoiceDate}`, colLeft, 10)
   nextLine(lineHeightSmall)
   drawText(`Supply date: ${invoiceDate}`, colLeft, 10)

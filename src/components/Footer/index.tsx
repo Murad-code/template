@@ -3,15 +3,17 @@ import type { Footer } from '@/payload-types'
 import { FooterMenu } from '@/components/Footer/menu'
 import { LogoIcon } from '@/components/icons/logo'
 import { getSiteConfig } from '@/config/site'
+import { getEffectiveFooterNavItems } from '@/config/nav'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
 export async function Footer() {
-  const { companyName, siteName } = getSiteConfig()
+  const config = getSiteConfig()
+  const { companyName, siteName } = config
   const footer: Footer = await getCachedGlobal('footer', 1)()
-  const menu = footer.navItems || []
+  const menu = getEffectiveFooterNavItems(footer, config)
   const currentYear = new Date().getFullYear()
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '')
   const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700'

@@ -24,9 +24,10 @@ export interface SiteConfig {
   soleTraderLegalAddress?: string
   serverURL: string
   projectType: ProjectType
-  enableBooking: boolean
-  /** True when booking is enabled via ENABLE_BOOKING or PROJECT_TYPE=booking|hybrid */
+  /** True when PROJECT_TYPE is `booking` or `hybrid` */
   bookingEnabled: boolean
+  /** True when PROJECT_TYPE is `ecommerce` or `hybrid` (shop, checkout, cart) */
+  ecommerceEnabled: boolean
   enableInvoices: boolean
   twitterCreator?: string
   twitterSite?: string
@@ -62,10 +63,8 @@ export function getSiteConfig(): SiteConfig {
     soleTraderLegalAddress: process.env.SOLE_TRADER_LEGAL_ADDRESS || undefined,
     serverURL,
     projectType: parseProjectType(process.env.PROJECT_TYPE),
-    enableBooking: process.env.ENABLE_BOOKING === 'true',
-    bookingEnabled:
-      process.env.ENABLE_BOOKING === 'true' ||
-      ['booking', 'hybrid'].includes(parseProjectType(process.env.PROJECT_TYPE)),
+    bookingEnabled: ['booking', 'hybrid'].includes(parseProjectType(process.env.PROJECT_TYPE)),
+    ecommerceEnabled: ['ecommerce', 'hybrid'].includes(parseProjectType(process.env.PROJECT_TYPE)),
     enableInvoices: process.env.ENABLE_INVOICES !== 'false',
     twitterCreator: twitterCreator || undefined,
     twitterSite: twitterSite || undefined,

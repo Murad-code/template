@@ -2,9 +2,11 @@ import { Categories } from '@/components/layout/search/Categories'
 import { FilterList } from '@/components/layout/search/filter'
 import { sorting } from '@/lib/constants'
 import { Search } from '@/components/Search'
+import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
 import React, { Suspense } from 'react'
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
+  redirectIfEcommerceDisabled()
   return (
     <Suspense fallback={null}>
       <div className="container flex flex-col gap-8 my-16 pb-4 ">

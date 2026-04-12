@@ -2,22 +2,23 @@
 import { CMSLink } from '@/components/Link'
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
+import type { Header } from '@/payload-types'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 
 import { MobileMenu } from './MobileMenu'
-import type { Header } from 'src/payload-types'
-
 import { LogoIcon } from '@/components/icons/logo'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/utilities/cn'
 
+type NavItem = NonNullable<Header['navItems']>[number]
+
 type Props = {
-  header: Header
+  menu: NavItem[]
+  ecommerceEnabled: boolean
 }
 
-export function HeaderClient({ header }: Props) {
-  const menu = header.navItems || []
+export function HeaderClient({ menu, ecommerceEnabled }: Props) {
   const pathname = usePathname()
 
   return (
@@ -25,7 +26,7 @@ export function HeaderClient({ header }: Props) {
       <nav className="flex items-center md:items-end justify-between container pt-2">
         <div className="block flex-none md:hidden">
           <Suspense fallback={null}>
-            <MobileMenu menu={menu} />
+            <MobileMenu ecommerceEnabled={ecommerceEnabled} menu={menu} />
           </Suspense>
         </div>
         <div className="flex w-full items-end justify-between">
@@ -54,11 +55,15 @@ export function HeaderClient({ header }: Props) {
             ) : null}
           </div>
 
-          <div className="flex justify-end md:w-1/3 gap-4">
-            <Suspense fallback={<OpenCartButton />}>
-              <Cart />
-            </Suspense>
-          </div>
+          {ecommerceEnabled ? (
+            <div className="flex justify-end md:w-1/3 gap-4">
+              <Suspense fallback={<OpenCartButton />}>
+                <Cart />
+              </Suspense>
+            </div>
+          ) : (
+            <div className="hidden w-1/3 md:block" aria-hidden />
+          )}
         </div>
       </nav>
     </div>
