@@ -28,9 +28,14 @@ Core features:
 - [Currencies](#currencies)
 - [Automated Tests](#tests)
 
-## Template roadmap (phases & backlog)
+## Project docs
 
-This repo is evolving toward a **configurable SaaS-style template** (ecommerce, booking, or hybrid via `PROJECT_TYPE`). A concise phase overview, what is already covered for booking, and a **mini todo list** for future improvements lives in **[docs/TEMPLATE_PHASES.md](docs/TEMPLATE_PHASES.md)**.
+Deployment and operations docs are consolidated in [`docs/README.md`](docs/README.md), including:
+
+- first-time VPS setup
+- ongoing deploy flow
+- current VPS architecture
+- new project setup after cloning this template
 
 ## Quick Start
 
@@ -55,7 +60,7 @@ pnpx create-payload-app my-project -t ecommerce
 
 That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
-**Production deployment:** We recommend deploying this template as a **Docker container on a VPS/VM** for a robust, repeatable setup without serverless cold starts. See [Deployment](#deployment) and **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for the Dockerfile, docker-compose, and step-by-step instructions. Use **[docs/CHECKLIST.md](docs/CHECKLIST.md)** before going live.
+**Production deployment:** We recommend Docker on a VPS/VM for a stable long-running runtime. See [`docs/README.md`](docs/README.md) for the current setup/deploy docs.
 
 ## Customising for a new client (template use)
 
@@ -111,7 +116,7 @@ See the [Collections](https://payloadcms.com/docs/configuration/collections) doc
 
   Primary collections for product details such as pricing per currency and optionally supports variants per product. Added by the [ecommerce plugin](https://payloadcms.com/docs/ecommerce/plugin#products). Each product (or variant) has **inventory**; optional **low stock threshold** (`lowStockThreshold`) drives storefront “only X left” copy, an admin list **Low** badge on inventory, and optional **email alerts** when stock crosses from above the threshold to at or below it (`ENABLE_LOW_STOCK_ALERTS`, `LOW_STOCK_ALERT_TO`). Variant SKUs use the parent product’s threshold for alerts.
 
-  **Cart stock reservations (optional):** Set `ENABLE_CART_STOCK_RESERVATION=true` to record short-lived `stock-reservations` rows when carts change so **other** carts cannot exceed sellable quantity at add-to-cart / cart update time (`CART_RESERVATION_TTL_MINUTES`, default 15). Expired rows should be removed with a cron job calling `POST /api/stock-reservations/cleanup-expired` with `Authorization: Bearer <STOCK_RESERVATION_CLEANUP_SECRET>` (see [DEPLOYMENT.md](docs/DEPLOYMENT.md)). The plugin’s payment initiation step still validates raw inventory; reservations mainly reduce oversell between cart updates and payment—document any stricter needs in your deployment notes.
+  **Cart stock reservations (optional):** Set `ENABLE_CART_STOCK_RESERVATION=true` to record short-lived `stock-reservations` rows when carts change so **other** carts cannot exceed sellable quantity at add-to-cart / cart update time (`CART_RESERVATION_TTL_MINUTES`, default 15). Expired rows should be removed with a cron job calling `POST /api/stock-reservations/cleanup-expired` with `Authorization: Bearer <STOCK_RESERVATION_CLEANUP_SECRET>` (see [`docs/deploy.md`](docs/deploy.md)). The plugin’s payment initiation step still validates raw inventory; reservations mainly reduce oversell between cart updates and payment—document any stricter needs in your deployment notes.
 
 ### Globals
 
@@ -432,7 +437,7 @@ export default buildConfig({
 Before deploying your app, you need to:
 
 1. Ensure your app builds and serves in production. See [Production](#production) for more details.
-2. **Recommended:** Deploy as a Docker container on any VPS/VM (DigitalOcean, Linode, Hetzner, EC2, etc.). See `docs/DEPLOYMENT.md` for the production Dockerfile and docker-compose.
+2. **Recommended:** Deploy as a Docker container on any VPS/VM (DigitalOcean, Linode, Hetzner, EC2, etc.). See [`docs/README.md`](docs/README.md).
 3. You can also deploy Payload as you would any other Node.js or Next.js application (e.g. directly on a VPS, DigitalOcean's Apps Platform, via Coolify). Check out the [deployment documentation](https://payloadcms.com/docs/production/deployment) for full details.
 
 ## Questions

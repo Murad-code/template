@@ -5,7 +5,7 @@ import { getStockReservationCleanupSecret } from '@/config/stock'
 /**
  * POST /api/stock-reservations/cleanup-expired
  * Authorization: Bearer <STOCK_RESERVATION_CLEANUP_SECRET>
- * Intended for cron (see docs/DEPLOYMENT.md).
+ * Intended for cron (see docs/deploy.md).
  */
 export const cleanupExpiredStockReservationsEndpoint: Endpoint = {
   path: '/stock-reservations/cleanup-expired',
