@@ -273,6 +273,10 @@ export interface Order {
   currency?: 'GBP' | null;
   accessToken?: string | null;
   /**
+   * Stripe PaymentIntent ID for this order.
+   */
+  stripePaymentIntentId?: string | null;
+  /**
    * Set when order is refunded via Stripe.
    */
   refundedAt?: string | null;
@@ -1277,10 +1281,24 @@ export interface Booking {
    */
   product?: (number | null) | Product;
   /**
-   * Leave empty for guest bookings.
+   * Customer account (leave empty for guest bookings).
    */
   customer?: (number | null) | User;
+  /**
+   * Email used for booking confirmation and receipts.
+   */
   guestEmail: string;
+  /**
+   * Stripe transaction rows for this booking.
+   */
+  transactions?: (number | BookingTransaction)[] | null;
+  amount?: number | null;
+  amountDisplay?: string | null;
+  currency?: 'GBP' | null;
+  /**
+   * Stripe PaymentIntent ID for this booking.
+   */
+  stripePaymentIntentId?: string | null;
   guestName?: string | null;
   slotDate: string;
   /**
@@ -1298,26 +1316,13 @@ export interface Booking {
    */
   refundedAt?: string | null;
   /**
-   * Refunded amount in pence.
+   * Refunded amount (stored in pence; displayed in pounds).
    */
   refundAmount?: number | null;
-  /**
-   * Set when the customer paid at booking time (pay on book).
-   */
-  stripePaymentIntentId?: string | null;
-  /**
-   * Total charged (minor units / pence). Set when payment succeeds.
-   */
-  amount?: number | null;
-  currency?: 'GBP' | null;
   /**
    * Secret token for guest “view booking” links (with email).
    */
   accessToken?: string | null;
-  /**
-   * Payment transaction rows for this booking.
-   */
-  transactions?: (number | BookingTransaction)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1843,6 +1848,11 @@ export interface BookingsSelect<T extends boolean = true> {
   product?: T;
   customer?: T;
   guestEmail?: T;
+  transactions?: T;
+  amount?: T;
+  amountDisplay?: T;
+  currency?: T;
+  stripePaymentIntentId?: T;
   guestName?: T;
   slotDate?: T;
   slotTime?: T;
@@ -1851,11 +1861,7 @@ export interface BookingsSelect<T extends boolean = true> {
   notes?: T;
   refundedAt?: T;
   refundAmount?: T;
-  stripePaymentIntentId?: T;
-  amount?: T;
-  currency?: T;
   accessToken?: T;
-  transactions?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2235,6 +2241,7 @@ export interface OrdersSelect<T extends boolean = true> {
   amount?: T;
   currency?: T;
   accessToken?: T;
+  stripePaymentIntentId?: T;
   refundedAt?: T;
   refundAmount?: T;
   updatedAt?: T;

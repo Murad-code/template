@@ -56,12 +56,83 @@ export const Bookings: CollectionConfig = {
       name: 'customer',
       type: 'relationship',
       relationTo: 'users',
-      admin: { position: 'sidebar', description: 'Leave empty for guest bookings.' },
+      admin: {
+        position: 'sidebar',
+        description: 'Customer account (leave empty for guest bookings).',
+      },
     },
     {
       name: 'guestEmail',
+      label: 'Customer email',
       type: 'email',
       required: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Email used for booking confirmation and receipts.',
+      },
+    },
+    {
+      name: 'transactions',
+      label: 'Transactions',
+      type: 'relationship',
+      relationTo: 'booking-transactions',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Stripe transaction rows for this booking.',
+      },
+    },
+    {
+      name: 'amount',
+      type: 'number',
+      admin: {
+        readOnly: true,
+        hidden: true,
+        components: {
+          Cell: '@/components/admin/BookingAmountCell#BookingAmountCell',
+        },
+      },
+    },
+    {
+      name: 'amountDisplay',
+      label: 'Amount',
+      type: 'text',
+      virtual: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        width: '50%',
+      },
+      hooks: {
+        afterRead: [
+          ({ siblingData }) => {
+            const amount = siblingData?.amount
+            if (typeof amount !== 'number' || !Number.isFinite(amount)) return ''
+            return `£${(amount / 100).toFixed(2)}`
+          },
+        ],
+      },
+    },
+    {
+      name: 'currency',
+      type: 'select',
+      defaultValue: 'GBP',
+      options: [{ label: 'British Pound (GBP)', value: 'GBP' }],
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        width: '50%',
+      },
+    },
+    {
+      name: 'stripePaymentIntentId',
+      label: 'Payment intent ID',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        description: 'Stripe PaymentIntent ID for this booking.',
+        readOnly: true,
+      },
     },
     {
       name: 'guestName',
@@ -122,6 +193,7 @@ export const Bookings: CollectionConfig = {
     },
     {
       name: 'downloadBookingInvoice',
+      label: 'Download invoice',
       type: 'ui',
       admin: {
         position: 'sidebar',
@@ -145,7 +217,7 @@ export const Bookings: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
-        description: 'Refunded amount in pence.',
+        description: 'Refunded amount (stored in pence; displayed in pounds).',
         components: {
           Field: '@/components/RefundAmountField#RefundAmountField',
         },
@@ -153,40 +225,13 @@ export const Bookings: CollectionConfig = {
     },
     {
       name: 'refundAction',
+      label: 'Refund booking',
       type: 'ui',
       admin: {
         position: 'sidebar',
         components: {
           Field: '@/components/BookingRefundButton#BookingRefundButton',
         },
-      },
-    },
-    {
-      name: 'stripePaymentIntentId',
-      type: 'text',
-      admin: {
-        position: 'sidebar',
-        description: 'Set when the customer paid at booking time (pay on book).',
-        readOnly: true,
-      },
-    },
-    {
-      name: 'amount',
-      type: 'number',
-      admin: {
-        position: 'sidebar',
-        description: 'Total charged (minor units / pence). Set when payment succeeds.',
-        readOnly: true,
-      },
-    },
-    {
-      name: 'currency',
-      type: 'select',
-      defaultValue: 'GBP',
-      options: [{ label: 'GBP', value: 'GBP' }],
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
       },
     },
     {
@@ -208,16 +253,6 @@ export const Bookings: CollectionConfig = {
             return value
           },
         ],
-      },
-    },
-    {
-      name: 'transactions',
-      type: 'relationship',
-      relationTo: 'booking-transactions',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-        description: 'Payment transaction rows for this booking.',
       },
     },
   ],

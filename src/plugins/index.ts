@@ -129,6 +129,37 @@ export const plugins: Plugin[] = [
                   // ignore lookup errors
                 }
               }
+
+              if (!doc.stripePaymentIntentId && Array.isArray(doc.transactions)) {
+                for (const tx of doc.transactions) {
+                  if (typeof tx === 'object' && tx !== null && 'stripe' in tx) {
+                    const intentId = (tx as { stripe?: { paymentIntentID?: string | null } }).stripe?.paymentIntentID
+                    if (intentId) {
+                      doc.stripePaymentIntentId = intentId
+                      break
+                    }
+                  }
+
+                  if (typeof tx === 'number') {
+                    try {
+                      const txDoc = await req.payload.findByID({
+                        collection: 'transactions',
+                        id: tx,
+                        depth: 0,
+                        req,
+                        overrideAccess: false,
+                      })
+                      if (txDoc?.stripe?.paymentIntentID) {
+                        doc.stripePaymentIntentId = txDoc.stripe.paymentIntentID
+                        break
+                      }
+                    } catch {
+                      // ignore transaction lookup errors
+                    }
+                  }
+                }
+              }
+
               return doc
             },
           ],
@@ -190,7 +221,33 @@ export const plugins: Plugin[] = [
           ],
         },
         fields: [
-          ...defaultCollection.fields,
+          ...defaultCollection.fields.map((field) => {
+            if ('name' in field && field.name === 'amount') {
+              return {
+                ...field,
+                admin: {
+                  ...(field.admin ?? {}),
+                  position: 'sidebar',
+                  readOnly: true,
+                  width: '50%',
+                },
+              }
+            }
+
+            if ('name' in field && field.name === 'currency') {
+              return {
+                ...field,
+                admin: {
+                  ...(field.admin ?? {}),
+                  position: 'sidebar',
+                  readOnly: true,
+                  width: '50%',
+                },
+              }
+            }
+
+            return field
+          }),
           {
             name: 'accessToken',
             type: 'text',
@@ -209,6 +266,16 @@ export const plugins: Plugin[] = [
                   return value
                 },
               ],
+            },
+          },
+          {
+            name: 'stripePaymentIntentId',
+            type: 'text',
+            admin: {
+              position: 'sidebar',
+              readOnly: true,
+              label: 'Payment intent ID',
+              description: 'Stripe PaymentIntent ID for this order.',
             },
           },
           {

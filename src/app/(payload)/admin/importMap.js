@@ -18,6 +18,7 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugField as SlugField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
+import { BookingAmountCell as BookingAmountCell_b14264128fdc9ed058ba23a14a737e36 } from '@/components/admin/BookingAmountCell'
 import { BookingDownloadInvoiceButton as BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4 } from '@/components/BookingDownloadInvoiceButton'
 import { RefundAmountField as RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd } from '@/components/RefundAmountField'
 import { BookingRefundButton as BookingRefundButton_e3468909190ebf3c0433e3209a2bd141 } from '@/components/BookingRefundButton'
@@ -54,6 +55,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/next/client#SlugField": SlugField_2b8867833a34864a02ddf429b0728a40,
+  "@/components/admin/BookingAmountCell#BookingAmountCell": BookingAmountCell_b14264128fdc9ed058ba23a14a737e36,
   "@/components/BookingDownloadInvoiceButton#BookingDownloadInvoiceButton": BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4,
   "@/components/RefundAmountField#RefundAmountField": RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd,
   "@/components/BookingRefundButton#BookingRefundButton": BookingRefundButton_e3468909190ebf3c0433e3209a2bd141,

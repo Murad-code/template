@@ -17,7 +17,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
             <Categories />
             <FilterList list={sorting} title="Sort by" />
           </div>
-          <div className="min-h-screen w-full">{children}</div>
+          <div className="w-full">{children}</div>
         </div>
       </div>
     </Suspense>
