@@ -29,6 +29,8 @@ Current project example mapping (this repository):
 - Docker + Docker Compose
 - `pnpm`
 - `.env` configured (especially `DOCKER_IMAGE`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`)
+- `.env` `PROJECT_TYPE` set to intended mode (`ecommerce` | `booking` | `hybrid`) before build, because frontend nav can be prerendered at build time
+- `.env` must include: `PROJECT_TYPE`, `SITE_NAME`, `COMPANY_NAME`, `NEXT_PUBLIC_SERVER_URL`, `PAYLOAD_PUBLIC_SERVER_URL` (build script now fails fast if any are missing)
 
 ---
 
@@ -90,6 +92,8 @@ Use your actual `DOCKER_IMAGE` tag.
 ## Notes
 
 - Build target platform is `linux/amd64` for VPS compatibility.
+- `./scripts/docker-build-amd64.sh` mounts your full local `.env` into Docker build as a BuildKit secret (`build_env`), so build-time prerender uses project values instead of template defaults.
+- `PROJECT_TYPE` is still passed as an explicit build arg; if wrong during build, deployed storefront nav can mismatch admin features.
 - `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` must match the Postgres volume that is actually initialized.
 - Changing those vars later does **not** reconfigure an existing volume; for a fresh DB init use:
 
@@ -112,3 +116,5 @@ pnpm tsc --noEmit
 ```bash
 docker compose exec -T postgres psql -U REPLACE_DB_USER -d REPLACE_DB_NAME -c "DELETE FROM payload_migrations WHERE batch = -1;"
 ```
+
+- If deploy later shows `/_next/static/*` 404s, rebuild with a fresh image tag and redeploy app container (`docker compose pull app && docker compose up -d --force-recreate app`).

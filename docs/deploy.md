@@ -110,6 +110,26 @@ curl -I https://REPLACE_DOMAIN
 curl -I https://REPLACE_DOMAIN/admin
 ```
 
+Static asset check (important):
+
+```bash
+# extract one current chunk path from live HTML, then request it directly
+curl -s https://REPLACE_DOMAIN | tr '"' '\n' | grep '^/_next/static/' | head -n 1
+curl -I https://REPLACE_DOMAIN/_next/static/chunks/REPLACE_KNOWN_CHUNK.js
+```
+
+If `/_next/static/*` returns `404`:
+
+```bash
+cd REPLACE_DEPLOY_DIR
+# use a new DOCKER_IMAGE tag in .env, then:
+docker compose pull app
+docker compose up -d --force-recreate app
+docker compose logs --tail=80 app
+```
+
+If browser still shows stale errors after server checks are `200`, perform a hard refresh / clear site cache in browser once.
+
 ---
 
 ## Backups

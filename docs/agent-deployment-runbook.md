@@ -127,6 +127,8 @@ Agents should follow these in order:
 - For Payload migrations in container runtime, use:
   - `PAYLOAD_CONFIG_PATH=src/payload.config.ts`
 - After schema-affecting deploys, verify tables exist with `\dt`.
+- When writing `.env` with heredoc, ensure the file closes with `EOF` on its own line and no accidental pasted text.
+- Always build with `PROJECT_TYPE` exported in local `.env` before `docker-build-amd64.sh --push` so prerendered frontend nav matches expected mode (`ecommerce`/`booking`/`hybrid`).
 
 ## Standard Validation Checks
 
@@ -137,6 +139,7 @@ After deployment, confirm:
 - app logs have no `relation "users" does not exist` errors
 - `curl -I https://DOMAIN`
 - `curl -I https://DOMAIN/admin`
+- `curl -I https://DOMAIN/_next/static/chunks/main-app-*.js` (or a chunk URL extracted from page HTML)
 
 ## Preflight Checklist (must run before build/deploy)
 
@@ -159,6 +162,88 @@ Notes:
 
 - `getent hosts DOMAIN` should resolve to expected VPS IP.
 - `docker login` should succeed locally (push) and on VPS (pull).
+
+## Fast Path (existing production project)
+
+Use this when VPS setup is already complete and you are deploying code updates to an existing project.
+
+### Preconditions (do not skip)
+
+- local `.env` has correct `PROJECT_TYPE`, `DOCKER_IMAGE` (new tag), and build-time env values
+- VPS `DEPLOY_DIR/.env` has production secrets and matching runtime values
+- you are **not** changing DB credentials (if changing, use full flow + volume strategy)
+
+### 1) Local build + push
+
+```bash
+# in repo root
+./scripts/docker-build-amd64.sh --push
+```
+
+### 2) VPS pull + recreate app
+
+```bash
+cd DEPLOY_DIR
+docker compose pull app
+docker compose up -d --force-recreate app
+docker compose logs --tail=100 app
+```
+
+### 3) Migration check (safe default)
+
+```bash
+docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate'
+docker compose exec -T postgres sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "\dt"'
+```
+
+### 4) Endpoint + asset verification
+
+```bash
+curl -I https://DOMAIN
+curl -I https://DOMAIN/admin
+curl -s https://DOMAIN | tr '"' '\n' | grep '^/_next/static/' | head -n 1
+```
+
+### 5) Browser verification
+
+- open `/` and `/admin` once in an incognito window
+- if browser shows stale chunk/css 404s but server checks are healthy, hard refresh / clear site cache once
+
+### 6) Optional automated smoke check
+
+Create and run a temporary smoke-check script on VPS for deterministic pass/fail:
+
+```bash
+cat > /tmp/deploy-smoke-check.sh << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOMAIN="${1:?Usage: deploy-smoke-check.sh <domain> <project_type>}"
+PROJECT_TYPE="${2:?Usage: deploy-smoke-check.sh <domain> <project_type>}"
+
+echo "== Basic endpoints =="
+curl -fsSI "https://${DOMAIN}" >/dev/null
+curl -fsSI "https://${DOMAIN}/admin" >/dev/null
+
+echo "== Extract and verify one static asset =="
+ASSET_PATH="$(curl -fsS "https://${DOMAIN}" | tr '"' '\n' | grep '^/_next/static/' | head -n 1 || true)"
+if [ -z "${ASSET_PATH}" ]; then
+  echo "Smoke check failed: no _next/static asset path found in homepage HTML" >&2
+  exit 1
+fi
+curl -fsSI "https://${DOMAIN}${ASSET_PATH}" >/dev/null
+
+if [ "${PROJECT_TYPE}" = "hybrid" ] || [ "${PROJECT_TYPE}" = "booking" ]; then
+  echo "== Booking route check =="
+  curl -fsSI "https://${DOMAIN}/book" >/dev/null
+fi
+
+echo "Smoke check passed for ${DOMAIN} (${PROJECT_TYPE})"
+EOF
+
+chmod +x /tmp/deploy-smoke-check.sh
+/tmp/deploy-smoke-check.sh DOMAIN PROJECT_TYPE
+```
 
 ## Failure Playbook
 
@@ -184,6 +269,44 @@ Action:
   - `docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate'`
 - verify:
   - `docker compose exec -T postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\dt'`
+
+### 3) Frontend renders but `_next/static/*` assets return `404`
+
+Meaning: Next standalone server is running, but static assets are not served from expected runtime path.
+
+Action:
+
+- ensure container startup links static directory for standalone runtime (entrypoint fix in this repo)
+- redeploy with a fresh image tag:
+  - update `DOCKER_IMAGE` to a new tag (for example `:1.0.2`)
+  - rebuild/push locally
+  - `docker compose pull app && docker compose up -d --force-recreate app`
+- verify a known chunk path:
+  - `curl -I https://DOMAIN/_next/static/chunks/<known-chunk>.js`
+
+### 4) Home page missing `Book` link but admin shows booking collections
+
+Meaning: `PROJECT_TYPE` mismatch at image build time (prerendered frontend baked as `ecommerce`).
+
+Action:
+
+- set `PROJECT_TYPE=hybrid` (or intended value) in local `.env`
+- rebuild image with new tag using `./scripts/docker-build-amd64.sh --push`
+- redeploy VPS app with new tag
+- verify nav includes expected links on `/`
+
+### 5) Transient `502 Bad Gateway` right after deploy
+
+Meaning: shared Nginx proxied to app before Next finished startup or while app restarted.
+
+Action:
+
+- check app readiness:
+  - `docker compose logs --tail=100 app`
+- recheck after startup:
+  - `curl -I https://DOMAIN`
+  - `curl -I https://DOMAIN/admin`
+- if browser still shows old errors, do hard refresh / clear site cache once.
 
 ## First Admin Bootstrap (fresh projects)
 

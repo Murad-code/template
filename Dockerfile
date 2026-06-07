@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 # To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.js file.
 # From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 #
@@ -43,6 +44,8 @@ ARG NEXT_PUBLIC_SERVER_URL=http://localhost
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+ARG PROJECT_TYPE=ecommerce
+ENV PROJECT_TYPE=${PROJECT_TYPE}
 
 # Production DB path: skip dev schema push; run prod migrations during next build.
 ENV NODE_ENV=production
@@ -54,12 +57,18 @@ ENV NODE_ENV=production
 
 # If the build DB has a dev-push row (payload_migrations.batch = -1), Payload prompts to
 # continue; Docker has no TTY. A single "y" on stdin accepts (see docs/docker.md to remove -1 rows instead).
-RUN printf 'y\n' | ( \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi \
+# We also load full build-time env from a BuildKit secret (`build_env`) so prerendered
+# output (e.g. nav from PROJECT_TYPE, SITE_NAME labels, URLs) uses real project values.
+RUN --mount=type=secret,id=build_env,target=/run/secrets/build_env \
+  BUILD_DATABASE_URL="${DATABASE_URL}" && \
+  set -a && . /run/secrets/build_env && set +a && \
+  export DATABASE_URL="${BUILD_DATABASE_URL}" && \
+  printf 'y\n' | ( \
+    if [ -f yarn.lock ]; then yarn run build; \
+    elif [ -f package-lock.json ]; then npm run build; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+    else echo "Lockfile not found." && exit 1; \
+    fi \
   )
 
 # Production image, run migrations then serve app

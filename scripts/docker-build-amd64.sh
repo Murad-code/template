@@ -14,6 +14,11 @@ if [ -f "${ENV_FILE}" ]; then
   set +a
 fi
 
+if [ ! -f "${ENV_FILE}" ]; then
+  echo "Missing .env at ${ENV_FILE}. Build requires populated env values." >&2
+  exit 1
+fi
+
 cd "${ROOT_DIR}"
 
 POSTGRES_USER="${POSTGRES_USER:-payload}"
@@ -23,6 +28,24 @@ POSTGRES_HOST_PORT="${POSTGRES_HOST_PORT:-5433}"
 IMAGE="${DOCKER_IMAGE:-muradkamali/template:1.0.0}"
 NEXT_PUBLIC_SERVER_URL="${NEXT_PUBLIC_SERVER_URL:-http://localhost:3000}"
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-pk_test_}"
+PROJECT_TYPE="${PROJECT_TYPE:-ecommerce}"
+
+# Fail fast so build-time prerender does not silently fall back to template defaults.
+required_build_env=(
+  "PROJECT_TYPE"
+  "SITE_NAME"
+  "COMPANY_NAME"
+  "NEXT_PUBLIC_SERVER_URL"
+  "PAYLOAD_PUBLIC_SERVER_URL"
+)
+
+for key in "${required_build_env[@]}"; do
+  val="${!key:-}"
+  if [ -z "${val}" ]; then
+    echo "Required build env '${key}' is missing in .env. Refusing to build with defaults." >&2
+    exit 1
+  fi
+done
 
 # Prefer a dedicated build-only secret so your runtime .env PAYLOAD_SECRET is not required here.
 BUILD_SECRET="${PAYLOAD_SECRET_BUILD:-${PAYLOAD_SECRET:-}}"
@@ -41,9 +64,11 @@ fi
 
 docker buildx build --platform linux/amd64 "${LOAD_OR_PUSH[@]}" \
   --add-host=host.docker.internal:host-gateway \
+  --secret "id=build_env,src=${ENV_FILE}" \
   --build-arg "DATABASE_URL=${DATABASE_BUILD_URL}" \
   --build-arg "PAYLOAD_SECRET=${BUILD_SECRET}" \
   --build-arg "NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}" \
   --build-arg "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}" \
+  --build-arg "PROJECT_TYPE=${PROJECT_TYPE}" \
   -t "${IMAGE}" \
   .
