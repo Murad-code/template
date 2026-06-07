@@ -7,6 +7,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { heroTypeOptions } from '@/heros/options'
 import { linkGroup } from './linkGroup'
 
 export const hero: Field = {
@@ -18,24 +19,7 @@ export const hero: Field = {
       type: 'select',
       defaultValue: 'lowImpact',
       label: 'Type',
-      options: [
-        {
-          label: 'None',
-          value: 'none',
-        },
-        {
-          label: 'High Impact',
-          value: 'highImpact',
-        },
-        {
-          label: 'Medium Impact',
-          value: 'mediumImpact',
-        },
-        {
-          label: 'Low Impact',
-          value: 'lowImpact',
-        },
-      ],
+      options: heroTypeOptions,
       required: true,
     },
     {
@@ -62,7 +46,8 @@ export const hero: Field = {
       name: 'media',
       type: 'upload',
       admin: {
-        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        condition: (_, { type } = {}) =>
+          ['highImpact', 'mediumImpact', 'landingSplit', 'landingSpotlight'].includes(type),
       },
       relationTo: 'media',
       required: true,

@@ -14,6 +14,15 @@ export const CallToAction: Block = {
   interfaceName: 'CallToActionBlock',
   fields: [
     {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'inlineCard',
+      options: [
+        { label: 'Inline Card', value: 'inlineCard' },
+        { label: 'Split Panel', value: 'splitPanel' },
+      ],
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({

@@ -21,6 +21,15 @@ export const Features: Block = {
       label: 'Section title',
     },
     {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'Cards', value: 'cards' },
+        { label: 'Minimal', value: 'minimal' },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
       required: true,

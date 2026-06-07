@@ -9,14 +9,22 @@ export const CallToActionBlock: React.FC<
     id?: string | number
     className?: string
   }
-> = ({ links, richText }) => {
+> = ({ layout, links, richText }) => {
+  const isSplit = layout === 'splitPanel'
+
   return (
     <div className="container">
-      <div className="bg-card rounded border-border border p-4 flex flex-col gap-8 md:flex-row md:justify-between md:items-center">
-        <div className="max-w-3xl flex items-center">
+      <div
+        className={`rounded border border-border ${
+          isSplit
+            ? 'bg-gradient-to-r from-card to-muted p-6 md:p-8'
+            : 'bg-card p-4 md:flex-row md:items-center md:justify-between'
+        } flex flex-col gap-8`}
+      >
+        <div className={`flex items-center ${isSplit ? 'max-w-2xl' : 'max-w-3xl'}`}>
           {richText && <RichText className="mb-0" data={richText} enableGutter={false} />}
         </div>
-        <div className="flex flex-col gap-8">
+        <div className={`flex ${isSplit ? 'flex-wrap gap-3' : 'flex-col gap-8'}`}>
           {(links || []).map(({ link }, i) => {
             return <CMSLink key={i} size="lg" {...link} />
           })}
