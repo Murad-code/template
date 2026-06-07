@@ -221,7 +221,7 @@ export const plugins: Plugin[] = [
           ],
         },
         fields: [
-          ...defaultCollection.fields.map((field) => {
+          ...((defaultCollection.fields as any[]).map((field) => {
             if ('name' in field && field.name === 'amount') {
               return {
                 ...field,
@@ -247,7 +247,7 @@ export const plugins: Plugin[] = [
             }
 
             return field
-          }),
+          }) as any[]),
           {
             name: 'accessToken',
             type: 'text',

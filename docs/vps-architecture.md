@@ -3,7 +3,7 @@
 This document describes how the VPS is currently running both projects at the same time:
 
 - `journalism` on `sadiasinsights.co.uk`
-- `template` on `muradsprojects.co.uk`
+- `testing-template` on `muradsprojects.co.uk`
 
 It is a practical snapshot of the deployed state so future you can quickly understand the topology.
 
@@ -14,7 +14,7 @@ It is a practical snapshot of the deployed state so future you can quickly under
 There are two separate Docker Compose projects on the same VPS:
 
 - `/root/app` -> journalism stack
-- `/root/template` -> template stack
+- `/root/testing-template` -> testing-template stack
 
 Each project has its own application container and its own Postgres container.
 
@@ -39,12 +39,12 @@ Only the journalism stack runs Nginx on host ports `80/443`. That Nginx instance
   - Terminates TLS for both domains
   - Routes traffic by `Host` header
 
-### Template compose project (`/root/template`)
+### testing-template compose project (`/root/testing-template`)
 
-- `template-app-1` (`muradkamali/template:1.0.0`)
+- `testing-template-app-1` (`muradkamali/testing-template:1.0.0`)
   - Template Next.js + Payload app
   - Published on host as `3001:3000`
-- `template-postgres-1` (`postgres:16-alpine`)
+- `testing-template-postgres-1` (`postgres:16-alpine`)
   - Template database volume
 
 ---
@@ -57,7 +57,7 @@ Traffic flow is:
 2. `app-nginx-1` receives request
 3. Nginx chooses upstream based on domain:
    - `sadiasinsights.co.uk` -> journalism upstream (`http://app:3000` inside `/root/app` compose network)
-   - `muradsprojects.co.uk` -> template upstream (`http://host.docker.internal:3001`)
+   - `muradsprojects.co.uk` -> testing-template upstream (`http://host.docker.internal:3001`)
 4. App responds through Nginx
 
 So there is one public Nginx, two backend apps.
@@ -97,12 +97,12 @@ The VPS resolver was updated to prefer public DNS to avoid stale upstream answer
 - `docker compose -f /root/app/docker-compose.yml pull app`
 - `docker compose -f /root/app/docker-compose.yml up -d`
 
-### Template deploy
+### testing-template deploy
 
-- Build/push image locally (amd64), e.g. `muradkamali/template:1.0.0`
-- Update `/root/template/.env` (`DOCKER_IMAGE=...`) if needed
-- `docker compose -f /root/template/docker-compose.yml pull app`
-- `docker compose -f /root/template/docker-compose.yml up -d`
+- Build/push image locally (amd64), e.g. `muradkamali/testing-template:1.0.0`
+- Update `/root/testing-template/.env` (`DOCKER_IMAGE=...`) if needed
+- `docker compose -f /root/testing-template/docker-compose.yml pull app`
+- `docker compose -f /root/testing-template/docker-compose.yml up -d`
 
 ---
 
@@ -111,7 +111,7 @@ The VPS resolver was updated to prefer public DNS to avoid stale upstream answer
 Each project has a separate Postgres container and volume:
 
 - journalism data in `/root/app` compose volumes
-- template data in `/root/template` compose volumes
+- testing-template data in `/root/testing-template` compose volumes
 
 This keeps schemas and content isolated.
 
@@ -134,9 +134,9 @@ Template currently publishes host port `3001`.
 docker compose -f /root/app/docker-compose.yml ps
 docker compose -f /root/app/docker-compose.yml logs app --tail=50
 
-# Template
-docker compose -f /root/template/docker-compose.yml ps
-docker compose -f /root/template/docker-compose.yml logs app --tail=50
+# testing-template
+docker compose -f /root/testing-template/docker-compose.yml ps
+docker compose -f /root/testing-template/docker-compose.yml logs app --tail=50
 
 # Public endpoints
 curl -I https://sadiasinsights.co.uk

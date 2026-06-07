@@ -19,6 +19,12 @@ This folder is intentionally small. Start here and open only the doc you need.
 - [`new-project.md`](./new-project.md)  
   What to do after cloning this template for a new client project.
 
+- [`agent-deployment-runbook.md`](./agent-deployment-runbook.md)  
+  Agent-focused deployment workflow, guardrails, failure playbook, and reusable prompt template.
+
+- [`DEPLOYMENT_VALUES.template.md`](./DEPLOYMENT_VALUES.template.md)  
+  Fill-in template for project-specific deployment inputs to minimize agent back-and-forth.
+
 ## Optional
 
 - [`SEEDING.md`](./SEEDING.md)  

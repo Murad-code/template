@@ -39,7 +39,7 @@ if [[ "${1:-}" == "--push" ]]; then
   LOAD_OR_PUSH=(--push)
 fi
 
-exec docker buildx build --platform linux/amd64 "${LOAD_OR_PUSH[@]}" \
+docker buildx build --platform linux/amd64 "${LOAD_OR_PUSH[@]}" \
   --add-host=host.docker.internal:host-gateway \
   --build-arg "DATABASE_URL=${DATABASE_BUILD_URL}" \
   --build-arg "PAYLOAD_SECRET=${BUILD_SECRET}" \

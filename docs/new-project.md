@@ -50,9 +50,18 @@ Open `http://localhost:3000`, create your first admin, and validate key flows:
 
 Follow docs in this order:
 
+0. Create deployment values file:
+
+```bash
+cp docs/DEPLOYMENT_VALUES.template.md docs/DEPLOYMENT_VALUES.md
+```
+
+Then fill all values in `docs/DEPLOYMENT_VALUES.md`.
+
 1. [`docker.md`](./docker.md) to build/push image
 2. [`vps-setup.md`](./vps-setup.md) for first-time server setup
 3. [`deploy.md`](./deploy.md) for future releases
+4. [`agent-deployment-runbook.md`](./agent-deployment-runbook.md) for repeatable agent-led deployments
 
 ## 5) Recommended go-live checks
 

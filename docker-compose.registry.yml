@@ -4,7 +4,6 @@
 #   docker compose -f docker-compose.registry.yml pull
 #   docker compose -f docker-compose.registry.yml up -d
 #
-# First-time deploy: run migrations before `up -d` — see docs/docker.md.
 # DOCKER_IMAGE must be set in .env or exported in the shell.
 
 services:
