@@ -16,6 +16,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "create:admin": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/create-admin.ts",
     "seed:blackoak": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/seed-black-oak.ts",
+    "seed:theme-palettes": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/seed-theme-palettes.ts",
     "reinstall": "cross-env NODE_OPTIONS=--no-deprecation rm -rf node_modules && rm pnpm-lock.yaml && pnpm --ignore-workspace install",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "stripe-webhooks": "stripe listen --forward-to localhost:3000/api/payments/stripe/webhooks",

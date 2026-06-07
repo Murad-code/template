@@ -7,8 +7,9 @@ import { homePageData } from './home'
 import { discoverSeedDir } from './discover'
 import { readLocalFile } from './localFile'
 import { slugify } from './marquee-product'
+import { upsertThemePalettes } from '@/utilities/themePalettes'
 import { Address, Transaction } from '@/payload-types'
-import type { Header, Footer, Media, Product } from '@/payload-types'
+import type { Header, Footer, Media, Product, SiteTheme } from '@/payload-types'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -29,9 +30,10 @@ const collections: CollectionSlug[] = [
   'booking-waitlist',
   'booking-slots',
   'services',
+  'theme-palettes',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['header', 'footer', 'site-theme']
 
 const baseAddressUKData: Transaction['billingAddress'] = {
   title: 'Mr.',
@@ -479,16 +481,21 @@ export const seed = async ({
   payload.logger.info(`— Clearing collections and globals...`)
 
   await Promise.all(
-    globals.map((global) =>
-      payload.updateGlobal({
+    globals.map((global) => {
+      const data =
+        global === 'site-theme'
+          ? ({ paletteMode: 'palette', palette: null } as Partial<SiteTheme>)
+          : ({ navItems: [] } as Partial<Header> & Partial<Footer>)
+
+      return payload.updateGlobal({
         slug: global,
-        data: { navItems: [] } as Partial<Header> & Partial<Footer>,
+        data,
         depth: 0,
         context: {
           disableRevalidate: true,
         },
-      }),
-    ),
+      })
+    }),
   )
 
   for (const collection of collections) {
@@ -935,6 +942,8 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals...`)
 
+  const { defaultPalette } = await upsertThemePalettes(payload)
+
   // Header/footer primary links are derived from PROJECT_TYPE (see src/config/nav.ts).
   await payload.updateGlobal({
     slug: 'header',
@@ -958,6 +967,16 @@ export const seed = async ({
   await payload.updateGlobal({
     slug: 'footer',
     data: { navItems: [] } as Partial<Footer>,
+  })
+  await payload.updateGlobal({
+    slug: 'site-theme',
+    data: {
+      paletteMode: 'palette',
+      palette: defaultPalette?.id,
+    } as Partial<SiteTheme>,
+    context: {
+      disableRevalidate: true,
+    },
   })
 
   const shouldSeedEcommerce = mode === 'ecommerce' || mode === 'hybrid'

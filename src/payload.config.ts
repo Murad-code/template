@@ -24,6 +24,7 @@ import { BookingWaitlist } from '@/collections/BookingWaitlist'
 import { Bookings } from '@/collections/Bookings'
 import { Categories } from '@/collections/Categories'
 import { Services } from '@/collections/Services'
+import { ThemePalettes } from '@/collections/ThemePalettes'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
 import { Users } from '@/collections/Users'
@@ -31,6 +32,7 @@ import { BlockedDates } from '@/globals/BlockedDates'
 import { BookingSettings } from '@/globals/BookingSettings'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
+import { SiteTheme } from '@/globals/SiteTheme'
 import { plugins } from './plugins'
 
 const filename = fileURLToPath(import.meta.url)
@@ -91,6 +93,7 @@ export default buildConfig({
     Users,
     Pages,
     Categories,
+    ThemePalettes,
     Media,
     BookingSlots,
     Bookings,
@@ -141,7 +144,7 @@ export default buildConfig({
   }),
   email: emailAdapter,
   endpoints: [cleanupExpiredStockReservationsEndpoint],
-  globals: [Header, Footer, BlockedDates, BookingSettings],
+  globals: [Header, Footer, SiteTheme, BlockedDates, BookingSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
