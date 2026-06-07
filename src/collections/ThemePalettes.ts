@@ -104,11 +104,13 @@ export const ThemePalettes: CollectionConfig = {
         const paletteID = originalDoc?.id
         if (operation !== 'update' || !paletteID) return data
 
+        const hasAuthenticatedUser = Boolean(req.user)
         const existing = await req.payload.findByID({
           collection: 'theme-palettes',
           id: paletteID,
           depth: 0,
-          overrideAccess: false,
+          // Enforce access checks for authenticated requests, but allow CLI/system seed scripts.
+          overrideAccess: !hasAuthenticatedUser,
           req,
         })
 
@@ -129,11 +131,13 @@ export const ThemePalettes: CollectionConfig = {
       (async ({ req, id }) => {
         if (!id) return
 
+        const hasAuthenticatedUser = Boolean(req.user)
         const existing = await req.payload.findByID({
           collection: 'theme-palettes',
           id,
           depth: 0,
-          overrideAccess: false,
+          // Enforce access checks for authenticated requests, but allow CLI/system seed scripts.
+          overrideAccess: !hasAuthenticatedUser,
           req,
         })
 
