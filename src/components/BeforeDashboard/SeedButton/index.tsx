@@ -5,7 +5,7 @@ import { toast } from '@payloadcms/ui'
 
 import './index.scss'
 
-type SeedMode = 'ecommerce' | 'booking'
+type SeedMode = 'ecommerce' | 'booking' | 'hybrid'
 
 const SuccessMessage: React.FC = () => (
   <div>
@@ -98,6 +98,7 @@ export const SeedButton: React.FC = () => {
       >
         <option value="ecommerce">Ecommerce</option>
         <option value="booking">Booking</option>
+        <option value="hybrid">Hybrid</option>
       </select>
       <button className="seedButton" onClick={handleClick}>
         Seed your database

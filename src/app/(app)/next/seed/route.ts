@@ -9,9 +9,9 @@ import { checkRole } from '@/access/utilities'
 export const maxDuration = 300 // This function can run for a maximum of 300 seconds
 
 function normalizeMode(mode: unknown): SeedMode {
-  if (mode === 'ecommerce' || mode === 'booking') return mode
+  if (mode === 'ecommerce' || mode === 'booking' || mode === 'hybrid') return mode
   const { projectType } = getSiteConfig()
-  if (projectType === 'booking') return 'booking'
+  if (projectType === 'booking' || projectType === 'hybrid') return projectType
   return 'ecommerce'
 }
 

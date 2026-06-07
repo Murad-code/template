@@ -40,6 +40,7 @@ const dirname = path.dirname(filename)
 const resendApiKey = process.env.RESEND_API_KEY
 const fromEmail = process.env.SMTP_FROM_EMAIL
 const fromName = process.env.SMTP_FROM_NAME || process.env.SITE_NAME || 'Site'
+const companyName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Admin'
 
 const emailAdapter =
   fromEmail && resendApiKey
@@ -67,7 +68,14 @@ const emailAdapter =
 
 export default buildConfig({
   admin: {
+    meta: {
+      titleSuffix: ` - ${companyName}`,
+    },
     components: {
+      graphics: {
+        Logo: '@/components/admin/BrandLogo#BrandLogo',
+        Icon: '@/components/admin/BrandIcon#BrandIcon',
+      },
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
       beforeLogin: ['@/components/BeforeLogin#BeforeLogin'],

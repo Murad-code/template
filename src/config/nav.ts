@@ -72,12 +72,7 @@ export function getEffectiveHeaderNavItems(header: Header, config: SiteConfig): 
 
 /** Core footer links from PROJECT_TYPE. */
 export function getDerivedFooterNavItems(config: SiteConfig): FooterNavItem[] {
-  const items: FooterNavItem[] = [
-    {
-      id: 'derived-foot-admin',
-      link: { type: 'custom', label: 'Admin', url: '/admin', newTab: false },
-    },
-  ]
+  const items: FooterNavItem[] = []
   if (config.ecommerceEnabled) {
     items.push({
       id: 'derived-foot-find-order',
@@ -90,15 +85,6 @@ export function getDerivedFooterNavItems(config: SiteConfig): FooterNavItem[] {
       link: { type: 'custom', label: 'Book', url: '/book', newTab: false },
     })
   }
-  items.push({
-    id: 'derived-foot-payload',
-    link: {
-      type: 'custom',
-      label: 'Payload',
-      url: 'https://payloadcms.com/',
-      newTab: true,
-    },
-  })
   return items
 }
 

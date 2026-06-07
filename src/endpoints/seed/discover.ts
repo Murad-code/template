@@ -32,7 +32,7 @@ export async function discoverSeedDir(): Promise<DiscoveredSeed> {
     await fs.access(seedPath)
   } catch {
     throw new Error(
-      `Seed directory "${SEED_DIR}" not found at ${seedPath}. Add marquee image folders to run seed.`,
+      `Seed directory "${SEED_DIR}" not found at ${seedPath}. Add product image folders to run seed.`,
     )
   }
 

@@ -29,6 +29,8 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { InventoryCell as InventoryCell_5db5f93db0d6a12915a59d276d573534 } from '@/components/admin/InventoryCell'
 import { OrderDownloadInvoiceButton as OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451 } from '@/components/OrderDownloadInvoiceButton'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
+import { BrandIcon as BrandIcon_d9087a380941d12f95aff168665b00b4 } from '@/components/admin/BrandIcon'
+import { BrandLogo as BrandLogo_fd0a9bbb35693e340bbbfa9596236d37 } from '@/components/admin/BrandLogo'
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
 import { BeforeDashboard as BeforeDashboard_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
 import { BeforeLogin as BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
@@ -66,6 +68,8 @@ export const importMap = {
   "@/components/admin/InventoryCell#InventoryCell": InventoryCell_5db5f93db0d6a12915a59d276d573534,
   "@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton": OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
+  "@/components/admin/BrandIcon#BrandIcon": BrandIcon_d9087a380941d12f95aff168665b00b4,
+  "@/components/admin/BrandLogo#BrandLogo": BrandLogo_fd0a9bbb35693e340bbbfa9596236d37,
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,
   "@/components/BeforeDashboard#BeforeDashboard": BeforeDashboard_1a7510af427896d367a49dbf838d2de6,
   "@/components/BeforeLogin#BeforeLogin": BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e,

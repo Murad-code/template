@@ -2,9 +2,23 @@ import clsx from 'clsx'
 import React from 'react'
 
 export function LogoIcon(props: React.ComponentProps<'svg'>) {
+  const companyName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Site'
+  const logoURL = process.env.NEXT_PUBLIC_BRAND_LOGO_URL || process.env.NEXT_PUBLIC_BRAND_ICON_URL || ''
+
+  if (logoURL) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        alt={`${companyName} logo`}
+        src={logoURL}
+        className={clsx('h-6 w-auto object-contain', props.className)}
+      />
+    )
+  }
+
   return (
     <svg
-      aria-label={`Payload logo`}
+      aria-label={`${companyName} logo`}
       viewBox="0 0 25 28"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

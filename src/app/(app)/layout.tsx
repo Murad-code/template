@@ -50,6 +50,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const { fontSans, fontMono } = getThemeConfig()
   const SansFont = fontMap.sans[fontSans as keyof typeof fontMap.sans] ?? GeistSans
   const MonoFont = fontMap.mono[fontMono as keyof typeof fontMap.mono] ?? GeistMono
+  const enableLivePreview = process.env.NEXT_PUBLIC_ENABLE_LIVE_PREVIEW === 'true'
 
   return (
     <html
@@ -66,7 +67,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body>
         <Providers>
           <AdminBar />
-          <LivePreviewListener />
+          {enableLivePreview ? <LivePreviewListener /> : null}
 
           <Header />
           <main className="flex-1">{children}</main>

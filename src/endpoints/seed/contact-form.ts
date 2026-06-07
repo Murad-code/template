@@ -1,6 +1,8 @@
 import { RequiredDataFromCollectionSlug } from 'payload'
 
 export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = () => {
+  const brandName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Site'
+  const fromEmail = process.env.SMTP_FROM_EMAIL || `noreply@${brandName.toLowerCase().replace(/\s+/g, '')}.local`
   return {
     confirmationMessage: {
       root: {
@@ -36,7 +38,7 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
     createdAt: '2023-01-12T21:47:41.374Z',
     emails: [
       {
-        emailFrom: '"Payload" \u003Cdemo@payloadcms.com\u003E',
+        emailFrom: `"${brandName}" \u003C${fromEmail}\u003E`,
         emailTo: '{{email}}',
         message: {
           root: {

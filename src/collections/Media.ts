@@ -6,12 +6,9 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
 import { adminOnly } from '@/access/adminOnly'
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const mediaStaticDir = process.env.PAYLOAD_MEDIA_DIR || path.resolve(process.cwd(), 'public', 'media')
 
 export const Media: CollectionConfig = {
   admin: {
@@ -41,6 +38,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    staticDir: path.resolve(dirname, '../../public/media'),
+    // Use a stable runtime path so media works in both dev and standalone production builds.
+    staticDir: mediaStaticDir,
   },
 }

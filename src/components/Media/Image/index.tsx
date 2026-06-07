@@ -49,7 +49,12 @@ export const Image: React.FC<MediaProps> = (props) => {
 
     const filename = fullFilename
 
-    src = `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`
+    // Prefer relative media URLs so local/dev doesn't proxy to a production domain.
+    if (typeof url === 'string' && url.length > 0) {
+      src = url
+    } else if (filename) {
+      src = `/api/media/file/${encodeURIComponent(filename)}`
+    }
   }
 
   // NOTE: this is used by the browser to determine which image to download at different screen sizes

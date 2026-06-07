@@ -1,6 +1,6 @@
 # Seeding the database
 
-The seed creates a demo site from local content in the `seed/` directory. You can run it as an **ecommerce** demo (marquees for sale) or a **booking** demo (marquees bookable by day).
+The seed creates a demo site from local content in the `seed/` directory. You can run it as an **ecommerce** demo, a **booking** demo, or a **hybrid** demo that includes both shop and booking content.
 
 ## Prerequisites
 
@@ -32,10 +32,24 @@ seed/
 2. On the dashboard, use the **Seed as** dropdown to choose:
    - **Ecommerce** – products for sale, with cart, order, and transaction.
    - **Booking** – same products as bookable items, with demo bookings and no carts/orders.
+   - **Hybrid** – ecommerce + booking together (products, services, bookings, cart/order/transaction).
 3. Click **Seed your database**.
 4. Wait for the success message, then open the site (e.g. Home link) to see the demo.
 
-Seeding is done via `POST /next/seed` with body `{ "mode": "ecommerce" }` or `{ "mode": "booking" }`. Only admin users can call it.
+Seeding is done via `POST /next/seed` with body `{ "mode": "ecommerce" }`, `{ "mode": "booking" }`, or `{ "mode": "hybrid" }`. Only admin users can call it.
+
+## CLI usage (repeatable deployment)
+
+You can also run seeding directly from terminal:
+
+```bash
+pnpm seed:blackoak            # defaults to hybrid
+pnpm seed:blackoak hybrid
+pnpm seed:blackoak ecommerce
+pnpm seed:blackoak booking
+```
+
+This requires at least one user account in the database (typically your admin account).
 
 ## What the seed does (both modes)
 

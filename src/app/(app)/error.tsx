@@ -1,22 +1,23 @@
 'use client'
 
+import Link from 'next/link'
 import React from 'react'
 
-export default function Error({ reset }: { reset: () => void }) {
+export default function Error() {
   return (
-    <div className="mx-auto my-4 flex max-w-xl flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 dark:border-neutral-800 dark:bg-black">
-      <h2 className="text-xl font-bold">Oh no!</h2>
-      <p className="my-2">
-        There was an issue with our storefront. This could be a temporary issue, please try your
-        action again.
-      </p>
-      <button
-        className="mx-auto mt-4 flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white hover:opacity-90"
-        onClick={() => reset()}
-        type="button"
-      >
-        Try Again
-      </button>
+    <div className="container py-28">
+      <div className="mx-auto max-w-xl rounded-lg border border-neutral-200 bg-white p-8 text-center dark:border-neutral-800 dark:bg-black">
+        <h2 className="text-2xl font-bold">Something went wrong</h2>
+        <p className="mt-3 text-neutral-600 dark:text-neutral-300">
+          We could not load this page. Please head back to the homepage.
+        </p>
+        <Link
+          href="/"
+          className="mx-auto mt-6 inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium tracking-wide text-white hover:opacity-90 dark:bg-white dark:text-black"
+        >
+          Go to Home
+        </Link>
+      </div>
     </div>
   )
 }

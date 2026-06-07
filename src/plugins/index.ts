@@ -192,7 +192,7 @@ export const plugins: Plugin[] = [
           ],
           afterChange: [
             ...(defaultCollection.hooks?.afterChange ?? []),
-            async ({ doc, operation, req }) => {
+            async ({ doc, operation, req, context }) => {
               req.payload.logger.info({
                 msg: 'Orders afterChange hook called',
                 operation,
@@ -200,6 +200,10 @@ export const plugins: Plugin[] = [
                 hasCustomerEmail: Boolean(doc?.customerEmail),
                 hasCustomer: Boolean(doc?.customer),
               })
+              if (context?.disableEmail) {
+                req.payload.logger.info({ msg: 'Skipping order confirmation email (disableEmail context)', orderId: doc?.id })
+                return
+              }
               // Only send confirmation on order create; recipient email is resolved in sendOrderConfirmationEmail
               // (from customerEmail for guests, or from populated customer.email for logged-in users)
               if (operation !== 'create' || !doc?.id) return
