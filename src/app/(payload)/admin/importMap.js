@@ -18,6 +18,9 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugField as SlugField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
+import { ThemePaletteFormPreview as ThemePaletteFormPreview_a47b59adc3732daed0e14660b4614685 } from '@/components/admin/ThemePaletteFormPreview'
+import { PaletteSwatchCell as PaletteSwatchCell_43c29e6ade55619e00e23e133c4c2114 } from '@/components/admin/PaletteSwatchCell'
+import { ColorPickerField as ColorPickerField_d572ded1c017fe858839e8cdc754e090 } from '@/components/admin/ColorPickerField'
 import { BookingAmountCell as BookingAmountCell_b14264128fdc9ed058ba23a14a737e36 } from '@/components/admin/BookingAmountCell'
 import { BookingDownloadInvoiceButton as BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4 } from '@/components/BookingDownloadInvoiceButton'
 import { RefundAmountField as RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd } from '@/components/RefundAmountField'
@@ -29,6 +32,9 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { InventoryCell as InventoryCell_5db5f93db0d6a12915a59d276d573534 } from '@/components/admin/InventoryCell'
 import { OrderDownloadInvoiceButton as OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451 } from '@/components/OrderDownloadInvoiceButton'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
+import { PaletteRelationshipField as PaletteRelationshipField_edfb9e32f306231c189475ba16110fad } from '@/components/admin/PaletteRelationshipField'
+import { PaletteSelectionPreview as PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1 } from '@/components/admin/PaletteSelectionPreview'
+import { PaletteHelp as PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c } from '@/components/admin/PaletteHelp'
 import { BrandIcon as BrandIcon_d9087a380941d12f95aff168665b00b4 } from '@/components/admin/BrandIcon'
 import { BrandLogo as BrandLogo_fd0a9bbb35693e340bbbfa9596236d37 } from '@/components/admin/BrandLogo'
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
@@ -57,6 +63,9 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/next/client#SlugField": SlugField_2b8867833a34864a02ddf429b0728a40,
+  "@/components/admin/ThemePaletteFormPreview#ThemePaletteFormPreview": ThemePaletteFormPreview_a47b59adc3732daed0e14660b4614685,
+  "@/components/admin/PaletteSwatchCell#PaletteSwatchCell": PaletteSwatchCell_43c29e6ade55619e00e23e133c4c2114,
+  "@/components/admin/ColorPickerField#ColorPickerField": ColorPickerField_d572ded1c017fe858839e8cdc754e090,
   "@/components/admin/BookingAmountCell#BookingAmountCell": BookingAmountCell_b14264128fdc9ed058ba23a14a737e36,
   "@/components/BookingDownloadInvoiceButton#BookingDownloadInvoiceButton": BookingDownloadInvoiceButton_eb4709a5540c9c5c5db280b1ffae08b4,
   "@/components/RefundAmountField#RefundAmountField": RefundAmountField_07e2c0803dbd18d46a3bf7f9cb62e1dd,
@@ -68,6 +77,9 @@ export const importMap = {
   "@/components/admin/InventoryCell#InventoryCell": InventoryCell_5db5f93db0d6a12915a59d276d573534,
   "@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton": OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
+  "@/components/admin/PaletteRelationshipField#PaletteRelationshipField": PaletteRelationshipField_edfb9e32f306231c189475ba16110fad,
+  "@/components/admin/PaletteSelectionPreview#PaletteSelectionPreview": PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1,
+  "@/components/admin/PaletteHelp#PaletteHelp": PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c,
   "@/components/admin/BrandIcon#BrandIcon": BrandIcon_d9087a380941d12f95aff168665b00b4,
   "@/components/admin/BrandLogo#BrandLogo": BrandLogo_fd0a9bbb35693e340bbbfa9596236d37,
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,

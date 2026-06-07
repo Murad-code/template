@@ -5,10 +5,12 @@ import React from 'react'
 
 export const LivePreviewListener: React.FC = () => {
   const router = useRouter()
+  const serverURL = typeof window !== 'undefined' ? window.location.origin : ''
+
   return (
     <PayloadLivePreview
       refresh={router.refresh}
-      serverURL={process.env.NEXT_PUBLIC_SERVER_URL || ''}
+      serverURL={serverURL}
     />
   )
 }

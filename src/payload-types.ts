@@ -75,6 +75,7 @@ export interface Config {
     users: User;
     pages: Page;
     categories: Category;
+    'theme-palettes': ThemePalette;
     media: Media;
     'booking-slots': BookingSlot;
     bookings: Booking;
@@ -114,6 +115,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'theme-palettes': ThemePalettesSelect<false> | ThemePalettesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'booking-slots': BookingSlotsSelect<false> | BookingSlotsSelect<true>;
     bookings: BookingsSelect<false> | BookingsSelect<true>;
@@ -143,12 +145,14 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-theme': SiteTheme;
     'blocked-dates': BlockedDate;
     'booking-settings': BookingSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-theme': SiteThemeSelect<false> | SiteThemeSelect<true>;
     'blocked-dates': BlockedDatesSelect<false> | BlockedDatesSelect<true>;
     'booking-settings': BookingSettingsSelect<false> | BookingSettingsSelect<true>;
   };
@@ -428,6 +432,7 @@ export interface VariantType {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
+  layout?: ('inlineCard' | 'splitPanel') | null;
   richText?: {
     root: {
       type: string;
@@ -475,7 +480,7 @@ export interface Page {
   title: string;
   publishedOn?: string | null;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'landingSplit' | 'landingSpotlight';
     richText?: {
       root: {
         type: string;
@@ -514,6 +519,7 @@ export interface Page {
   };
   layout: (
     | {
+        layout?: ('inlineCard' | 'splitPanel') | null;
         richText?: {
           root: {
             type: string;
@@ -975,6 +981,7 @@ export interface FAQBlock {
  */
 export interface FeaturesBlock {
   title?: string | null;
+  layout?: ('cards' | 'minimal') | null;
   items: {
     title: string;
     description?: {
@@ -1241,6 +1248,48 @@ export interface Address {
   createdAt: string;
 }
 /**
+ * Create reusable custom palettes that appear in Site Theme dropdowns. The default system palette is protected and always available.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme-palettes".
+ */
+export interface ThemePalette {
+  id: number;
+  /**
+   * Stable internal key for seeding and fallback behavior.
+   */
+  key: string;
+  name: string;
+  /**
+   * System palettes are managed by seed/backfill scripts. The default system palette is protected from deletion.
+   */
+  isSystem?: boolean | null;
+  /**
+   * Color 1 (light background)
+   */
+  color1?: string | null;
+  /**
+   * Color 2 (light card).
+   */
+  color2?: string | null;
+  /**
+   * Color 3 (border / accent).
+   */
+  color3?: string | null;
+  /**
+   * Color 4 (dark card).
+   */
+  color4?: string | null;
+  /**
+   * Color 5 (dark background).
+   */
+  color5?: string | null;
+  lightText?: string | null;
+  darkText?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Optional managed slots for a service and date. When rows exist for a date, only these times are offered (instead of generated grid).
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1453,6 +1502,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'theme-palettes';
+        value: number | ThemePalette;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1650,6 +1703,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
+  layout?: T;
   richText?: T;
   links?:
     | T
@@ -1785,6 +1839,7 @@ export interface FAQBlockSelect<T extends boolean = true> {
  */
 export interface FeaturesBlockSelect<T extends boolean = true> {
   title?: T;
+  layout?: T;
   items?:
     | T
     | {
@@ -1803,6 +1858,24 @@ export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme-palettes_select".
+ */
+export interface ThemePalettesSelect<T extends boolean = true> {
+  key?: T;
+  name?: T;
+  isSystem?: T;
+  color1?: T;
+  color2?: T;
+  color3?: T;
+  color4?: T;
+  color5?: T;
+  lightText?: T;
+  darkText?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2391,6 +2464,40 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Set your site palette from saved palettes, or use a one-off custom palette. A protected default palette is always available as fallback.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-theme".
+ */
+export interface SiteTheme {
+  id: number;
+  /**
+   * Choose how this site should get its palette.
+   */
+  paletteMode: 'palette' | 'custom';
+  /**
+   * Select a palette. Create or remove palettes in the 'Theme Palettes' collection.
+   */
+  palette?: (number | null) | ThemePalette;
+  customPalette?: {
+    color1?: string | null;
+    color2?: string | null;
+    color3?: string | null;
+    color4?: string | null;
+    color5?: string | null;
+    /**
+     * Used for hero headings and body in light mode.
+     */
+    lightText?: string | null;
+    /**
+     * Used for hero headings and body in dark mode.
+     */
+    darkText?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Date ranges when the business is closed or bookings are disabled. Used to hide slots in booking flows.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2503,6 +2610,28 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-theme_select".
+ */
+export interface SiteThemeSelect<T extends boolean = true> {
+  paletteMode?: T;
+  palette?: T;
+  customPalette?:
+    | T
+    | {
+        color1?: T;
+        color2?: T;
+        color3?: T;
+        color4?: T;
+        color5?: T;
+        lightText?: T;
+        darkText?: T;
       };
   updatedAt?: T;
   createdAt?: T;

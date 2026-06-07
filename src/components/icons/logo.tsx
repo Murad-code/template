@@ -2,7 +2,8 @@ import clsx from 'clsx'
 import React from 'react'
 
 export function LogoIcon(props: React.ComponentProps<'svg'>) {
-  const companyName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Site'
+  const companyName =
+    process.env.NEXT_PUBLIC_COMPANY_NAME || process.env.NEXT_PUBLIC_SITE_NAME || 'Site'
   const logoURL = process.env.NEXT_PUBLIC_BRAND_LOGO_URL || process.env.NEXT_PUBLIC_BRAND_ICON_URL || ''
 
   if (logoURL) {
