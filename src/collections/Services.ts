@@ -39,6 +39,12 @@ export const Services: CollectionConfig = {
       admin: { description: 'Optional short description shown when selecting a service.' },
     },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Service image used on booking cards and the service details page.' },
+    },
+    {
       name: 'durationMinutes',
       type: 'number',
       required: true,

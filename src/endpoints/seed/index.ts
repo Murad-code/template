@@ -1,5 +1,7 @@
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest } from 'payload'
 import { RequiredDataFromCollectionSlug } from 'payload'
+import fs from 'fs/promises'
+import path from 'path'
 
 import { contactFormData } from './contact-form'
 import { contactPageData } from './contact-page'
@@ -73,6 +75,7 @@ type ServiceSeed = {
   priceInGBP: number
   description: string
   category: 'tasting' | 'home-brewing' | 'espresso' | 'advanced'
+  imageFileName: string
 }
 
 function lexicalParagraph(text: string): any {
@@ -109,6 +112,16 @@ function richTextFrom(...children: Array<ReturnType<typeof lexicalParagraph> | R
       indent: 0,
       version: 1,
     },
+  }
+}
+
+async function optionalSeedImage(...segments: string[]): Promise<string | null> {
+  const absolutePath = path.join(process.cwd(), 'seed', ...segments)
+  try {
+    await fs.access(absolutePath)
+    return absolutePath
+  } catch {
+    return null
   }
 }
 
@@ -330,6 +343,7 @@ const serviceSeeds: ServiceSeed[] = [
     description:
       'Explore four carefully selected coffees from different origins while learning how processing, roasting and brewing influence flavour.',
     category: 'tasting',
+    imageFileName: 'coffee-tasting-experience.jpg',
   },
   {
     name: 'Brew Better Coffee at Home',
@@ -339,6 +353,7 @@ const serviceSeeds: ServiceSeed[] = [
     description:
       'Learn grind size, water temperature and extraction principles for consistently excellent coffee at home.',
     category: 'home-brewing',
+    imageFileName: 'brew-better-coffee-at-home.jpg',
   },
   {
     name: 'Introduction to Espresso',
@@ -347,6 +362,7 @@ const serviceSeeds: ServiceSeed[] = [
     priceInGBP: 6500,
     description: 'Master espresso preparation, shot dialing and milk steaming on professional equipment.',
     category: 'espresso',
+    imageFileName: 'introduction-to-espresso.jpg',
   },
   {
     name: 'Latte Art Workshop',
@@ -355,6 +371,7 @@ const serviceSeeds: ServiceSeed[] = [
     priceInGBP: 5500,
     description: 'Practice pouring hearts, tulips and rosettas with one-to-one coaching.',
     category: 'espresso',
+    imageFileName: 'latte-art-workshop.jpg',
   },
   {
     name: 'Coffee Roasting Fundamentals',
@@ -363,6 +380,7 @@ const serviceSeeds: ServiceSeed[] = [
     priceInGBP: 8500,
     description: 'Understand roast development through guided live roasting demonstrations and cupping.',
     category: 'advanced',
+    imageFileName: 'coffee-roasting-fundamentals.jpg',
   },
   {
     name: 'Cupping and Sensory Training',
@@ -371,6 +389,7 @@ const serviceSeeds: ServiceSeed[] = [
     priceInGBP: 3500,
     description: 'Develop your palate and learn structured tasting methods used by roasting teams.',
     category: 'tasting',
+    imageFileName: 'cupping-and-sensory-training.jpg',
   },
   {
     name: 'Home Barista Masterclass',
@@ -379,6 +398,7 @@ const serviceSeeds: ServiceSeed[] = [
     priceInGBP: 12000,
     description: 'A complete workshop covering espresso workflow, milk texturing and equipment care.',
     category: 'advanced',
+    imageFileName: 'home-barista-masterclass.jpg',
   },
 ]
 
@@ -559,6 +579,20 @@ export const seed = async ({
       })
       pathToMedia.set(imagePath, doc)
     }
+  }
+
+  const serviceSlugToMedia = new Map<string, Media>()
+  for (const serviceSeed of serviceSeeds) {
+    const serviceImagePath = await optionalSeedImage('services', serviceSeed.imageFileName)
+    if (!serviceImagePath) continue
+    const file = await readLocalFile(serviceImagePath)
+    const doc = await payload.create({
+      collection: 'media',
+      data: { alt: `${serviceSeed.name} service image` },
+      file,
+      overwriteExistingFiles: true,
+    })
+    serviceSlugToMedia.set(serviceSeed.slug, doc)
   }
 
   payload.logger.info(`— Seeding categories...`)
@@ -1062,6 +1096,7 @@ export const seed = async ({
     const serviceDocs: Array<{ id: number; slug: string }> = []
     for (const [idx, serviceSeed] of serviceSeeds.entries()) {
       const linkedProduct = products[idx % products.length]
+      const serviceImage = serviceSlugToMedia.get(serviceSeed.slug)
       payload.logger.info(`  · Creating service: ${serviceSeed.name}`)
       const serviceDoc = await payload.create({
         collection: 'services',
@@ -1074,6 +1109,7 @@ export const seed = async ({
           priceInGBP: serviceSeed.priceInGBP,
           active: true,
           linkedProduct: linkedProduct?.id,
+          image: serviceImage?.id,
         },
       })
       serviceDocs.push({ id: serviceDoc.id, slug: serviceSeed.slug })

@@ -188,6 +188,7 @@ export function BookingForm({
   }, [date, selectedServiceId, selectedSlot])
 
   const selectedService = services.find((s) => String(s.id) === selectedServiceId)
+  const showServiceSelect = !initialServiceSlugOrId
   const hasPrice = Boolean(
     selectedService?.priceInGBPEnabled &&
       selectedService.priceInGBP != null &&
@@ -304,7 +305,7 @@ export function BookingForm({
 
   const validateStep = () => {
     if (!selectedServiceId || !date || !selectedSlot || !guestEmail) {
-      setMessage({ type: 'error', text: 'Please choose a service, date, time, and enter your email.' })
+      setMessage({ type: 'error', text: 'Please choose a date, time, and enter your email.' })
       return false
     }
     return true
@@ -382,29 +383,31 @@ export function BookingForm({
   }
 
   return (
-    <div className="space-y-6 max-w-md">
-      <div>
-        <Label htmlFor="service">Service</Label>
-        <select
-          id="service"
-          value={selectedServiceId}
-          onChange={(e) => {
-            setSelectedServiceId(e.target.value)
-            setSlots([])
-            setSelectedSlot('')
-            setSelectedSlotOfferingId(null)
-          }}
-          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          required
-        >
-          <option value="">Select a service</option>
-          {services.map((s) => (
-            <option key={String(s.id)} value={String(s.id)}>
-              {s.name} ({s.durationMinutes} min)
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="space-y-6 w-full">
+      {showServiceSelect ? (
+        <div>
+          <Label htmlFor="service">Service</Label>
+          <select
+            id="service"
+            value={selectedServiceId}
+            onChange={(e) => {
+              setSelectedServiceId(e.target.value)
+              setSlots([])
+              setSelectedSlot('')
+              setSelectedSlotOfferingId(null)
+            }}
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            required
+          >
+            <option value="">Select a service</option>
+            {services.map((s) => (
+              <option key={String(s.id)} value={String(s.id)}>
+                {s.name} ({s.durationMinutes} min)
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
       <div>
         <Label>Date</Label>
         <div className="mt-2">
@@ -435,7 +438,7 @@ export function BookingForm({
                       typeof slot.slotOfferingId === 'number' ? slot.slotOfferingId : null,
                     )
                   }}
-                  className={`px-3 py-1.5 rounded text-sm border ${
+                  className={`px-3 py-1.5 rounded text-sm border cursor-pointer ${
                     selectedSlot === slot.time &&
                     (slot.slotOfferingId ?? null) === selectedSlotOfferingId
                       ? 'bg-primary text-primary-foreground border-primary'
@@ -449,7 +452,7 @@ export function BookingForm({
           )}
         </div>
       )}
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="guestEmail">Email *</Label>
         <Input
           id="guestEmail"
@@ -459,7 +462,7 @@ export function BookingForm({
           required
         />
       </div>
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="guestName">Name</Label>
         <Input
           id="guestName"

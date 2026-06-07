@@ -1102,6 +1102,10 @@ export interface Service {
    */
   description?: string | null;
   /**
+   * Service image used on booking cards and the service details page.
+   */
+  image?: (number | null) | Media;
+  /**
    * Length of the appointment in minutes. Used to generate time slots.
    */
   durationMinutes: number;
@@ -1980,6 +1984,7 @@ export interface ServicesSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   description?: T;
+  image?: T;
   durationMinutes?: T;
   enabledPriceInGBP?: T;
   priceInGBP?: T;

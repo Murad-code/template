@@ -1,8 +1,8 @@
 'use client'
 
+import { endOfDay, startOfDay } from 'date-fns'
 import { useMemo } from 'react'
 import { DayPicker, type Matcher } from 'react-day-picker'
-import { endOfDay, startOfDay } from 'date-fns'
 
 import type { BlockedRange } from '@/utilities/getBlockedRanges'
 import {
@@ -47,7 +47,9 @@ export function BookingCalendar({
       matchers.push({ from, to })
     }
     if (bookingHoursSettings) {
-      matchers.push((date: Date) => getBookingHoursForDate(localDateToYmd(date), bookingHoursSettings).closed)
+      matchers.push(
+        (date: Date) => getBookingHoursForDate(localDateToYmd(date), bookingHoursSettings).closed,
+      )
     }
     return matchers
   }, [blockedRanges, bookingHoursSettings])

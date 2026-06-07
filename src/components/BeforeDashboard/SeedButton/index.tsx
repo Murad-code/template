@@ -20,7 +20,7 @@ export const SeedButton: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<unknown>(null)
-  const [mode, setMode] = useState<SeedMode>('ecommerce')
+  const [mode, setMode] = useState<SeedMode>('hybrid')
 
   const handleClick = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
