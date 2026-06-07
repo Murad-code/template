@@ -55,19 +55,24 @@ export function getDerivedHeaderNavItems(config: SiteConfig): HeaderNavItem[] {
       link: { type: 'custom', label: 'Book', url: '/book', newTab: false },
     })
   }
-  items.push({
-    id: 'derived-nav-account',
-    link: { type: 'custom', label: 'Account', url: '/account', newTab: false },
-  })
   return items
 }
 
-/** Derived first; append CMS items whose path is not already covered. */
+function getAccountNavItem(): HeaderNavItem {
+  return {
+    id: 'derived-nav-account',
+    link: { type: 'custom', label: 'Account', url: '/account', newTab: false },
+  }
+}
+
+/** Keep Account as the final item; append CMS items before it unless duplicated. */
 export function getEffectiveHeaderNavItems(header: Header, config: SiteConfig): HeaderNavItem[] {
   const derived = getDerivedHeaderNavItems(config)
-  const used = new Set(derived.map(navItemKey))
+  const accountItem = getAccountNavItem()
+  const accountKey = navItemKey(accountItem)
+  const used = new Set([...derived.map(navItemKey), accountKey])
   const extras = (header.navItems ?? []).filter((item) => !used.has(navItemKey(item)))
-  return [...derived, ...extras]
+  return [...derived, ...extras, accountItem]
 }
 
 /** Core footer links from PROJECT_TYPE. */
