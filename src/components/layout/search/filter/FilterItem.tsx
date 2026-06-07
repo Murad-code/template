@@ -5,7 +5,7 @@ import type { SortFilterItem as SortFilterItemType } from '@/lib/constants'
 import { createUrl } from '@/utilities/createUrl'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
 import type { ListItem } from '.'
@@ -68,4 +68,34 @@ function SortFilterItem({ item }: { item: SortFilterItemType }) {
 
 export function FilterItem({ item }: { item: ListItem }) {
   return 'path' in item ? <PathFilterItem item={item} /> : <SortFilterItem item={item} />
+}
+
+export function ResetFiltersItem() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const hasCategory = Boolean(searchParams.get('category'))
+  const hasSort = Boolean(searchParams.get('sort'))
+
+  if (!hasCategory && !hasSort) return null
+
+  const resetFilters = () => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('category')
+    params.delete('sort')
+    const newParams = params.toString()
+    router.push(newParams ? `${pathname}?${newParams}` : pathname)
+  }
+
+  return (
+    <li className="mt-4 flex text-sm text-black dark:text-white">
+      <button
+        className="w-full text-left underline underline-offset-4 hover:cursor-pointer"
+        onClick={resetFilters}
+        type="button"
+      >
+        Reset filters
+      </button>
+    </li>
+  )
 }

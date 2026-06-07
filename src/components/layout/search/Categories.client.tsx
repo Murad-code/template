@@ -9,6 +9,34 @@ type Props = {
   category: Category
 }
 
+export const AllCategoriesItem: React.FC = () => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const isActive = useMemo(() => {
+    return !searchParams.get('category')
+  }, [searchParams])
+
+  const clearCategory = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('category')
+    const newParams = params.toString()
+    router.push(newParams ? `${pathname}?${newParams}` : pathname)
+  }, [pathname, router, searchParams])
+
+  return (
+    <button
+      onClick={clearCategory}
+      className={clsx('hover:cursor-pointer', {
+        ' underline': isActive,
+      })}
+    >
+      All
+    </button>
+  )
+}
+
 export const CategoryItem: React.FC<Props> = ({ category }) => {
   const router = useRouter()
   const pathname = usePathname()
@@ -29,7 +57,7 @@ export const CategoryItem: React.FC<Props> = ({ category }) => {
 
     const newParams = params.toString()
 
-    router.push(pathname + '?' + newParams)
+    router.push(newParams ? `${pathname}?${newParams}` : pathname)
   }, [category.id, isActive, pathname, router, searchParams])
 
   return (

@@ -1,6 +1,7 @@
 import { Grid } from '@/components/Grid'
 import { ProductGridItem } from '@/components/ProductGridItem'
 import configPromise from '@payload-config'
+import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
@@ -18,6 +19,21 @@ type Props = {
 export default async function ShopPage({ searchParams }: Props) {
   const { q: searchValue, sort, category } = await searchParams
   const payload = await getPayload({ config: configPromise })
+  const normalizedSort = typeof sort === 'string' ? sort : undefined
+  const normalizedCategory = typeof category === 'string' ? category : undefined
+  const clearSearchParams = new URLSearchParams()
+
+  if (normalizedSort) {
+    clearSearchParams.set('sort', normalizedSort)
+  }
+
+  if (normalizedCategory) {
+    clearSearchParams.set('category', normalizedCategory)
+  }
+
+  const clearSearchHref = clearSearchParams.toString()
+    ? `/shop?${clearSearchParams.toString()}`
+    : '/shop'
 
   const products = await payload.find({
     collection: 'products',
@@ -30,7 +46,7 @@ export default async function ShopPage({ searchParams }: Props) {
       categories: true,
       priceInGBP: true,
     },
-    ...(sort ? { sort } : { sort: 'title' }),
+    ...(normalizedSort ? { sort: normalizedSort } : { sort: 'title' }),
     ...(searchValue || category
       ? {
           where: {
@@ -50,7 +66,7 @@ export default async function ShopPage({ searchParams }: Props) {
                           },
                         },
                         {
-                          description: {
+                          slug: {
                             like: searchValue,
                           },
                         },
@@ -58,11 +74,11 @@ export default async function ShopPage({ searchParams }: Props) {
                     },
                   ]
                 : []),
-              ...(category
+              ...(normalizedCategory
                 ? [
                     {
                       categories: {
-                        contains: category,
+                        contains: normalizedCategory,
                       },
                     },
                   ]
@@ -78,12 +94,17 @@ export default async function ShopPage({ searchParams }: Props) {
   return (
     <div>
       {searchValue ? (
-        <p className="mb-4">
-          {products.docs?.length === 0
-            ? 'There are no products that match '
-            : `Showing ${products.docs.length} ${resultsText} for `}
-          <span className="font-bold">&quot;{searchValue}&quot;</span>
-        </p>
+        <div className="mb-4 flex items-center gap-3">
+          <p>
+            {products.docs?.length === 0
+              ? 'There are no products that match '
+              : `Showing ${products.docs.length} ${resultsText} for `}
+            <span className="font-bold">&quot;{searchValue}&quot;</span>
+          </p>
+          <Link className="underline underline-offset-2 hover:no-underline" href={clearSearchHref}>
+            Clear search
+          </Link>
+        </div>
       ) : null}
 
       {!searchValue && products.docs?.length === 0 && (

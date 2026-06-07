@@ -3,7 +3,7 @@ import type { SortFilterItem } from '@/lib/constants'
 import React, { Suspense } from 'react'
 
 import { FilterItemDropdown } from './FilterItemDropdown'
-import { FilterItem } from './FilterItem'
+import { FilterItem, ResetFiltersItem } from './FilterItem'
 export type ListItem = PathFilterItem | SortFilterItem
 export type PathFilterItem = { path: string; title: string }
 
@@ -27,6 +27,7 @@ export function FilterList({ list, title }: { list: ListItem[]; title?: string }
         <ul className="hidden md:block">
           <Suspense fallback={null}>
             <FilterItemList list={list} />
+            <ResetFiltersItem />
           </Suspense>
         </ul>
         <ul className="md:hidden">
