@@ -127,6 +127,7 @@ Agents should follow these in order:
 - For Payload migrations in container runtime, use:
   - `PAYLOAD_CONFIG_PATH=src/payload.config.ts`
 - After schema-affecting deploys, verify tables exist with `\dt`.
+- `pnpm payload migrate` showing "Done" is not sufficient by itself; always validate `/admin` and scan logs for `column ... does not exist` errors.
 - When writing `.env` with heredoc, ensure the file closes with `EOF` on its own line and no accidental pasted text.
 - Always build with `PROJECT_TYPE` exported in local `.env` before `docker-build-amd64.sh --push` so prerendered frontend nav matches expected mode (`ecommerce`/`booking`/`hybrid`).
 
@@ -193,8 +194,20 @@ docker compose logs --tail=100 app
 
 ```bash
 docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate'
+docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate:status'
 docker compose exec -T postgres sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "\dt"'
+docker compose logs --tail=200 app | grep -En 'column .* does not exist|relation .* does not exist|Failed query' || true
 ```
+
+If logs contain a missing-column error, immediately verify the expected relation columns exist before continuing:
+
+```bash
+docker compose exec -T postgres sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "\d payload_locked_documents_rels"'
+```
+
+If the app expects a column (example: `theme_palettes_id`) that is missing, treat this as **missing migration coverage** (not a transient deploy issue).
+
+Do not run `/next/seed` (or admin seed actions) until migration checks are clean and `/admin` returns `200`.
 
 ### 4) Endpoint + asset verification
 
@@ -308,6 +321,51 @@ Action:
   - `curl -I https://DOMAIN/admin`
 - if browser still shows old errors, do hard refresh / clear site cache once.
 
+### 6) Admin `500` with missing column after migrate (`column ... does not exist`)
+
+Meaning: running image expects schema changes that are not represented in applied migrations (or migration files are missing from image/source).
+
+Action:
+
+- verify current relation table shape:
+  - `docker compose exec -T postgres sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "\d payload_locked_documents_rels"'`
+- check migration files in running container:
+  - `docker compose exec -T app sh -lc 'ls -la src/migrations'`
+- if column is missing and no migration adds it:
+  - create and commit a proper Payload migration in repo (`pnpm payload migrate:create`)
+  - build/push a **new image tag**
+  - redeploy app and rerun migrate
+- emergency-only hotfix (to restore admin quickly): apply targeted `ALTER TABLE ... ADD COLUMN IF NOT EXISTS ...`, then follow up with a real migration commit so future environments are consistent.
+
+### 7) Seed endpoint fails with missing table/column (`relation ... does not exist` / `column ... does not exist`)
+
+Meaning: app code + seed logic moved ahead of DB schema (migration drift). Seeding is surfacing drift that also risks runtime failures.
+
+Action (required order):
+
+1. Confirm drift signals:
+   - `docker compose logs --tail=200 app | grep -En 'column .* does not exist|relation .* does not exist|Failed query'`
+   - `docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate:status'`
+   - if latest migration shows `Ran = No`, do **not** run seed; fix migration execution first
+2. In repo (local), generate and commit a catch-up migration:
+   - `pnpm payload migrate:create`
+   - verify generated SQL includes missing objects from logs
+   - commit `src/migrations/*` and `src/migrations/index.ts`
+3. Build/push a new image tag and redeploy app.
+4. On VPS, run:
+   - `docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate'`
+   - `docker compose exec -T app sh -lc 'PAYLOAD_CONFIG_PATH=src/payload.config.ts pnpm payload migrate:status'`
+   - if migrate fails, copy exact SQL error and patch migration for idempotency (`IF NOT EXISTS` / guarded constraints), then rebuild and redeploy
+5. Validate before seed:
+   - `curl -I https://DOMAIN/admin`
+   - app logs show no schema errors
+6. Only then run seed (if required).
+
+Emergency-only workaround:
+
+- Apply targeted SQL (`CREATE TABLE IF NOT EXISTS`, `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`) to restore service quickly.
+- Still create and deploy a real migration commit immediately after; do not leave manual SQL as the only fix.
+
 ## First Admin Bootstrap (fresh projects)
 
 After first successful deploy and migration:
@@ -363,6 +421,7 @@ Execution requirements:
 6) Include validation commands after each phase.
 7) Include first-admin bootstrap steps for fresh projects.
 8) If anything fails, diagnose and provide the minimum fix with exact commands.
+9) For fast-path updates, run `pnpm payload migrate:status` on VPS after migrate and block seed/admin checks until no schema drift errors appear in logs.
 ```
 
 ## Operator Note
