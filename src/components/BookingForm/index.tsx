@@ -1,18 +1,18 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { BookingCalendar } from '@/components/BookingCalendar'
+import { Price } from '@/components/Price'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { BookingCalendar } from '@/components/BookingCalendar'
-import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
-import { Price } from '@/components/Price'
 import type { BlockedRange } from '@/utilities/getBlockedRanges'
 import type { BookingHoursSettings } from '@/utilities/getBookingHoursForDate'
 import { getBookingHoursForDate } from '@/utilities/getBookingHoursForDate'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BookingPaymentStep } from './BookingPaymentStep'
 
 type BookingApiResponse = {
@@ -34,10 +34,9 @@ function pushBookingInvoice(
   router.push(`/bookings/${data.id}?${qp.toString()}`)
 }
 
-const stripePromise =
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-    ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-    : null
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null
 
 type ServiceOption = {
   id: string | number
@@ -76,7 +75,9 @@ export function BookingForm({
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null)
   const [paymentAmount, setPaymentAmount] = useState<number | null>(null)
-  const [bookingHoursSettings, setBookingHoursSettings] = useState<BookingHoursSettings | null>(null)
+  const [bookingHoursSettings, setBookingHoursSettings] = useState<BookingHoursSettings | null>(
+    null,
+  )
 
   const bookingSelectionRef = useRef({ date: '', serviceId: '', slot: '' })
   bookingSelectionRef.current = {
@@ -127,7 +128,9 @@ export function BookingForm({
         setBookingHoursSettings({
           defaultStartHour: typeof o.defaultStartHour === 'number' ? o.defaultStartHour : undefined,
           defaultEndHour: typeof o.defaultEndHour === 'number' ? o.defaultEndHour : undefined,
-          weekdayHours: Array.isArray(o.weekdayHours) ? (o.weekdayHours as BookingHoursSettings['weekdayHours']) : null,
+          weekdayHours: Array.isArray(o.weekdayHours)
+            ? (o.weekdayHours as BookingHoursSettings['weekdayHours'])
+            : null,
         })
       })
       .catch(() => setBookingHoursSettings(null))
@@ -191,8 +194,8 @@ export function BookingForm({
   const showServiceSelect = !initialServiceSlugOrId
   const hasPrice = Boolean(
     selectedService?.priceInGBPEnabled &&
-      selectedService.priceInGBP != null &&
-      selectedService.priceInGBP > 0,
+    selectedService.priceInGBP != null &&
+    selectedService.priceInGBP > 0,
   )
   const stripeKey = typeof process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === 'string'
 
@@ -512,7 +515,8 @@ export function BookingForm({
             'Loading…'
           ) : hasPrice && stripeKey && selectedService?.priceInGBP != null ? (
             <span className="inline-flex flex-wrap items-center gap-x-1 justify-center">
-              Pay <Price amount={selectedService.priceInGBP} as="span" className="font-medium" /> and book
+              Pay <Price amount={selectedService.priceInGBP} as="span" className="font-medium" />{' '}
+              and book
             </span>
           ) : (
             'Request booking'

@@ -2,22 +2,23 @@
 
 import Link from 'next/link'
 import React from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 export default function Error() {
   return (
     <div className="container py-28">
-      <div className="mx-auto max-w-xl rounded-lg bg-white p-8 text-center shadow-sm shadow-black/10 dark:bg-black dark:shadow-black/40">
+      <Card className="mx-auto max-w-xl p-2 text-center">
+        <CardContent className="p-8">
         <h2 className="text-2xl font-bold">Something went wrong</h2>
-        <p className="mt-3 text-neutral-600 dark:text-neutral-300">
+        <p className="mt-3 text-muted-foreground">
           We could not load this page. Please head back to the homepage.
         </p>
-        <Link
-          href="/"
-          className="mx-auto mt-6 inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium tracking-wide text-white hover:opacity-90 dark:bg-white dark:text-black"
-        >
-          Go to Home
-        </Link>
-      </div>
+        <Button asChild className="mx-auto mt-6 rounded-full px-6 py-3 text-sm tracking-wide">
+          <Link href="/">Go to Home</Link>
+        </Button>
+        </CardContent>
+      </Card>
     </div>
   )
 }

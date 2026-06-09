@@ -1,6 +1,9 @@
 import { Grid } from '@/components/Grid'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { RenderHero } from '@/heros/RenderHero'
+import { Button } from '@/components/ui/button'
 import { MetaChip } from '@/components/ui/meta-chip'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
@@ -102,6 +105,19 @@ export default async function BookPage({ searchParams }: BookPageProps) {
     where: { and: whereAnd },
   })
 
+  const cmsBookPageResult = await payload.find({
+    collection: 'pages',
+    depth: 2,
+    draft: false,
+    limit: 1,
+    pagination: false,
+    overrideAccess: false,
+    where: {
+      and: [{ slug: { equals: 'book' } }, { _status: { equals: 'published' } }],
+    },
+  })
+  const cmsBookPage = cmsBookPageResult.docs[0]
+
   const clearFiltersHref = '/book'
   const filterFormKey = [
     normalizedQuery,
@@ -113,6 +129,13 @@ export default async function BookPage({ searchParams }: BookPageProps) {
 
   return (
     <div className="container py-12 space-y-8">
+      {cmsBookPage ? (
+        <article className="space-y-8">
+          <RenderHero {...cmsBookPage.hero} />
+          <RenderBlocks blocks={cmsBookPage.layout} />
+        </article>
+      ) : null}
+
       <div className="space-y-3">
         <h1 className="text-3xl font-medium">Book a service</h1>
         <p className="text-muted-foreground max-w-2xl">
@@ -257,9 +280,9 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                     </div>
                   </div>
 
-                  <span className="inline-flex h-10 items-center justify-center rounded-md bg-muted/70 px-4 text-sm font-medium transition-colors group-hover:bg-muted">
-                    View details and book
-                  </span>
+                  <Button asChild className="w-full border-transparent bg-background hover:bg-background/90">
+                    <span>View details and book</span>
+                  </Button>
                 </article>
               </Link>
             )

@@ -16,16 +16,16 @@ export async function Footer() {
   const menu = getEffectiveFooterNavItems(footer, config)
   const currentYear = new Date().getFullYear()
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '')
-  const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700'
+  const skeleton = 'w-full h-6 animate-pulse rounded bg-muted'
 
   const copyrightName = companyName || siteName || ''
 
   return (
-    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
+    <footer className="bg-card text-sm text-muted-foreground">
       <div className="container">
-        <div className="flex w-full flex-col gap-6 border-t border-neutral-200 py-12 text-sm md:flex-row md:gap-12 dark:border-neutral-700">
+        <div className="flex w-full flex-col gap-6 py-12 text-sm md:flex-row md:gap-12">
           <div>
-            <Link className="flex items-center gap-2 text-black md:pt-1 dark:text-white" href="/">
+            <Link className="flex items-center gap-2 text-foreground md:pt-1" href="/">
               <LogoIcon className="w-6" />
               <span className="sr-only">{siteName}</span>
             </Link>
@@ -49,13 +49,13 @@ export async function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-neutral-200 py-6 text-sm dark:border-neutral-700">
+      <div className="py-6 text-sm">
         <div className="container mx-auto flex w-full flex-col items-center gap-1 md:flex-row md:gap-0">
           <p>
             &copy; {copyrightDate} {copyrightName}
             {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
           </p>
-          <hr className="mx-4 hidden h-4 w-px border-l border-neutral-400 md:inline-block" />
+          <hr className="mx-4 hidden h-4 w-px border-l border-muted md:inline-block" />
           <p>Designed in London</p>
         </div>
       </div>

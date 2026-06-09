@@ -41,7 +41,7 @@ export const Search: React.FC<Props> = ({ className }) => {
     <form className={cn('relative w-full', className)} onSubmit={onSubmit}>
       <input
         autoComplete="off"
-        className="w-full rounded-lg border bg-white px-4 py-2 pr-16 text-sm text-black placeholder:text-neutral-500 dark:border-neutral-800 dark:bg-black dark:text-white dark:placeholder:text-neutral-400"
+        className="w-full rounded-lg border border-input bg-background px-4 py-2 pr-16 text-sm text-foreground placeholder:text-muted-foreground"
         defaultValue={query}
         key={query}
         name="search"
@@ -52,7 +52,7 @@ export const Search: React.FC<Props> = ({ className }) => {
         {query ? (
           <button
             aria-label="Clear search"
-            className="cursor-pointer text-neutral-500 transition-colors hover:text-neutral-800 dark:hover:text-neutral-200"
+            className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
             onClick={clearSearch}
             type="button"
           >
@@ -61,7 +61,7 @@ export const Search: React.FC<Props> = ({ className }) => {
         ) : null}
         <button
           aria-label="Submit search"
-          className="cursor-pointer text-neutral-500 transition-colors hover:text-neutral-800 dark:hover:text-neutral-200"
+          className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
           type="submit"
         >
           <SearchIcon aria-hidden className="h-4 w-4" />

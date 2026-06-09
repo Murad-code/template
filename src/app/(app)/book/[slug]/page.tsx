@@ -108,7 +108,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
           </div>
         </div>
 
-        <div className="rounded-2xl p-6 md:p-8 bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
+        <div className="w-full rounded-2xl bg-card p-6 shadow-sm shadow-black/10 md:p-8 lg:mx-auto lg:max-w-136 dark:shadow-black/40">
           <h2 className="text-xl font-medium mb-6">Book this service</h2>
           <BookingForm initialServiceSlugOrId={service.slug} initialProductId={initialProductId ?? null} />
         </div>

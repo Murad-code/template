@@ -97,10 +97,13 @@ export function AddToCart({ product }: Props) {
   return (
     <Button
       aria-label="Add to cart"
-      variant={'outline'}
-      className={clsx({
-        'hover:opacity-90': true,
-      })}
+      variant={'subtle'}
+      className={clsx(
+        'bg-card text-card-foreground hover:bg-card/90',
+        {
+          'hover:opacity-95': true,
+        },
+      )}
       disabled={disabled || isLoading}
       onClick={addToCart}
       type="submit"
