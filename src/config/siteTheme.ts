@@ -13,6 +13,19 @@ type PaletteMode = {
   dark: PaletteColors
 }
 
+const FONT_STACKS = {
+  'geist-sans': 'var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif',
+  'system-sans':
+    'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  'system-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  'geist-mono':
+    'var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  'system-mono':
+    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+} as const
+
+type FontToken = keyof typeof FONT_STACKS
+
 const fallbackPalette: PaletteMode = {
   // Neutral defaults that preserve the original clean admin/frontend baseline.
   light: {
@@ -70,23 +83,50 @@ function mapCustomPaletteToMode(input: {
   }
 }
 
+function mapSavedPalette(value: unknown): PaletteMode | null {
+  if (!value || typeof value !== 'object') return null
+  return mapCustomPaletteToMode(value as Parameters<typeof mapCustomPaletteToMode>[0])
+}
+
 function resolvePalette(theme: SiteTheme | null | undefined): PaletteMode {
+  let basePalette: PaletteMode | null = null
+
   if (theme?.paletteMode === 'custom') {
-    return mapCustomPaletteToMode(theme?.customPalette || {})
+    basePalette = mapCustomPaletteToMode(theme?.customPalette || {})
+  } else if (!theme?.paletteMode || theme.paletteMode === 'palette') {
+    basePalette = mapSavedPalette(theme?.palette)
   }
 
-  if (!theme?.paletteMode || theme.paletteMode === 'palette') {
-    const saved = theme?.palette
-    if (saved && typeof saved === 'object') {
-      return mapCustomPaletteToMode(saved)
-    }
-  }
+  const resolvedBase = basePalette || fallbackPalette
+  const darkOverride = mapSavedPalette((theme as SiteTheme & { darkPalette?: unknown })?.darkPalette)
 
-  return fallbackPalette
+  if (!darkOverride) return resolvedBase
+
+  return {
+    light: resolvedBase.light,
+    dark: darkOverride.dark,
+  }
+}
+
+function resolveFontStack(value: unknown, fallback: FontToken): string {
+  if (typeof value !== 'string') return FONT_STACKS[fallback]
+  const token = value as FontToken
+  return FONT_STACKS[token] || FONT_STACKS[fallback]
+}
+
+function resolveTypography(theme: SiteTheme | null | undefined) {
+  const typography = theme?.typography
+
+  return {
+    body: resolveFontStack(typography?.bodyFont, 'geist-sans'),
+    heading: resolveFontStack(typography?.headingFont, 'geist-sans'),
+    mono: resolveFontStack(typography?.monoFont, 'geist-mono'),
+  }
 }
 
 export function getLandingThemeCss(theme: SiteTheme | null | undefined): string {
   const palette = resolvePalette(theme)
+  const typography = resolveTypography(theme)
 
   return `
 :root {
@@ -100,6 +140,9 @@ export function getLandingThemeCss(theme: SiteTheme | null | undefined): string 
   --landing-card-border: ${palette.light.cardBorder};
   --landing-heading: ${palette.light.heading};
   --landing-body: ${palette.light.body};
+  --site-font-sans: ${typography.body};
+  --site-font-heading: ${typography.heading};
+  --site-font-mono: ${typography.mono};
 }
 
 [data-theme='dark'] {
@@ -113,6 +156,9 @@ export function getLandingThemeCss(theme: SiteTheme | null | undefined): string 
   --landing-card-border: ${palette.dark.cardBorder};
   --landing-heading: ${palette.dark.heading};
   --landing-body: ${palette.dark.body};
+  --site-font-sans: ${typography.body};
+  --site-font-heading: ${typography.heading};
+  --site-font-mono: ${typography.mono};
 }
 `
 }

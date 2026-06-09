@@ -23,6 +23,17 @@ const revalidateSiteThemeTag = () => {
   }
 }
 
+const fontFamilyOptions = [
+  { label: 'Geist Sans (default)', value: 'geist-sans' },
+  { label: 'System Sans', value: 'system-sans' },
+  { label: 'System Serif', value: 'system-serif' },
+] as const
+
+const monoFontFamilyOptions = [
+  { label: 'Geist Mono (default)', value: 'geist-mono' },
+  { label: 'System Mono', value: 'system-mono' },
+] as const
+
 const generateSiteThemePreviewPath = () => {
   const params = new URLSearchParams({
     slug: 'home',
@@ -51,6 +62,45 @@ export const SiteTheme: GlobalConfig = {
   },
   fields: [
     {
+      name: 'typography',
+      type: 'group',
+      admin: {
+        description:
+          'Choose brand font roles. Body controls default text, heading controls H1-H6, and mono controls labels/prices using font-mono.',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'bodyFont',
+              type: 'select',
+              required: true,
+              defaultValue: 'geist-sans',
+              options: fontFamilyOptions,
+              label: 'Body font',
+            },
+            {
+              name: 'headingFont',
+              type: 'select',
+              required: true,
+              defaultValue: 'geist-sans',
+              options: fontFamilyOptions,
+              label: 'Heading font',
+            },
+            {
+              name: 'monoFont',
+              type: 'select',
+              required: true,
+              defaultValue: 'geist-mono',
+              options: monoFontFamilyOptions,
+              label: 'Mono / utility font',
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'paletteMode',
       type: 'select',
       defaultValue: 'palette',
@@ -72,6 +122,20 @@ export const SiteTheme: GlobalConfig = {
       admin: {
         condition: (_, siblingData) => !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
         description: "Select a palette. Create or remove palettes in the 'Theme Palettes' collection.",
+        components: {
+          Field: '@/components/admin/PaletteRelationshipField#PaletteRelationshipField',
+        },
+      },
+    },
+    {
+      name: 'darkPalette',
+      type: 'relationship',
+      relationTo: 'theme-palettes',
+      maxDepth: 1,
+      label: 'Dark mode palette override (optional)',
+      admin: {
+        description:
+          'Optional: choose a different palette for dark mode only. If empty, dark mode uses the main selected palette.',
         components: {
           Field: '@/components/admin/PaletteRelationshipField#PaletteRelationshipField',
         },

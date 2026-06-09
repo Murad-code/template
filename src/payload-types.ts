@@ -2477,6 +2477,14 @@ export interface Footer {
 export interface SiteTheme {
   id: number;
   /**
+   * Choose brand font roles. Body controls default text, heading controls H1-H6, and mono controls labels/prices using font-mono.
+   */
+  typography: {
+    bodyFont: 'geist-sans' | 'system-sans' | 'system-serif';
+    headingFont: 'geist-sans' | 'system-sans' | 'system-serif';
+    monoFont: 'geist-mono' | 'system-mono';
+  };
+  /**
    * Choose how this site should get its palette.
    */
   paletteMode: 'palette' | 'custom';
@@ -2484,6 +2492,10 @@ export interface SiteTheme {
    * Select a palette. Create or remove palettes in the 'Theme Palettes' collection.
    */
   palette?: (number | null) | ThemePalette;
+  /**
+   * Optional: choose a different palette for dark mode only. If empty, dark mode uses the main selected palette.
+   */
+  darkPalette?: (number | null) | ThemePalette;
   customPalette?: {
     color1?: string | null;
     color2?: string | null;
@@ -2625,8 +2637,16 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "site-theme_select".
  */
 export interface SiteThemeSelect<T extends boolean = true> {
+  typography?:
+    | T
+    | {
+        bodyFont?: T;
+        headingFont?: T;
+        monoFont?: T;
+      };
   paletteMode?: T;
   palette?: T;
+  darkPalette?: T;
   customPalette?:
     | T
     | {

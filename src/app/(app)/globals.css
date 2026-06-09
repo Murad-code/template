@@ -17,6 +17,7 @@
   h4,
   h5,
   h6 {
+    font-family: var(--site-font-heading, var(--font-sans));
     font-weight: unset;
     font-size: unset;
   }
@@ -43,8 +44,8 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
-  --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--site-font-mono, var(--font-geist-mono));
+  --font-sans: var(--site-font-sans, var(--font-geist-sans));
 }
 
 @layer utilities {
@@ -135,7 +136,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    font-family: var(--font-sans);
+    @apply bg-background text-foreground min-h-screen flex flex-col;
   }
 }
 
