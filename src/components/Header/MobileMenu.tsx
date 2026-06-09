@@ -4,6 +4,7 @@ import type { Header } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Button } from '@/components/ui/button'
+import { IconSquareButton } from '@/components/ui/icon-square-button'
 import {
   Sheet,
   SheetContent,
@@ -48,8 +49,10 @@ export function MobileMenu({ menu, ecommerceEnabled }: Props) {
 
   return (
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
-      <SheetTrigger className="relative flex h-11 w-11 items-center justify-center rounded-md bg-card text-black shadow-sm shadow-black/10 transition-colors dark:bg-black dark:text-white dark:shadow-black/40">
-        <MenuIcon className="h-4" />
+      <SheetTrigger asChild>
+        <IconSquareButton aria-label="Open menu">
+          <MenuIcon className="h-4" />
+        </IconSquareButton>
       </SheetTrigger>
 
       <SheetContent side="left" className="px-4">

@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/sheet'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import { ShoppingCart } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -20,9 +19,9 @@ import { DeleteItemButton } from './DeleteItemButton'
 import { EditItemQuantityButton } from './EditItemQuantityButton'
 import { OpenCartButton } from './OpenCart'
 import { Button } from '@/components/ui/button'
-import type { Product, VariantOption } from '@/payload-types'
-
-type ProductGalleryRow = NonNullable<Product['gallery']>[number]
+import type { Product } from '@/payload-types'
+import { resolveProductVariantDisplay } from '@/utilities/resolveProductVariantDisplay'
+import { LineItemRow } from '@/components/LineItemRow'
 
 export function CartModal() {
   const { cart } = useCart()
@@ -68,111 +67,50 @@ export function CartModal() {
 
                   if (typeof product !== 'object' || !item || !product || !product.slug)
                     return <React.Fragment key={i} />
-
-                  const metaImage =
-                    product.meta?.image && typeof product.meta?.image === 'object'
-                      ? product.meta.image
-                      : undefined
-
-                  const firstGalleryImage =
-                    typeof product.gallery?.[0]?.image === 'object'
-                      ? product.gallery?.[0]?.image
-                      : undefined
-
-                  let image = firstGalleryImage || metaImage
-                  let price = product.priceInGBP
-
-                  const isVariant = Boolean(variant) && typeof variant === 'object'
-
-                  if (isVariant) {
-                    price = variant?.priceInGBP
-
-                    const imageVariant = product.gallery?.find((galleryRow: ProductGalleryRow) => {
-                      if (!galleryRow.variantOption) return false
-                      const variantOptionID =
-                        typeof galleryRow.variantOption === 'object'
-                          ? galleryRow.variantOption.id
-                          : galleryRow.variantOption
-
-                      const hasMatch = variant?.options?.some((option: number | VariantOption) => {
-                        if (typeof option === 'object') return option.id === variantOptionID
-                        else return option === variantOptionID
-                      })
-
-                      return hasMatch
-                    })
-
-                    if (imageVariant && typeof imageVariant.image === 'object') {
-                      image = imageVariant.image
-                    }
-                  }
+                  const variantObject = variant && typeof variant === 'object' ? variant : undefined
+                  const { image, isVariant, price, variantLabel } = resolveProductVariantDisplay({
+                    product,
+                    variant: variantObject,
+                  })
 
                   return (
                     <li className="flex w-full flex-col" key={i}>
-                      <div className="relative flex w-full flex-row justify-between px-1 py-4">
-                        <div className="absolute z-40 -mt-2 ml-[55px]">
-                          <DeleteItemButton item={item} />
-                        </div>
-                        <Link
-                          className="z-30 flex flex-row space-x-4"
-                          href={`/products/${(item.product as Product)?.slug}`}
-                        >
-                          <div className="relative h-16 w-16 cursor-pointer overflow-hidden rounded-md bg-neutral-200 shadow-sm shadow-black/5 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:shadow-black/30">
-                            {image?.url && (
-                              <Image
-                                alt={image?.alt || product?.title || ''}
-                                className="h-full w-full object-cover"
-                                height={94}
-                                src={image.url}
-                                width={94}
-                              />
-                            )}
+                      <LineItemRow
+                        actions={
+                          <div className="absolute z-40 -mt-2 ml-[55px]">
+                            <DeleteItemButton item={item} />
                           </div>
-
-                          <div className="flex flex-1 flex-col text-base">
-                            <span className="leading-tight">{product?.title}</span>
-                            {isVariant && variant ? (
-                              <p className="text-sm text-neutral-500 dark:text-neutral-400 capitalize">
-                                {variant.options
-                                  ?.map((option: number | VariantOption) => {
-                                    if (typeof option === 'object') return option.label
-                                    return null
-                                  })
-                                  .join(', ')}
-                              </p>
-                            ) : null}
-                          </div>
-                        </Link>
-                        <div className="flex h-16 flex-col justify-between">
-                          {typeof price === 'number' && (
-                            <Price
-                              amount={price}
-                              className="flex justify-end space-y-2 text-right text-sm"
-                            />
-                          )}
-                          <div className="ml-auto flex h-9 flex-row items-center rounded-lg bg-muted/70 shadow-sm shadow-black/5 dark:shadow-black/20">
+                        }
+                        className="w-full px-1 py-4"
+                        href={`/products/${(item.product as Product)?.slug}`}
+                        imageAlt={image?.alt || product?.title || ''}
+                        imageClassName="h-16 w-16"
+                        imageUrl={image?.url || undefined}
+                        price={price}
+                        quantity={item.quantity || undefined}
+                        title={product.title}
+                        trailing={
+                          <div className="ml-auto flex h-9 flex-row items-center rounded-lg bg-muted/60 shadow-sm">
                             <EditItemQuantityButton item={item} type="minus" />
                             <p className="w-6 text-center">
                               <span className="w-full text-sm">{item.quantity}</span>
                             </p>
                             <EditItemQuantityButton item={item} type="plus" />
                           </div>
-                        </div>
-                      </div>
+                        }
+                        variantLabel={isVariant ? variantLabel : undefined}
+                      />
                     </li>
                   )
                 })}
               </ul>
 
               <div className="px-4">
-                <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
+                <div className="py-4 text-sm text-muted-foreground">
                   {typeof cart?.subtotal === 'number' && (
                     <div className="mb-3 flex items-center justify-between rounded-md bg-muted/40 px-2 pb-1 pt-1">
                       <p>Total</p>
-                      <Price
-                        amount={cart?.subtotal}
-                        className="text-right text-base text-black dark:text-white"
-                      />
+                      <Price amount={cart?.subtotal} className="text-right text-base text-foreground" />
                     </div>
                   )}
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { Media } from '@/components/Media'
 import { Message } from '@/components/Message'
 import { Price } from '@/components/Price'
+import { ProductItem } from '@/components/ProductItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,9 +19,7 @@ import { CheckoutForm } from '@/components/forms/CheckoutForm'
 import { useAddresses, useCart, usePayments } from '@payloadcms/plugin-ecommerce/client/react'
 import { CheckoutAddresses } from '@/components/checkout/CheckoutAddresses'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
-import type { Address, Product, VariantOption } from '@/payload-types'
-
-type ProductGalleryRow = NonNullable<Product['gallery']>[number]
+import type { Address } from '@/payload-types'
 import { Checkbox } from '@/components/ui/checkbox'
 import { AddressItem } from '@/components/addresses/AddressItem'
 import { FormItem } from '@/components/forms/FormItem'
@@ -143,7 +141,7 @@ export const CheckoutPage: React.FC = () => {
       <div className="basis-full lg:basis-2/3 flex flex-col gap-8 justify-stretch">
         <h2 className="font-medium text-3xl">Contact</h2>
         {!user && (
-          <div className=" bg-accent dark:bg-black rounded-lg p-4 w-full flex items-center">
+          <div className="w-full rounded-lg border border-border bg-accent p-4">
             <div className="prose dark:prose-invert">
               <Button asChild className="no-underline text-inherit" variant="outline">
                 <Link href="/login">Log in</Link>
@@ -156,7 +154,7 @@ export const CheckoutPage: React.FC = () => {
           </div>
         )}
         {user ? (
-          <div className="bg-accent dark:bg-card rounded-lg p-4 ">
+          <div className="rounded-lg border border-border bg-accent p-4">
             <div>
               <p>{user.email}</p>{' '}
               <p>
@@ -168,7 +166,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-accent dark:bg-black rounded-lg p-4 ">
+          <div className="rounded-lg border border-border bg-accent p-4">
             <div>
               <p className="mb-4">Enter your email to checkout as a guest.</p>
 
@@ -363,78 +361,21 @@ export const CheckoutPage: React.FC = () => {
       </div>
 
       {!cartIsEmpty && (
-        <div className="basis-full lg:basis-1/3 lg:pl-8 p-8 border-none bg-primary/5 flex flex-col gap-8 rounded-lg">
+        <div className="basis-full rounded-lg border border-border bg-card p-8 lg:basis-1/3 lg:pl-8 flex flex-col gap-8">
           <h2 className="text-3xl font-medium">Your cart</h2>
           {cart?.items?.map((item, index) => {
             if (typeof item.product === 'object' && item.product) {
-              const {
-                product,
-                product: { id, meta, title, gallery },
-                quantity,
-                variant,
-              } = item
+              const { product, quantity, variant } = item
 
               if (!quantity) return null
 
-              let image = gallery?.[0]?.image || meta?.image
-              let price = product?.priceInGBP
-
-              const isVariant = Boolean(variant) && typeof variant === 'object'
-
-              if (isVariant) {
-                price = variant?.priceInGBP
-
-                const imageVariant = product.gallery?.find((galleryRow: ProductGalleryRow) => {
-                  if (!galleryRow.variantOption) return false
-                  const variantOptionID =
-                    typeof galleryRow.variantOption === 'object'
-                      ? galleryRow.variantOption.id
-                      : galleryRow.variantOption
-
-                  const hasMatch = variant?.options?.some((option: number | VariantOption) => {
-                    if (typeof option === 'object') return option.id === variantOptionID
-                    else return option === variantOptionID
-                  })
-
-                  return hasMatch
-                })
-
-                if (imageVariant && typeof imageVariant.image !== 'string') {
-                  image = imageVariant.image
-                }
-              }
-
               return (
-                <div className="flex items-start gap-4" key={index}>
-                  <div className="flex items-stretch justify-stretch h-20 w-20 p-2 rounded-lg bg-muted/60 shadow-sm shadow-black/5 dark:shadow-black/20">
-                    <div className="relative w-full h-full">
-                      {image && typeof image !== 'string' && (
-                        <Media className="" fill imgClassName="rounded-lg" resource={image} />
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex grow justify-between items-center">
-                    <div className="flex flex-col gap-1">
-                      <p className="font-medium text-lg">{title}</p>
-                      {variant && typeof variant === 'object' && (
-                        <p className="text-sm font-mono text-primary/50 tracking-widest">
-                          {variant.options
-                            ?.map((option: number | VariantOption) => {
-                              if (typeof option === 'object') return option.label
-                              return null
-                            })
-                            .join(', ')}
-                        </p>
-                      )}
-                      <div>
-                        {'x'}
-                        {quantity}
-                      </div>
-                    </div>
-
-                    {typeof price === 'number' && <Price amount={price} />}
-                  </div>
-                </div>
+                <ProductItem
+                  key={index}
+                  product={product}
+                  quantity={quantity}
+                  variant={variant && typeof variant === 'object' ? variant : undefined}
+                />
               )
             }
             return null
