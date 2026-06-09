@@ -8,11 +8,11 @@ import { formatDateTime } from '@/utilities/formatDateTime'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeftIcon } from 'lucide-react'
 import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { getSiteConfig } from '@/config/site'
+import { AccountDetailMetaLabel, AccountDetailPanel } from '@/components/account/AccountDetailPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -115,30 +115,14 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
       : null
 
   return (
-    <div className="">
-      <div className="flex gap-8 justify-between items-center mb-6">
-        {user ? (
-          <div className="flex gap-4">
-            <Button asChild variant="ghost">
-              <Link href="/account/bookings">
-                <ChevronLeftIcon />
-                My bookings
-              </Link>
-            </Button>
-          </div>
-        ) : (
-          <div />
-        )}
-
-        <h1 className="text-sm uppercase font-mono px-2 bg-primary/10 rounded tracking-[0.07em]">
-          <span>{`Booking #${booking.id}`}</span>
-        </h1>
-      </div>
-
-      <div className="bg-card rounded-lg px-6 py-4 flex flex-col gap-12 shadow-sm shadow-black/10 dark:shadow-black/40">
+    <AccountDetailPanel
+      backHref={user ? '/account/bookings' : undefined}
+      backLabel={user ? 'My bookings' : undefined}
+      badgeLabel={`Booking #${booking.id}`}
+    >
         <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
           <div>
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Booked on</p>
+            <AccountDetailMetaLabel>Booked on</AccountDetailMetaLabel>
             <p className="text-lg">
               <time dateTime={booking.createdAt}>
                 {formatDateTime({ date: booking.createdAt })}
@@ -147,7 +131,7 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
           </div>
 
           <div>
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Appointment</p>
+            <AccountDetailMetaLabel>Appointment</AccountDetailMetaLabel>
             <p className="text-lg">
               <time dateTime={toDateOnlyString(booking.slotDate)}>
                 {formatDateDisplayDMY(booking.slotDate)}
@@ -158,12 +142,12 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
 
           {booking.amount != null && booking.amount > 0 ? (
             <div>
-              <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Total paid</p>
+              <AccountDetailMetaLabel>Total paid</AccountDetailMetaLabel>
               <Price className="text-lg" amount={booking.amount} />
             </div>
           ) : (
             <div>
-              <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Payment</p>
+              <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
               <p className="text-lg text-muted-foreground">No charge</p>
             </div>
           )}
@@ -179,7 +163,7 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
 
         {service && (
           <div>
-            <h2 className="font-mono text-primary/50 mb-2 uppercase text-sm">Service</h2>
+            <h2 className="mb-2 font-mono text-sm uppercase text-muted-foreground">Service</h2>
             <p className="text-lg font-medium">{service.name}</p>
             {service.description ? (
               <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
@@ -189,18 +173,17 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
 
         <div className="flex flex-col sm:flex-row sm:gap-12 gap-4">
           <div>
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Status</p>
+            <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
             <p className="text-lg capitalize">{booking.status}</p>
           </div>
           {booking.stripePaymentIntentId ? (
             <div>
-              <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Payment</p>
+              <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
               <p className="text-sm text-muted-foreground">Received via card</p>
             </div>
           ) : null}
         </div>
-      </div>
-    </div>
+    </AccountDetailPanel>
   )
 }
 

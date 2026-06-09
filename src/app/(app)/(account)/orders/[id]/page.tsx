@@ -8,13 +8,13 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { getSiteConfig } from '@/config/site'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { ChevronLeftIcon } from 'lucide-react'
 import { ProductItem } from '@/components/ProductItem'
 import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { OrderStatus } from '@/components/OrderStatus'
 import { AddressItem } from '@/components/addresses/AddressItem'
+import { AccountDetailMetaLabel, AccountDetailPanel } from '@/components/account/AccountDetailPanel'
 
 export const dynamic = 'force-dynamic'
 
@@ -128,30 +128,14 @@ export default async function Order({ params, searchParams }: PageProps) {
       : null
 
   return (
-    <div className="">
-      <div className="flex gap-8 justify-between items-center mb-6">
-        {user ? (
-          <div className="flex gap-4">
-            <Button asChild variant="ghost">
-              <Link href="/orders">
-                <ChevronLeftIcon />
-                All orders
-              </Link>
-            </Button>
-          </div>
-        ) : (
-          <div></div>
-        )}
-
-        <h1 className="text-sm uppercase font-mono px-2 bg-primary/10 rounded tracking-[0.07em]">
-          <span className="">{`Order #${order.id}`}</span>
-        </h1>
-      </div>
-
-      <div className="bg-card rounded-lg px-6 py-4 flex flex-col gap-12 shadow-sm shadow-black/10 dark:shadow-black/40">
+    <AccountDetailPanel
+      backHref={user ? '/orders' : undefined}
+      backLabel={user ? 'All orders' : undefined}
+      badgeLabel={`Order #${order.id}`}
+    >
         <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
           <div className="">
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Order Date</p>
+            <AccountDetailMetaLabel>Order Date</AccountDetailMetaLabel>
             <p className="text-lg">
               <time dateTime={order.createdAt}>
                 {formatDateTime({ date: order.createdAt })}
@@ -160,13 +144,13 @@ export default async function Order({ params, searchParams }: PageProps) {
           </div>
 
           <div className="">
-            <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Total</p>
+            <AccountDetailMetaLabel>Total</AccountDetailMetaLabel>
             {order.amount && <Price className="text-lg" amount={order.amount} />}
           </div>
 
           {order.status && (
             <div className="grow max-w-1/3">
-              <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Status</p>
+              <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
               <OrderStatus className="text-sm" status={order.status} />
             </div>
           )}
@@ -182,7 +166,7 @@ export default async function Order({ params, searchParams }: PageProps) {
 
         {order.items && (
           <div>
-            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Items</h2>
+            <h2 className="mb-4 font-mono text-sm uppercase text-muted-foreground">Items</h2>
             <ul className="flex flex-col gap-6">
               {order.items?.map((item, index) => {
                 if (typeof item.product === 'string') {
@@ -212,14 +196,15 @@ export default async function Order({ params, searchParams }: PageProps) {
 
         {order.shippingAddress && (
           <div>
-            <h2 className="font-mono text-primary/50 mb-4 uppercase text-sm">Shipping Address</h2>
+            <h2 className="mb-4 font-mono text-sm uppercase text-muted-foreground">
+              Shipping Address
+            </h2>
 
             {/* @ts-expect-error - some kind of type hell */}
             <AddressItem address={order.shippingAddress} hideActions />
           </div>
         )}
-      </div>
-    </div>
+    </AccountDetailPanel>
   )
 }
 
