@@ -438,11 +438,11 @@ export function BookingForm({
                       typeof slot.slotOfferingId === 'number' ? slot.slotOfferingId : null,
                     )
                   }}
-                  className={`px-3 py-1.5 rounded text-sm border cursor-pointer ${
+                  className={`booking-slot-button px-3 py-1.5 rounded text-sm cursor-pointer ${
                     selectedSlot === slot.time &&
                     (slot.slotOfferingId ?? null) === selectedSlotOfferingId
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'border-border hover:bg-muted'
+                      ? 'booking-slot-button--selected'
+                      : ''
                   }`}
                 >
                   {slot.time}
