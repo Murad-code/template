@@ -1,8 +1,8 @@
 'use client'
 
-import { AddressItem } from '@/components/addresses/AddressItem'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
 import { Button } from '@/components/ui/button'
+import { AddressList } from '@/components/addresses/AddressList'
 import {
   Dialog,
   DialogContent,
@@ -76,26 +76,20 @@ const AddressesModal: React.FC<Props> = ({ setAddress }) => {
         </DialogHeader>
 
         <div className="flex flex-col gap-12">
-          <ul className="flex flex-col gap-8">
-            {addresses.map((address) => (
-              <li key={address.id} className="border-b pb-8 last:border-none">
-                <AddressItem
-                  address={address}
-                  beforeActions={
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setAddress(address)
-                        closeModal()
-                      }}
-                    >
-                      Select
-                    </Button>
-                  }
-                />
-              </li>
-            ))}
-          </ul>
+          <AddressList
+            addresses={addresses}
+            renderBeforeActions={(address) => (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setAddress(address)
+                  closeModal()
+                }}
+              >
+                Select
+              </Button>
+            )}
+          />
 
           <CreateAddressModal />
         </div>
