@@ -43,3 +43,6 @@ public/media
 
 
 docs/DEPLOYMENT_VALUES.md
+
+# cursor local config
+.cursor/cli-config.json

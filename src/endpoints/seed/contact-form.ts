@@ -75,10 +75,10 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
     ],
     fields: [
       {
-        name: 'full-name',
-        blockName: 'full-name',
+        name: 'name',
+        blockName: 'name',
         blockType: 'text',
-        label: 'Full Name',
+        label: 'Name',
         required: true,
         width: 100,
       },
@@ -91,11 +91,11 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
         width: 100,
       },
       {
-        name: 'phone',
-        blockName: 'phone',
-        blockType: 'number',
-        label: 'Phone',
-        required: false,
+        name: 'subject',
+        blockName: 'subject',
+        blockType: 'text',
+        label: 'Subject',
+        required: true,
         width: 100,
       },
       {

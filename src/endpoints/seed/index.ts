@@ -469,16 +469,216 @@ const marketingPages = [
 ]
 
 const blogGuideTitles = [
-  'How to Brew Better Coffee at Home',
-  'V60 Brewing Guide for Beginners',
-  'French Press vs Pour Over: Which Is Right for You?',
-  'Understanding Coffee Origins',
-  'What Is Specialty Coffee?',
-  'The Importance of Grind Size',
-  'Espresso Extraction Explained',
-  'How to Store Coffee Properly',
-  'Light Roast vs Dark Roast',
-  "Beginner's Guide to Latte Art",
+  {
+    title: 'How to Brew Better Coffee at Home',
+    teaser: 'Build a repeatable daily brew routine with simple adjustments to water, grind and timing.',
+    readTime: '6 min read',
+    sections: [
+      {
+        heading: 'Start with fresh coffee and accurate measurements',
+        paragraphs: [
+          'Use beans roasted within the last 2-4 weeks and weigh both coffee and water. A digital scale removes guesswork and helps you repeat good cups.',
+          'A practical starting ratio is 1:16 (for example, 20g coffee to 320g water), then adjust to your taste.',
+        ],
+      },
+      {
+        heading: 'Dial in one variable at a time',
+        paragraphs: [
+          'If coffee tastes sour or thin, grind a little finer. If it tastes bitter or dry, grind a little coarser.',
+          'Keep notes on ratio, grind setting and brew time so each cup teaches you something useful.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'V60 Brewing Guide for Beginners',
+    teaser: 'A clear V60 workflow for balanced sweetness, clarity and body.',
+    readTime: '5 min read',
+    sections: [
+      {
+        heading: 'Recommended starter recipe',
+        paragraphs: [
+          'Use 18g coffee and 300g water at around 94C. Rinse the paper filter thoroughly before brewing to avoid papery flavor.',
+          'Bloom with 45g water for 30-40 seconds, then pour in slow circles to 180g and finish at 300g by around 1:40.',
+        ],
+      },
+      {
+        heading: 'What to adjust first',
+        paragraphs: [
+          'If the drawdown is too fast and the cup tastes weak, go finer. If it stalls and tastes harsh, go coarser.',
+          'Small changes go a long way. Move your grinder one step at a time and taste again.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'French Press vs Pour Over: Which Is Right for You?',
+    teaser: 'Compare body, clarity and workflow to choose the brew method that fits your mornings.',
+    readTime: '4 min read',
+    sections: [
+      {
+        heading: 'French press in one sentence',
+        paragraphs: [
+          'French press emphasizes body and texture, with a richer mouthfeel and a forgiving brew process.',
+          'It suits people who prefer heavier cups and minimal equipment.',
+        ],
+      },
+      {
+        heading: 'Pour over in one sentence',
+        paragraphs: [
+          'Pour over emphasizes clarity and flavor separation, highlighting delicate notes and acidity.',
+          'It rewards attention to pouring and grind consistency, but produces very expressive cups.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Understanding Coffee Origins',
+    teaser: 'How origin, elevation and processing shape flavor in your cup.',
+    readTime: '7 min read',
+    sections: [
+      {
+        heading: 'Origin influences flavor tendency',
+        paragraphs: [
+          'Different regions often show recurring flavor patterns: some coffees lean floral and citrusy, others lean chocolatey and nutty.',
+          'These are not strict rules, but they are helpful when picking coffees for your preferences.',
+        ],
+      },
+      {
+        heading: 'Processing matters just as much',
+        paragraphs: [
+          'Washed coffees usually taste cleaner and brighter. Natural coffees can taste fruitier and heavier.',
+          'When trying a new origin, read both origin and process to get a more accurate expectation.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'What Is Specialty Coffee?',
+    teaser: 'A practical definition of specialty coffee beyond marketing language.',
+    readTime: '5 min read',
+    sections: [
+      {
+        heading: 'Quality at every stage',
+        paragraphs: [
+          'Specialty coffee generally refers to higher quality coffee evaluated by strict standards from farm to cup.',
+          'It includes transparent sourcing, careful processing and roasting decisions that preserve character.',
+        ],
+      },
+      {
+        heading: 'Why it tastes different',
+        paragraphs: [
+          'The goal is clarity and sweetness rather than generic roast flavor. You taste more of what makes each coffee unique.',
+          'For home brewers, it usually means fresher beans and more information to guide better brewing.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'The Importance of Grind Size',
+    teaser: 'Grind size controls extraction more than most people realize.',
+    readTime: '4 min read',
+    sections: [
+      {
+        heading: 'Extraction basics',
+        paragraphs: [
+          'Finer grounds extract faster because they expose more surface area. Coarser grounds extract slower.',
+          'Too fine can taste bitter and dry. Too coarse can taste sour and watery.',
+        ],
+      },
+      {
+        heading: 'Match grind to brew method',
+        paragraphs: [
+          'Espresso needs fine grind, pour over medium-fine, and French press coarse as a general starting point.',
+          'Always taste and adjust for your grinder, coffee and recipe.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Espresso Extraction Explained',
+    teaser: 'Use dose, yield and time to troubleshoot espresso shots quickly.',
+    readTime: '6 min read',
+    sections: [
+      {
+        heading: 'Track three numbers',
+        paragraphs: [
+          'Start by recording dose (dry coffee), yield (liquid espresso) and shot time.',
+          'A common baseline is 18g in, 36g out, around 25-32 seconds depending on the coffee.',
+        ],
+      },
+      {
+        heading: 'Troubleshooting by taste',
+        paragraphs: [
+          'Sour shots often need finer grind or a slightly higher yield. Bitter shots often need coarser grind or shorter extraction.',
+          'Change one variable at a time and keep notes so improvements are repeatable.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'How to Store Coffee Properly',
+    teaser: 'Simple storage habits that keep coffee tasting fresher for longer.',
+    readTime: '3 min read',
+    sections: [
+      {
+        heading: 'Protect against oxygen, heat and light',
+        paragraphs: [
+          'Store coffee in an airtight container in a cool, dry cupboard away from sunlight.',
+          'Avoid keeping coffee near ovens or windows where temperature swings are common.',
+        ],
+      },
+      {
+        heading: 'Buy smaller amounts more often',
+        paragraphs: [
+          'Freshness improves when you buy quantities you can finish within a few weeks.',
+          'If you need to store long-term, freeze sealed portions and thaw only once before use.',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Light Roast vs Dark Roast',
+    teaser: 'Understand roast level differences and pick coffee that fits your taste.',
+    readTime: '4 min read',
+    sections: [
+      {
+        heading: 'Light roast profile',
+        paragraphs: [
+          'Light roasts often highlight acidity, florals and fruit-forward notes from origin character.',
+          'They can be vibrant and complex, especially in pour-over brewing.',
+        ],
+      },
+      {
+        heading: 'Dark roast profile',
+        paragraphs: [
+          'Dark roasts generally emphasize roast-driven notes like cocoa, smoke and bittersweet intensity.',
+          'They pair well with milk and produce bolder, heavier cups.',
+        ],
+      },
+    ],
+  },
+  {
+    title: "Beginner's Guide to Latte Art",
+    teaser: 'Milk texture and pitcher control fundamentals to pour your first clean patterns.',
+    readTime: '6 min read',
+    sections: [
+      {
+        heading: 'Texture milk correctly',
+        paragraphs: [
+          'Aim for glossy, paint-like milk with tiny bubbles. Large foam bubbles make art difficult.',
+          'Stretch milk briefly at the start, then keep the whirlpool going to integrate texture.',
+        ],
+      },
+      {
+        heading: 'Practice the same base pattern',
+        paragraphs: [
+          'Start with a simple heart and repeat it daily before moving to tulips or rosettas.',
+          'Keep cup angle, pour height and pitcher speed consistent so your hands learn the movement.',
+        ],
+      },
+    ],
+  },
 ]
 
 // Next.js revalidation errors are normal when seeding the database without a server running
@@ -834,14 +1034,15 @@ export const seed = async ({
         richText: richTextFrom(
           lexicalHeading('Brew Better Coffee', 'h1'),
           lexicalParagraph('Guides, tutorials and practical tips from the Black Oak roasting team.'),
+          lexicalParagraph('Explore beginner-friendly how-tos, brew method comparisons and origin deep dives.'),
         ),
         links: [
           {
             link: {
               type: 'custom',
               appearance: 'default',
-              label: 'Shop Coffee',
-              url: '/shop',
+              label: 'Start With Our V60 Guide',
+              url: '/v60-brewing-guide-for-beginners',
             },
           },
         ],
@@ -857,6 +1058,13 @@ export const seed = async ({
                 lexicalParagraph(
                   'Browse coffee guides covering brew methods, extraction, equipment, storage and coffee origins.',
                 ),
+                lexicalParagraph(
+                  'Every article is seeded with practical steps so this demo feels like a complete editorial site from day one.',
+                ),
+                lexicalHeading('Popular Guides', 'h3'),
+                ...blogGuideTitles
+                  .slice(0, 4)
+                  .map((guide) => lexicalParagraph(`${guide.title} - ${guide.teaser} (${guide.readTime})`)),
               ),
             },
           ],
@@ -924,7 +1132,12 @@ export const seed = async ({
     })
   }
 
-  for (const title of blogGuideTitles) {
+  for (const guide of blogGuideTitles) {
+    const articleBodyNodes = guide.sections.flatMap((section) => [
+      lexicalHeading(section.heading, 'h2'),
+      ...section.paragraphs.map((paragraph) => lexicalParagraph(paragraph)),
+    ])
+
     await payload.create({
       collection: 'pages',
       depth: 0,
@@ -932,12 +1145,15 @@ export const seed = async ({
         ...seedContext,
       },
       data: {
-        title,
-        slug: slugify(title),
+        title: guide.title,
+        slug: slugify(guide.title),
         _status: 'published',
         hero: {
           type: 'lowImpact',
-          richText: richTextFrom(lexicalHeading(title, 'h1')),
+          richText: richTextFrom(
+            lexicalHeading(guide.title, 'h1'),
+            lexicalParagraph(`${guide.teaser} (${guide.readTime}).`),
+          ),
           links: [
             {
               link: {
@@ -957,17 +1173,21 @@ export const seed = async ({
                 size: 'full',
                 enableLink: false,
                 richText: richTextFrom(
-                  lexicalParagraph(
-                    `This guide gives practical, beginner-friendly advice for ${title.toLowerCase()}. Update this seeded article with your own expertise or brand voice as needed.`,
-                  ),
+                lexicalParagraph(
+                  `This guide gives practical, beginner-friendly advice for ${guide.title.toLowerCase()}.`,
                 ),
+                ...articleBodyNodes,
+                lexicalParagraph(
+                  'Use this seeded post as a foundation and replace sections with your own workflow, photos and product recommendations.',
+                ),
+              ),
               },
             ],
           },
         ],
         meta: {
-          title: `${title} | Black Oak Coffee Co.`,
-          description: `A practical guide from Black Oak Coffee Co: ${title}.`,
+          title: `${guide.title} | Black Oak Coffee Co.`,
+          description: guide.teaser,
           image: homeImage,
         },
       },
