@@ -53,7 +53,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
 
         {typeof price === 'number' && (
           <div className="leading-tight">
-            <Price amount={price} as="span" className="font-medium tabular-nums" />
+            <Price amount={price} as="span" />
           </div>
         )}
       </div>

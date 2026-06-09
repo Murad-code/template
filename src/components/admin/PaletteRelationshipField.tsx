@@ -48,13 +48,6 @@ export const PaletteRelationshipField: RelationshipFieldClientComponent = ({ fie
     return typed.paletteMode?.value
   })
 
-  const triggerSave = () => {
-    const form = wrapperRef.current?.closest('form')
-    if (form && form instanceof HTMLFormElement) {
-      form.requestSubmit()
-    }
-  }
-
   useEffect(() => {
     let cancelled = false
 
@@ -177,8 +170,6 @@ export const PaletteRelationshipField: RelationshipFieldClientComponent = ({ fie
                   setValue(palette.id)
                   setIsOpen(false)
                   setQuery('')
-                  // Trigger save so Payload live preview refreshes immediately after palette changes.
-                  setTimeout(triggerSave, 0)
                 }}
                 style={{
                   width: '100%',
