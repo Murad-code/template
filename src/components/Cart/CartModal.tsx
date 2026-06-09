@@ -117,7 +117,7 @@ export function CartModal() {
                           className="z-30 flex flex-row space-x-4"
                           href={`/products/${(item.product as Product)?.slug}`}
                         >
-                          <div className="relative h-16 w-16 cursor-pointer overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                          <div className="relative h-16 w-16 cursor-pointer overflow-hidden rounded-md bg-neutral-200 shadow-sm shadow-black/5 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:shadow-black/30">
                             {image?.url && (
                               <Image
                                 alt={image?.alt || product?.title || ''}
@@ -150,7 +150,7 @@ export function CartModal() {
                               className="flex justify-end space-y-2 text-right text-sm"
                             />
                           )}
-                          <div className="ml-auto flex h-9 flex-row items-center rounded-lg border">
+                          <div className="ml-auto flex h-9 flex-row items-center rounded-lg bg-muted/70 shadow-sm shadow-black/5 dark:shadow-black/20">
                             <EditItemQuantityButton item={item} type="minus" />
                             <p className="w-6 text-center">
                               <span className="w-full text-sm">{item.quantity}</span>
@@ -167,7 +167,7 @@ export function CartModal() {
               <div className="px-4">
                 <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
                   {typeof cart?.subtotal === 'number' && (
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between rounded-md bg-muted/40 px-2 pb-1 pt-1">
                       <p>Total</p>
                       <Price
                         amount={cart?.subtotal}

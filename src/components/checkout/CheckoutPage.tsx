@@ -49,6 +49,7 @@ export const CheckoutPage: React.FC = () => {
   const [billingAddress, setBillingAddress] = useState<Partial<Address>>()
   const [billingAddressSameAsShipping, setBillingAddressSameAsShipping] = useState(true)
   const [isProcessingPayment, setProcessingPayment] = useState(false)
+  const [stripeFontFamily, setStripeFontFamily] = useState('ui-sans-serif, system-ui, sans-serif')
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
 
@@ -75,6 +76,14 @@ export const CheckoutPage: React.FC = () => {
       setBillingAddressSameAsShipping(true)
       setEmail('')
       setEmailEditable(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    const rootStyles = getComputedStyle(document.documentElement)
+    const configuredSans = rootStyles.getPropertyValue('--site-font-sans').trim()
+    if (configuredSans) {
+      setStripeFontFamily(configuredSans)
     }
   }, [])
 
@@ -322,7 +331,7 @@ export const CheckoutPage: React.FC = () => {
                         theme === 'dark' ? cssVariables.colors.base0 : cssVariables.colors.base1000,
                       colorText: theme === 'dark' ? '#858585' : cssVariables.colors.base1000,
                       colorTextPlaceholder: '#858585',
-                      fontFamily: 'Geist, sans-serif',
+                      fontFamily: stripeFontFamily,
                       fontSizeBase: '16px',
                       fontWeightBold: '600',
                       fontWeightNormal: '500',
@@ -397,7 +406,7 @@ export const CheckoutPage: React.FC = () => {
 
               return (
                 <div className="flex items-start gap-4" key={index}>
-                  <div className="flex items-stretch justify-stretch h-20 w-20 p-2 rounded-lg border">
+                  <div className="flex items-stretch justify-stretch h-20 w-20 p-2 rounded-lg bg-muted/60 shadow-sm shadow-black/5 dark:shadow-black/20">
                     <div className="relative w-full h-full">
                       {image && typeof image !== 'string' && (
                         <Media className="" fill imgClassName="rounded-lg" resource={image} />

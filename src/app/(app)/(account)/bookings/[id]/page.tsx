@@ -135,7 +135,7 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
         </h1>
       </div>
 
-      <div className="bg-card border rounded-lg px-6 py-4 flex flex-col gap-12">
+      <div className="bg-card rounded-lg px-6 py-4 flex flex-col gap-12 shadow-sm shadow-black/10 dark:shadow-black/40">
         <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
           <div>
             <p className="font-mono uppercase text-primary/50 mb-1 text-sm">Booked on</p>
