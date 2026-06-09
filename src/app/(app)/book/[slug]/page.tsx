@@ -76,7 +76,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
         <div className="space-y-5">
-          <div className="rounded-2xl overflow-hidden border bg-card">
+          <div className="rounded-2xl overflow-hidden bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
             {service.image && typeof service.image === 'object' ? (
               <Media
                 resource={service.image}
@@ -107,7 +107,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
           </div>
         </div>
 
-        <div className="rounded-2xl border p-6 md:p-8">
+        <div className="rounded-2xl p-6 md:p-8 bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
           <h2 className="text-xl font-medium mb-6">Book this service</h2>
           <BookingForm initialServiceSlugOrId={service.slug} initialProductId={initialProductId ?? null} />
         </div>

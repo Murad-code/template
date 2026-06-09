@@ -223,7 +223,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
 
             return (
               <Link
-                className="group h-full rounded-2xl border bg-card overflow-hidden flex flex-col hover:border-primary/40 transition-colors"
+                className="group h-full rounded-2xl bg-card overflow-hidden flex flex-col shadow-sm shadow-black/10 dark:shadow-black/40 transition-shadow hover:shadow-md hover:shadow-black/15 dark:hover:shadow-black/50"
                 key={service.id}
                 href={`/book/${encodeURIComponent(serviceKey)}`}
               >

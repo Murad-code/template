@@ -7,7 +7,7 @@ export default function GlobalError() {
     <html lang="en">
       <body>
         <main className="container py-28">
-          <div className="mx-auto max-w-xl rounded-lg border border-neutral-200 bg-white p-8 text-center dark:border-neutral-800 dark:bg-black">
+          <div className="mx-auto max-w-xl rounded-lg bg-white p-8 text-center shadow-sm shadow-black/10 dark:bg-black dark:shadow-black/40">
             <h1 className="text-2xl font-bold">Unexpected error</h1>
             <p className="mt-3 text-neutral-600 dark:text-neutral-300">
               Something went wrong while rendering this page.
