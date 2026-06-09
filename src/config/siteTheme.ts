@@ -14,6 +14,26 @@ type PaletteMode = {
   dark: PaletteColors
 }
 
+export type SiteThemePreviewInput = {
+  paletteMode?: SiteTheme['paletteMode']
+  palette?: unknown
+  darkPalette?: unknown
+  customPalette?: {
+    color1?: string | null
+    color2?: string | null
+    color3?: string | null
+    color4?: string | null
+    color5?: string | null
+    lightText?: string | null
+    darkText?: string | null
+  } | null
+  typography?: {
+    bodyFont?: string | null
+    headingFont?: string | null
+    monoFont?: string | null
+  } | null
+} | null
+
 const FONT_STACKS = {
   'geist-sans': 'var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif',
   'system-sans':
@@ -109,7 +129,7 @@ function mapSavedPalette(value: unknown): PaletteMode | null {
   return mapCustomPaletteToMode(value as Parameters<typeof mapCustomPaletteToMode>[0])
 }
 
-function resolvePalette(theme: SiteTheme | null | undefined): PaletteMode {
+function resolvePalette(theme: SiteThemePreviewInput): PaletteMode {
   let basePalette: PaletteMode | null = null
 
   if (theme?.paletteMode === 'custom') {
@@ -119,7 +139,7 @@ function resolvePalette(theme: SiteTheme | null | undefined): PaletteMode {
   }
 
   const resolvedBase = basePalette || fallbackPalette
-  const darkOverride = mapSavedPalette((theme as SiteTheme & { darkPalette?: unknown })?.darkPalette)
+  const darkOverride = mapSavedPalette(theme?.darkPalette)
 
   if (!darkOverride) return resolvedBase
 
@@ -135,7 +155,7 @@ function resolveFontStack(value: unknown, fallback: FontToken): string {
   return FONT_STACKS[token] || FONT_STACKS[fallback]
 }
 
-function resolveTypography(theme: SiteTheme | null | undefined) {
+function resolveTypography(theme: SiteThemePreviewInput) {
   const typography = theme?.typography
 
   return {
@@ -145,7 +165,7 @@ function resolveTypography(theme: SiteTheme | null | undefined) {
   }
 }
 
-export function getLandingThemeCss(theme: SiteTheme | null | undefined): string {
+export function getLandingThemeCss(theme: SiteThemePreviewInput): string {
   const palette = resolvePalette(theme)
   const typography = resolveTypography(theme)
 

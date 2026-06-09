@@ -104,6 +104,15 @@ export const SiteTheme: GlobalConfig = {
       ],
     },
     {
+      name: 'siteThemeLivePreviewBridge',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/SiteThemeLivePreviewBridge#SiteThemeLivePreviewBridge',
+        },
+      },
+    },
+    {
       name: 'paletteMode',
       type: 'select',
       defaultValue: 'palette',

@@ -9,6 +9,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getSiteConfig } from '@/config/site'
 import { ThemeStyles } from '@/components/ThemeStyles'
+import { ThemePreviewLiveSync } from '@/components/ThemePreviewLiveSync'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import {
@@ -170,6 +171,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Providers>
           <AdminBar />
           <LivePreviewListener />
+          <ThemePreviewLiveSync />
 
           <Header />
           <main className="flex-1">{children}</main>
