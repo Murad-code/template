@@ -22,7 +22,7 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
   const pathname = usePathname()
 
   return (
-    <div className="relative z-20 border-b">
+    <div className="relative z-20 bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
       <nav className="flex items-center md:items-end justify-between container pt-2">
         <div className="block flex-none md:hidden">
           <Suspense fallback={null}>

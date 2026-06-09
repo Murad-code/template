@@ -17,7 +17,7 @@ export const FeaturesBlock: React.FC<FeaturesBlockProps> = (props) => {
             className={
               isMinimal
                 ? 'border-l-2 border-primary/40 pl-5 pr-3 py-1'
-                : 'rounded-lg border border-border bg-card p-6'
+                : 'rounded-lg bg-card p-6 shadow-sm shadow-black/10 dark:shadow-black/40'
             }
           >
             <h3 className="font-semibold mb-2">{item.title}</h3>

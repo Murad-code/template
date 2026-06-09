@@ -15,10 +15,10 @@ export const CallToActionBlock: React.FC<
   return (
     <div className="container">
       <div
-        className={`rounded border border-border ${
+        className={`rounded bg-card shadow-sm shadow-black/10 dark:shadow-black/40 ${
           isSplit
-            ? 'bg-gradient-to-r from-card to-muted p-6 md:p-8'
-            : 'bg-card p-4 md:flex-row md:items-center md:justify-between'
+            ? 'bg-linear-to-r from-card to-muted p-6 md:p-8'
+            : 'p-4 md:flex-row md:items-center md:justify-between'
         } flex flex-col gap-8`}
       >
         <div className={`flex items-center ${isSplit ? 'max-w-2xl' : 'max-w-3xl'}`}>
