@@ -99,7 +99,8 @@ export const PaletteRelationshipField: RelationshipFieldClientComponent = ({ fie
     return palettes.filter((palette) => palette.name.toLowerCase().includes(normalized))
   }, [palettes, query])
 
-  if (paletteMode && paletteMode !== 'palette') return null
+  const isPrimaryPaletteField = path === 'palette'
+  if (isPrimaryPaletteField && paletteMode && paletteMode !== 'palette') return null
 
   const label = typeof field.label === 'string' ? field.label : 'Palette'
 
