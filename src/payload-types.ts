@@ -2480,9 +2480,66 @@ export interface SiteTheme {
    * Choose brand font roles. Body controls default text, heading controls H1-H6, and mono controls labels/prices using font-mono.
    */
   typography: {
-    bodyFont: 'geist-sans' | 'system-sans' | 'system-serif';
-    headingFont: 'geist-sans' | 'system-sans' | 'system-serif';
-    monoFont: 'geist-mono' | 'system-mono';
+    bodyFont:
+      | 'geist-sans'
+      | 'inter'
+      | 'source-sans-3'
+      | 'nunito-sans'
+      | 'space-grotesk'
+      | 'montserrat'
+      | 'system-sans'
+      | 'playfair-display'
+      | 'lora'
+      | 'merriweather'
+      | 'dm-serif-display'
+      | 'system-serif'
+      | 'geist-mono'
+      | 'jetbrains-mono'
+      | 'fira-code'
+      | 'ibm-plex-mono'
+      | 'source-code-pro'
+      | 'roboto-mono'
+      | 'system-mono';
+    headingFont:
+      | 'geist-sans'
+      | 'inter'
+      | 'source-sans-3'
+      | 'nunito-sans'
+      | 'space-grotesk'
+      | 'montserrat'
+      | 'system-sans'
+      | 'playfair-display'
+      | 'lora'
+      | 'merriweather'
+      | 'dm-serif-display'
+      | 'system-serif'
+      | 'geist-mono'
+      | 'jetbrains-mono'
+      | 'fira-code'
+      | 'ibm-plex-mono'
+      | 'source-code-pro'
+      | 'roboto-mono'
+      | 'system-mono';
+    monoFont:
+      | 'geist-sans'
+      | 'inter'
+      | 'source-sans-3'
+      | 'nunito-sans'
+      | 'space-grotesk'
+      | 'montserrat'
+      | 'system-sans'
+      | 'playfair-display'
+      | 'lora'
+      | 'merriweather'
+      | 'dm-serif-display'
+      | 'system-serif'
+      | 'geist-mono'
+      | 'jetbrains-mono'
+      | 'fira-code'
+      | 'ibm-plex-mono'
+      | 'source-code-pro'
+      | 'roboto-mono'
+      | 'system-mono';
   };
   /**
    * Choose how this site should get its palette.

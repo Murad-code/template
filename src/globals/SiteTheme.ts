@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 import { revalidateTag } from 'next/cache'
 
 import { adminOnly } from '@/access/adminOnly'
+import { TYPOGRAPHY_FONT_OPTIONS } from '@/config/typographyFonts'
 
 const colorField = (name: string, label: string, description?: string) => ({
   name,
@@ -22,17 +23,6 @@ const revalidateSiteThemeTag = () => {
     // Ignore when running outside Next.js request/render context (e.g. CLI scripts).
   }
 }
-
-const fontFamilyOptions = [
-  { label: 'Geist Sans (default)', value: 'geist-sans' },
-  { label: 'System Sans', value: 'system-sans' },
-  { label: 'System Serif', value: 'system-serif' },
-] as const
-
-const monoFontFamilyOptions = [
-  { label: 'Geist Mono (default)', value: 'geist-mono' },
-  { label: 'System Mono', value: 'system-mono' },
-] as const
 
 const generateSiteThemePreviewPath = () => {
   const params = new URLSearchParams({
@@ -70,33 +60,46 @@ export const SiteTheme: GlobalConfig = {
       },
       fields: [
         {
-          type: 'row',
-          fields: [
-            {
-              name: 'bodyFont',
-              type: 'select',
-              required: true,
-              defaultValue: 'geist-sans',
-              options: fontFamilyOptions,
-              label: 'Body font',
+          name: 'bodyFont',
+          type: 'select',
+          required: true,
+          defaultValue: 'geist-sans',
+          options: TYPOGRAPHY_FONT_OPTIONS,
+          label: 'Body font',
+          admin: {
+            width: '100%',
+            components: {
+              Field: '@/components/admin/TypographyFontSelectField#TypographyFontSelectField',
             },
-            {
-              name: 'headingFont',
-              type: 'select',
-              required: true,
-              defaultValue: 'geist-sans',
-              options: fontFamilyOptions,
-              label: 'Heading font',
+          },
+        },
+        {
+          name: 'headingFont',
+          type: 'select',
+          required: true,
+          defaultValue: 'geist-sans',
+          options: TYPOGRAPHY_FONT_OPTIONS,
+          label: 'Heading font',
+          admin: {
+            width: '100%',
+            components: {
+              Field: '@/components/admin/TypographyFontSelectField#TypographyFontSelectField',
             },
-            {
-              name: 'monoFont',
-              type: 'select',
-              required: true,
-              defaultValue: 'geist-mono',
-              options: monoFontFamilyOptions,
-              label: 'Mono / utility font',
+          },
+        },
+        {
+          name: 'monoFont',
+          type: 'select',
+          required: true,
+          defaultValue: 'geist-mono',
+          options: TYPOGRAPHY_FONT_OPTIONS,
+          label: 'Mono / utility font',
+          admin: {
+            width: '100%',
+            components: {
+              Field: '@/components/admin/TypographyFontSelectField#TypographyFontSelectField',
             },
-          ],
+          },
         },
       ],
     },

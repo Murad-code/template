@@ -32,6 +32,7 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { InventoryCell as InventoryCell_5db5f93db0d6a12915a59d276d573534 } from '@/components/admin/InventoryCell'
 import { OrderDownloadInvoiceButton as OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451 } from '@/components/OrderDownloadInvoiceButton'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
+import { TypographyFontSelectField as TypographyFontSelectField_677811ae973e3180110e74d19b8650e0 } from '@/components/admin/TypographyFontSelectField'
 import { PaletteRelationshipField as PaletteRelationshipField_edfb9e32f306231c189475ba16110fad } from '@/components/admin/PaletteRelationshipField'
 import { PaletteSelectionPreview as PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1 } from '@/components/admin/PaletteSelectionPreview'
 import { PaletteHelp as PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c } from '@/components/admin/PaletteHelp'
@@ -77,6 +78,7 @@ export const importMap = {
   "@/components/admin/InventoryCell#InventoryCell": InventoryCell_5db5f93db0d6a12915a59d276d573534,
   "@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton": OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
+  "@/components/admin/TypographyFontSelectField#TypographyFontSelectField": TypographyFontSelectField_677811ae973e3180110e74d19b8650e0,
   "@/components/admin/PaletteRelationshipField#PaletteRelationshipField": PaletteRelationshipField_edfb9e32f306231c189475ba16110fad,
   "@/components/admin/PaletteSelectionPreview#PaletteSelectionPreview": PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1,
   "@/components/admin/PaletteHelp#PaletteHelp": PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c,

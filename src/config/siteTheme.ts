@@ -1,4 +1,5 @@
 import type { SiteTheme } from '@/payload-types'
+import type { TypographyFontValue } from '@/config/typographyFonts'
 
 type PaletteColors = {
   background: string
@@ -18,13 +19,33 @@ const FONT_STACKS = {
   'system-sans':
     'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   'system-serif': 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  inter: 'var(--font-inter), ui-sans-serif, system-ui, sans-serif',
+  'source-sans-3': 'var(--font-source-sans-3), ui-sans-serif, system-ui, sans-serif',
+  'nunito-sans': 'var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif',
+  montserrat: 'var(--font-montserrat), ui-sans-serif, system-ui, sans-serif',
+  'space-grotesk': 'var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif',
+  'playfair-display': 'var(--font-playfair-display), ui-serif, Georgia, Cambria, "Times New Roman", serif',
+  lora: 'var(--font-lora), ui-serif, Georgia, Cambria, "Times New Roman", serif',
+  merriweather: 'var(--font-merriweather), ui-serif, Georgia, Cambria, "Times New Roman", serif',
+  'dm-serif-display':
+    'var(--font-dm-serif-display), ui-serif, Georgia, Cambria, "Times New Roman", serif',
   'geist-mono':
     'var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   'system-mono':
     'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  'jetbrains-mono':
+    'var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
+  'fira-code':
+    'var(--font-fira-code), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
+  'ibm-plex-mono':
+    'var(--font-ibm-plex-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
+  'source-code-pro':
+    'var(--font-source-code-pro), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
+  'roboto-mono':
+    'var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace',
 } as const
 
-type FontToken = keyof typeof FONT_STACKS
+type FontToken = TypographyFontValue
 
 const fallbackPalette: PaletteMode = {
   // Neutral defaults that preserve the original clean admin/frontend baseline.
