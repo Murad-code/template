@@ -12,6 +12,21 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
+    files: ['src/app/(app)/**/*.{ts,tsx}', 'src/components/**/*.{ts,tsx}'],
+    ignores: ['src/components/admin/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'warn',
+        {
+          selector:
+            "JSXAttribute[name.name='className'] Literal[value=/\\b(?:bg|text|border|ring)-(?:neutral|gray|slate|zinc|stone|blue|green|red|white|black)-?/]",
+          message:
+            'Use semantic theme tokens (e.g. bg-card, text-foreground, border-border) instead of hardcoded palette classes.',
+        },
+      ],
+    },
+  },
+  {
     rules: {
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
