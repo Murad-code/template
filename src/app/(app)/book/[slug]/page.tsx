@@ -1,6 +1,7 @@
 import { BookingForm } from '@/components/BookingForm'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
+import { MetaChip } from '@/components/ui/meta-chip'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
 import Link from 'next/link'
@@ -80,11 +81,11 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
             {service.image && typeof service.image === 'object' ? (
               <Media
                 resource={service.image}
-                className="relative aspect-[4/3]"
+                className="relative aspect-4/3"
                 imgClassName="h-full w-full object-cover"
               />
             ) : (
-              <div className="aspect-[4/3] bg-muted" />
+              <div className="aspect-4/3 bg-muted" />
             )}
           </div>
           <div className="space-y-3">
@@ -93,8 +94,8 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
               {service.description || 'Book your preferred date and time for this service.'}
             </p>
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <span className="rounded-full border px-2.5 py-1">{service.durationMinutes ?? 30} min</span>
-              <span className="rounded-full border px-2.5 py-1">
+              <MetaChip>{service.durationMinutes ?? 30} min</MetaChip>
+              <MetaChip>
                 {hasPrice && typeof service.priceInGBP === 'number' ? (
                   <span>
                     <Price amount={service.priceInGBP} as="span" /> upfront
@@ -102,7 +103,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
                 ) : (
                   'Pay later / free'
                 )}
-              </span>
+              </MetaChip>
             </div>
           </div>
         </div>

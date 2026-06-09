@@ -1,6 +1,7 @@
 import { Grid } from '@/components/Grid'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
+import { MetaChip } from '@/components/ui/meta-chip'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
 import Link from 'next/link'
@@ -230,11 +231,11 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                 {service.image && typeof service.image === 'object' ? (
                   <Media
                     resource={service.image}
-                    className="relative aspect-[4/3] bg-muted"
+                    className="relative aspect-4/3 bg-muted"
                     imgClassName="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                   />
                 ) : (
-                  <div className="relative aspect-[4/3] bg-muted" />
+                  <div className="relative aspect-4/3 bg-muted" />
                 )}
                 <article className="p-5 h-full flex flex-col justify-between gap-4">
                   <div className="space-y-3">
@@ -243,8 +244,8 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                       {service.description || 'A guided session tailored to your needs.'}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="rounded-full border px-2.5 py-1">{service.durationMinutes ?? 30} min</span>
-                      <span className="rounded-full border px-2.5 py-1">
+                      <MetaChip>{service.durationMinutes ?? 30} min</MetaChip>
+                      <MetaChip>
                         {hasPrice && typeof service.priceInGBP === 'number' ? (
                           <span>
                             <Price amount={service.priceInGBP} as="span" /> upfront
@@ -252,11 +253,11 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                         ) : (
                           'Pay later / free'
                         )}
-                      </span>
+                      </MetaChip>
                     </div>
                   </div>
 
-                  <span className="inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium group-hover:bg-muted">
+                  <span className="inline-flex h-10 items-center justify-center rounded-md bg-muted/70 px-4 text-sm font-medium transition-colors group-hover:bg-muted">
                     View details and book
                   </span>
                 </article>
