@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/utilities/cn'
 
 export function SurfaceCard({ className, ...props }: React.ComponentProps<'div'>) {
-  return <Card className={cn('gap-4 rounded-lg', className)} {...props} />
+  return <Card className={cn('gap-4 rounded-lg border-0', className)} {...props} />
 }
 
 export function SurfaceCardHeader({ className, ...props }: React.ComponentProps<'div'>) {
