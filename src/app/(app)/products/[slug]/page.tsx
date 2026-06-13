@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
+import { SurfaceCard } from '@/components/ui/surface-card'
 import { ChevronLeftIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
@@ -143,7 +144,7 @@ export default async function ProductPage({ params }: Args) {
             All products
           </Link>
         </Button>
-        <div className="flex flex-col gap-12 rounded-lg p-8 md:py-12 lg:flex-row lg:gap-8 bg-primary-foreground shadow-sm shadow-black/10 dark:shadow-black/40">
+        <SurfaceCard className="flex flex-col gap-12 rounded-lg border-0 p-8 shadow-sm shadow-black/10 md:py-12 lg:flex-row lg:gap-8 dark:shadow-black/40">
           <div className="h-full w-full basis-full lg:basis-1/2">
             <Suspense
               fallback={
@@ -157,7 +158,7 @@ export default async function ProductPage({ params }: Args) {
           <div className="basis-full lg:basis-1/2">
             <ProductDescription product={product} bookScheduleHref={bookScheduleHref} />
           </div>
-        </div>
+        </SurfaceCard>
       </div>
 
       {product.layout?.length ? <RenderBlocks blocks={product.layout} /> : <></>}

@@ -21,7 +21,7 @@ export async function Footer() {
   const copyrightName = companyName || siteName || ''
 
   return (
-    <footer className="bg-card text-sm text-muted-foreground">
+    <footer className="bg-card text-sm text-text-secondary">
       <div className="container">
         <div className="flex w-full flex-col gap-6 py-12 text-sm md:flex-row md:gap-12">
           <div>

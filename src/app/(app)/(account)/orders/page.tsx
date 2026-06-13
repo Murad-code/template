@@ -5,6 +5,7 @@ import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { getSiteConfig } from '@/config/site'
 
 import { OrderItem } from '@/components/OrderItem'
+import { SurfaceCard } from '@/components/ui/surface-card'
 import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -45,7 +46,7 @@ export default async function Orders() {
 
   return (
     <>
-      <div className="p-8 rounded-lg bg-primary-foreground w-full shadow-sm shadow-black/10 dark:shadow-black/40">
+      <SurfaceCard className="w-full gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
         <h1 className="text-3xl font-medium mb-8">Orders</h1>
         {(!orders || !Array.isArray(orders) || orders?.length === 0) && (
           <p className="">You have no orders.</p>
@@ -60,7 +61,7 @@ export default async function Orders() {
             ))}
           </ul>
         )}
-      </div>
+      </SurfaceCard>
     </>
   )
 }

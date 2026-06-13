@@ -174,7 +174,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <ThemePreviewLiveSync />
 
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 bg-background">{children}</main>
           <Footer />
         </Providers>
       </body>

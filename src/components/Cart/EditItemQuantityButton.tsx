@@ -1,6 +1,7 @@
 'use client'
 
 import { CartItem } from '@/components/Cart'
+import { Button } from '@/components/ui/button'
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
 import clsx from 'clsx'
 import { MinusIcon, PlusIcon } from 'lucide-react'
@@ -34,14 +35,15 @@ export function EditItemQuantityButton({ type, item }: { item: CartItem; type: '
   }, [item, type])
 
   return (
-    <form>
-      <button
+    <form className="flex h-full items-center">
+      <Button
         disabled={disabled || isLoading}
         aria-label={type === 'plus' ? 'Increase item quantity' : 'Reduce item quantity'}
+        variant="ghost"
+        size="icon"
         className={clsx(
-          'ease hover:cursor-pointer flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground hover:opacity-90',
+          'h-full min-w-[36px] max-w-[36px] self-center flex-none rounded-full p-0 leading-none gap-0 text-muted-foreground hover:bg-muted hover:text-foreground',
           {
-            'cursor-not-allowed': disabled || isLoading,
             'ml-auto': type === 'minus',
           },
         )}
@@ -63,7 +65,7 @@ export function EditItemQuantityButton({ type, item }: { item: CartItem; type: '
         ) : (
           <MinusIcon className="h-4 w-4" />
         )}
-      </button>
+      </Button>
     </form>
   )
 }

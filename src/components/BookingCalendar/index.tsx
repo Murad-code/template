@@ -85,13 +85,16 @@ export function BookingCalendar({
                 '&:not(.Mui-selected):hover': {
                   backgroundColor: 'color-mix(in srgb, var(--border) 22%, var(--card))',
                 },
+                '&.MuiPickerDay-today:not(.Mui-selected)': {
+                  border: '1px solid var(--primary)',
+                },
                 '&.Mui-selected': {
-                  backgroundColor: 'var(--landing-card-border) !important',
-                  color: 'var(--landing-heading) !important',
+                  backgroundColor: 'var(--primary) !important',
+                  color: 'var(--primary-foreground) !important',
                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.14)',
                 },
                 '&.Mui-selected:hover': {
-                  backgroundColor: 'var(--landing-card-border) !important',
+                  backgroundColor: 'var(--primary) !important',
                 },
               },
             },
@@ -100,6 +103,9 @@ export function BookingCalendar({
             '& .MuiPickersCalendarHeader-label': {
               color: 'var(--foreground)',
               fontWeight: 600,
+            },
+            '& .MuiPickersCalendarHeader-switchViewIcon': {
+              color: 'var(--foreground)',
             },
             '& .MuiDayCalendar-weekDayLabel': {
               color: 'var(--muted-foreground)',

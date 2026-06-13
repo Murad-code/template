@@ -35,17 +35,17 @@ export const ThemeSelector: React.FC = () => {
 
   return (
     <Select onValueChange={onThemeChange} value={value}>
-      <SelectTrigger className="mb-0 w-auto min-w-24 cursor-pointer gap-2 border-0 bg-muted text-foreground shadow-sm ring-0 outline-hidden focus-visible:ring-0 focus-visible:outline-hidden px-3 md:pl-3">
+      <SelectTrigger className="mb-0 h-8 w-auto min-w-24 cursor-pointer gap-2 rounded-md border border-background bg-surface-soft-panel text-text-primary shadow-[var(--elevation-soft)] ring-0 outline-hidden transition-colors hover:bg-surface-raised focus-visible:ring-0 focus-visible:outline-hidden px-3 md:pl-3">
         <SelectValue placeholder="Theme" />
       </SelectTrigger>
-      <SelectContent className="border-0 bg-muted text-foreground shadow-lg">
-        <SelectItem className="cursor-pointer" value="auto">
+      <SelectContent className="rounded-md border border-background bg-surface-soft-panel text-text-primary shadow-[var(--elevation-soft-hover)]">
+        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="auto">
           Auto
         </SelectItem>
-        <SelectItem className="cursor-pointer" value="light">
+        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="light">
           Light
         </SelectItem>
-        <SelectItem className="cursor-pointer" value="dark">
+        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="dark">
           Dark
         </SelectItem>
       </SelectContent>

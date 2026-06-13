@@ -8,6 +8,7 @@ import configPromise from '@payload-config'
 import { AccountForm } from '@/components/forms/AccountForm'
 import { Order } from '@/payload-types'
 import { OrderItem } from '@/components/OrderItem'
+import { SurfaceCard } from '@/components/ui/surface-card'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 
@@ -48,12 +49,12 @@ export default async function AccountPage() {
 
   return (
     <>
-      <div className="p-8 rounded-lg bg-primary-foreground shadow-sm shadow-black/10 dark:shadow-black/40">
+      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
         <h1 className="text-3xl font-medium mb-8">Account settings</h1>
         <AccountForm />
-      </div>
+      </SurfaceCard>
 
-      <div className="p-8 rounded-lg bg-primary-foreground shadow-sm shadow-black/10 dark:shadow-black/40">
+      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
         <h2 className="text-3xl font-medium mb-8">Recent Orders</h2>
 
         <div className="prose dark:prose-invert mb-8">
@@ -80,7 +81,7 @@ export default async function AccountPage() {
         <Button asChild variant="default">
           <Link href="/orders">View all orders</Link>
         </Button>
-      </div>
+      </SurfaceCard>
     </>
   )
 }

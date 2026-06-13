@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
+import { SurfaceCard } from '@/components/ui/surface-card'
 
 export default async function AddressesPage() {
   const headers = await getHeaders()
@@ -46,7 +47,7 @@ export default async function AddressesPage() {
 
   return (
     <>
-      <div className="p-8 rounded-lg bg-primary-foreground shadow-sm shadow-black/10 dark:shadow-black/40">
+      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
         <h1 className="text-3xl font-medium mb-8">Addresses</h1>
 
         <div className="mb-8">
@@ -54,7 +55,7 @@ export default async function AddressesPage() {
         </div>
 
         <CreateAddressModal />
-      </div>
+      </SurfaceCard>
     </>
   )
 }

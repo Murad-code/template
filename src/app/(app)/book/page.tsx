@@ -4,6 +4,7 @@ import { Price } from '@/components/Price'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { MetaChip } from '@/components/ui/meta-chip'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
@@ -153,9 +154,9 @@ export default async function BookPage({ searchParams }: BookPageProps) {
           <label className="text-sm mb-1.5 block" htmlFor="booking-search">
             Search services
           </label>
-          <input
+          <Input
             autoComplete="off"
-            className="h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+            className="h-10"
             defaultValue={normalizedQuery}
             id="booking-search"
             name="q"
@@ -169,7 +170,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
             Duration
           </label>
           <select
-            className="h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+            className="interactive-focus h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
             defaultValue={normalizedDuration}
             id="duration"
             name="duration"
@@ -186,7 +187,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
             Pricing
           </label>
           <select
-            className="h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+            className="interactive-focus h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
             defaultValue={normalizedPricing}
             id="pricing"
             name="pricing"
@@ -202,7 +203,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
             Sort
           </label>
           <select
-            className="h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+            className="interactive-focus h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
             defaultValue={normalizedSort}
             id="sort"
             name="sort"
@@ -217,15 +218,12 @@ export default async function BookPage({ searchParams }: BookPageProps) {
         {sp.product ? <input name="product" type="hidden" value={sp.product} /> : null}
 
         <div className="xl:col-span-5 flex items-center gap-3">
-          <button
-            className="inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-95"
-            type="submit"
-          >
+          <Button type="submit" className="h-10 border-transparent bg-primary text-primary-foreground hover:bg-primary/90">
             Apply filters
-          </button>
-          <Link className="text-sm underline underline-offset-2 hover:no-underline" href={clearFiltersHref}>
-            Reset all
-          </Link>
+          </Button>
+          <Button asChild variant="link" size="clear" className="text-sm">
+            <Link href={clearFiltersHref}>Reset all</Link>
+          </Button>
         </div>
       </form>
 
@@ -247,7 +245,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
 
             return (
               <Link
-                className="group h-full rounded-2xl bg-card overflow-hidden flex flex-col shadow-sm shadow-black/10 dark:shadow-black/40 transition-shadow hover:shadow-md hover:shadow-black/15 dark:hover:shadow-black/50"
+                className="interactive-focus group h-full rounded-2xl bg-card overflow-hidden flex flex-col shadow-sm shadow-black/10 dark:shadow-black/40 transition-shadow hover:shadow-md hover:shadow-black/15 dark:hover:shadow-black/50"
                 key={service.id}
                 href={`/book/${encodeURIComponent(serviceKey)}`}
               >

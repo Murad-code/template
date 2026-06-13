@@ -33,14 +33,17 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
     gallery?.[0]?.image && typeof gallery[0]?.image !== 'string' ? gallery[0]?.image : false
 
   return (
-    <Link className="relative inline-block h-full w-full group" href={`/products/${product.slug}`}>
+    <Link
+      className="group relative inline-block h-full w-full overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/10 transition-shadow hover:shadow-md hover:shadow-black/15 dark:shadow-black/40 dark:hover:shadow-black/50"
+      href={`/products/${product.slug}`}
+    >
       {image ? (
         <Media
           className={clsx(
-            'relative aspect-square overflow-hidden rounded-2xl bg-primary-foreground shadow-sm shadow-black/10 dark:shadow-black/40',
+            'relative aspect-square overflow-hidden bg-muted',
           )}
           height={80}
-          imgClassName={clsx('h-full w-full object-cover rounded-2xl', {
+          imgClassName={clsx('h-full w-full object-cover', {
             'transition duration-300 ease-in-out group-hover:scale-102': true,
           })}
           resource={image}
@@ -48,7 +51,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
         />
       ) : null}
 
-      <div className="mt-4 flex items-center justify-between text-primary/70 group-hover:text-primary">
+      <div className="flex items-center justify-between gap-3 p-4 text-muted-foreground group-hover:text-foreground">
         <div className="leading-tight">{title}</div>
 
         {typeof price === 'number' && (

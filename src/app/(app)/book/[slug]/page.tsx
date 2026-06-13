@@ -1,6 +1,7 @@
 import { BookingForm } from '@/components/BookingForm'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
+import { SurfaceCard } from '@/components/ui/surface-card'
 import { MetaChip } from '@/components/ui/meta-chip'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
@@ -77,7 +78,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
         <div className="space-y-5">
-          <div className="rounded-2xl overflow-hidden bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
+          <SurfaceCard className="rounded-2xl overflow-hidden border-0 py-0 shadow-sm shadow-black/10 dark:shadow-black/40">
             {service.image && typeof service.image === 'object' ? (
               <Media
                 resource={service.image}
@@ -87,7 +88,7 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
             ) : (
               <div className="aspect-4/3 bg-muted" />
             )}
-          </div>
+          </SurfaceCard>
           <div className="space-y-3">
             <h1 className="text-3xl font-medium">{service.name}</h1>
             <p className="text-muted-foreground">
@@ -108,10 +109,10 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
           </div>
         </div>
 
-        <div className="w-full rounded-2xl bg-card p-6 shadow-sm shadow-black/10 md:p-8 lg:mx-auto lg:max-w-136 dark:shadow-black/40">
+        <SurfaceCard className="w-full rounded-2xl border-0 p-6 shadow-sm shadow-black/10 md:p-8 lg:mx-auto lg:max-w-136 dark:shadow-black/40">
           <h2 className="text-xl font-medium mb-6">Book this service</h2>
           <BookingForm initialServiceSlugOrId={service.slug} initialProductId={initialProductId ?? null} />
-        </div>
+        </SurfaceCard>
       </section>
     </div>
   )

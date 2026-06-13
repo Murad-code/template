@@ -52,7 +52,7 @@ export const CreateAddressModal: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild disabled={disabled}>
-        <Button variant={'outline'}>{buttonText}</Button>
+        <Button variant={'secondary'}>{buttonText}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

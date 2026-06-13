@@ -4,6 +4,7 @@ import { Message } from '@/components/Message'
 import { Price } from '@/components/Price'
 import { ProductItem } from '@/components/ProductItem'
 import { Button } from '@/components/ui/button'
+import { SurfaceCard } from '@/components/ui/surface-card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/providers/Auth'
@@ -141,9 +142,9 @@ export const CheckoutPage: React.FC = () => {
       <div className="basis-full lg:basis-2/3 flex flex-col gap-8 justify-stretch">
         <h2 className="font-medium text-3xl">Contact</h2>
         {!user && (
-          <div className="w-full rounded-lg border border-border bg-accent p-4">
+          <SurfaceCard className="w-full gap-4 rounded-lg bg-accent p-4">
             <div className="prose dark:prose-invert">
-              <Button asChild className="no-underline text-inherit" variant="outline">
+              <Button asChild className="no-underline text-inherit">
                 <Link href="/login">Log in</Link>
               </Button>
               <p className="mt-0">
@@ -151,10 +152,10 @@ export const CheckoutPage: React.FC = () => {
                 <Link href="/create-account">create an account</Link>
               </p>
             </div>
-          </div>
+          </SurfaceCard>
         )}
         {user ? (
-          <div className="rounded-lg border border-border bg-accent p-4">
+          <SurfaceCard className="gap-4 rounded-lg bg-accent p-4">
             <div>
               <p>{user.email}</p>{' '}
               <p>
@@ -164,9 +165,9 @@ export const CheckoutPage: React.FC = () => {
                 </Link>
               </p>
             </div>
-          </div>
+          </SurfaceCard>
         ) : (
-          <div className="rounded-lg border border-border bg-accent p-4">
+          <SurfaceCard className="gap-4 rounded-lg bg-accent p-4">
             <div>
               <p className="mb-4">Enter your email to checkout as a guest.</p>
 
@@ -193,7 +194,7 @@ export const CheckoutPage: React.FC = () => {
                 Continue as guest
               </Button>
             </div>
-          </div>
+          </SurfaceCard>
         )}
 
         <h2 className="font-medium text-3xl">Address</h2>
@@ -203,7 +204,7 @@ export const CheckoutPage: React.FC = () => {
             <AddressItem
               actions={
                 <Button
-                  variant={'outline'}
+                  variant={'secondary'}
                   disabled={Boolean(paymentData)}
                   onClick={(e) => {
                     e.preventDefault()
@@ -247,7 +248,7 @@ export const CheckoutPage: React.FC = () => {
                 <AddressItem
                   actions={
                     <Button
-                      variant={'outline'}
+                      variant={'secondary'}
                       disabled={Boolean(paymentData)}
                       onClick={(e) => {
                         e.preventDefault()
@@ -361,7 +362,7 @@ export const CheckoutPage: React.FC = () => {
       </div>
 
       {!cartIsEmpty && (
-        <div className="basis-full rounded-lg border border-border bg-card p-8 lg:basis-1/3 lg:pl-8 flex flex-col gap-8">
+        <SurfaceCard className="basis-full rounded-lg p-8 lg:basis-1/3 lg:pl-8 flex flex-col gap-8">
           <h2 className="text-3xl font-medium">Your cart</h2>
           {cart?.items?.map((item, index) => {
             if (typeof item.product === 'object' && item.product) {
@@ -385,7 +386,7 @@ export const CheckoutPage: React.FC = () => {
             <span className="uppercase">Total</span>{' '}
             <Price className="text-3xl font-medium" amount={cart.subtotal || 0} />
           </div>
-        </div>
+        </SurfaceCard>
       )}
     </div>
   )

@@ -68,7 +68,7 @@ const AddressesModal: React.FC<Props> = ({ setAddress }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant={'outline'}>{'Select an address'}</Button>
+        <Button variant="secondary">{'Select an address'}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -80,6 +80,7 @@ const AddressesModal: React.FC<Props> = ({ setAddress }) => {
             addresses={addresses}
             renderBeforeActions={(address) => (
               <Button
+                variant="secondary"
                 onClick={(e) => {
                   e.preventDefault()
                   setAddress(address)

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import type { Product, Variant } from '@/payload-types'
 
 import { useCart } from '@payloadcms/plugin-ecommerce/client/react'
-import clsx from 'clsx'
 import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
@@ -16,7 +15,7 @@ export function AddToCart({ product }: Props) {
   const { addItem, cart, isLoading } = useCart()
   const searchParams = useSearchParams()
 
-  const variants = product.variants?.docs || []
+  const variants = useMemo(() => product.variants?.docs || [], [product.variants?.docs])
 
   const selectedVariant = useMemo<Variant | undefined>(() => {
     if (product.enableVariants && variants.length) {
@@ -97,13 +96,7 @@ export function AddToCart({ product }: Props) {
   return (
     <Button
       aria-label="Add to cart"
-      variant={'subtle'}
-      className={clsx(
-        'bg-card text-card-foreground hover:bg-card/90',
-        {
-          'hover:opacity-95': true,
-        },
-      )}
+      variant={'default'}
       disabled={disabled || isLoading}
       onClick={addToCart}
       type="submit"
