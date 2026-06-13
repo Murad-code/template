@@ -135,6 +135,25 @@ function paletteToCssVars(palette: ThemePalette): string {
     .join('\n  ')
 }
 
+function semanticSurfaceVars(): string {
+  return [
+    '--surface-base: var(--background);',
+    '--surface-raised: var(--card);',
+    '--surface-soft-panel: color-mix(in srgb, var(--card) 82%, var(--background));',
+    '--surface-header: var(--card);',
+    '--surface-footer: var(--card);',
+    '--text-primary: var(--foreground);',
+    '--text-secondary: var(--muted-foreground);',
+    '--text-inverse: var(--primary-foreground);',
+    '--border-subtle: var(--border);',
+    '--border-strong: color-mix(in srgb, var(--border) 70%, var(--foreground));',
+    '--focus-ring: var(--ring);',
+    '--elevation-soft: 0 2px 6px color-mix(in srgb, #000 10%, transparent), 0 1px 2px color-mix(in srgb, #000 8%, transparent);',
+    '--elevation-soft-hover: 0 3px 8px color-mix(in srgb, #000 14%, transparent), 0 1px 2px color-mix(in srgb, #000 10%, transparent);',
+    '--elevation-soft-pressed: inset 0 2px 5px color-mix(in srgb, #000 22%, transparent), 0 1px 2px color-mix(in srgb, #000 8%, transparent);',
+  ].join('\n  ')
+}
+
 export function getThemeConfig(): ThemeConfig {
   return {
     light: defaultLight,
@@ -149,9 +168,11 @@ export function getThemeCss(): string {
   const { light, dark } = getThemeConfig()
   return `:root {
   ${paletteToCssVars(light)}
+  ${semanticSurfaceVars()}
 }
 
 [data-theme='dark'] {
   ${paletteToCssVars(dark)}
+  ${semanticSurfaceVars()}
 }`
 }

@@ -129,6 +129,17 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-soft-panel: var(--surface-soft-panel);
+  --color-surface-header: var(--surface-header);
+  --color-surface-footer: var(--surface-footer);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-inverse: var(--text-inverse);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-focus-ring: var(--focus-ring);
 }
 
 @layer base {
@@ -139,6 +150,17 @@
 }
 
 @layer components {
+  .interactive-focus {
+    outline: none;
+    transition: box-shadow 0.18s ease;
+  }
+
+  .interactive-focus:focus-visible {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--ring) 50%, transparent),
+      0 0 0 4px var(--background);
+  }
+
   .booking-slot-button {
     background: var(--background);
     color: var(--foreground);
@@ -173,6 +195,13 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.12),
       0 1px 2px rgba(0, 0, 0, 0.06);
     transform: translateY(1px);
+  }
+
+  .booking-slot-button:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--ring) 50%, transparent),
+      0 0 0 4px var(--background);
   }
 
 }
