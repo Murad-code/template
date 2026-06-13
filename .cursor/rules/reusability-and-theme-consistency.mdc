@@ -1,0 +1,24 @@
+---
+description: Prioritize theme tokens and reusable modular UI patterns
+alwaysApply: true
+---
+
+# Reusability and Theme Consistency
+
+## Theme Palette First
+
+- Prefer semantic theme tokens and CSS variables over hardcoded colors (for example: `bg-primary`, `text-primary-foreground`, `border-border-subtle`).
+- Keep light/dark behavior driven by shared theme variables so components adapt automatically without per-page overrides.
+- When adjusting styles, reuse existing palette tokens before introducing new color values.
+
+## Reusable Component Architecture
+
+- Prioritize reusable and modular code over one-off page-specific implementations.
+- Centralize base behavior and styling in shared root components (for example `src/components/ui/button.tsx`), and keep consumer overrides minimal.
+- If multiple features need the same UI/interaction pattern, extract or extend a shared component instead of duplicating logic.
+- Favor small, composable APIs (`variant`, `size`, `className`) that keep component usage consistent and maintainable.
+
+## Maintainability Standard
+
+- Optimize for long-term maintainability: one source of truth for core UI patterns, minimal duplication, predictable theming.
+- New styling decisions should strengthen the reusable template codebase, not fragment it.

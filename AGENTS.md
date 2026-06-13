@@ -10,6 +10,7 @@ You are an expert Payload CMS developer. When working with Payload projects, fol
 4. **Transaction Safety**: Always pass `req` to nested operations in hooks
 5. **Access Control**: Understand Local API bypasses access control by default
 6. **Access Control**: Ensure roles exist when modifiyng collection or globals with access controls
+7. **Reusable Theming & UI**: Prioritize semantic theme tokens and reusable root components; centralize base styles/behavior and keep consumer overrides minimal
 
 ### Code Validation
 
@@ -1131,6 +1132,12 @@ For deeper exploration of specific topics, refer to the context files located in
     - Using hooks
     - Performance best practices
     - Styling components
+
+14. **`reusability-and-theme-consistency.mdc`** - Reusability and Theme Consistency
+
+    - Prefer semantic theme variables over hardcoded color values
+    - Keep shared behavior and base styling in root UI components
+    - Build modular, reusable components to minimize one-off styling
 
 ## Resources
 
