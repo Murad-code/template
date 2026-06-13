@@ -3,11 +3,22 @@ import { revalidateTag } from 'next/cache'
 
 import { adminOnly } from '@/access/adminOnly'
 import { TYPOGRAPHY_FONT_OPTIONS } from '@/config/typographyFonts'
+import { APIError } from 'payload'
+import {
+  normalizeAndValidatePalette,
+  normalizeHexColor,
+  type PaletteInput,
+} from '@/utilities/themePaletteValidation'
 
 const colorField = (name: string, label: string, description?: string) => ({
   name,
   type: 'text' as const,
   label,
+  validate: (value: unknown) => {
+    const normalized = normalizeHexColor(typeof value === 'string' ? value : null)
+    if (!normalized) return `${label} must be a valid hex color (#RRGGBB).`
+    return true
+  },
   admin: {
     components: {
       Field: '@/components/admin/ColorPickerField#ColorPickerField',
@@ -181,6 +192,15 @@ export const SiteTheme: GlobalConfig = {
       },
       fields: [
         {
+          name: 'paletteAutomationTools',
+          type: 'ui',
+          admin: {
+            components: {
+              Field: '@/components/admin/PaletteAutomationTools#PaletteAutomationTools',
+            },
+          },
+        },
+        {
           type: 'row',
           fields: [
             colorField('color1', 'Color 1 (light background)'),
@@ -209,6 +229,37 @@ export const SiteTheme: GlobalConfig = {
     },
   ],
   hooks: {
+    beforeValidate: [
+      ({ data, context }) => {
+        const incomingData = (data ?? {}) as Record<string, unknown>
+        const skipPaletteValidation = Boolean(
+          (context as Record<string, unknown> | undefined)?.skipSiteThemePaletteValidation,
+        )
+        const paletteMode =
+          incomingData.paletteMode === 'custom' || incomingData.paletteMode === 'palette'
+            ? incomingData.paletteMode
+            : 'palette'
+
+        if (paletteMode === 'palette') {
+          if (skipPaletteValidation) return incomingData
+          if (!incomingData.palette) {
+            throw new APIError('A main palette must be selected when palette mode is set to "Palette".', 400)
+          }
+          return incomingData
+        }
+
+        const custom = (incomingData.customPalette ?? {}) as PaletteInput
+        let normalized
+        try {
+          normalized = normalizeAndValidatePalette(custom, 'Custom palette')
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Invalid custom palette configuration.'
+          throw new APIError(message, 400)
+        }
+        incomingData.customPalette = normalized
+        return incomingData
+      },
+    ],
     afterChange: [
       () => {
         revalidateSiteThemeTag()

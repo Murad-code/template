@@ -713,6 +713,7 @@ export const seed = async ({
         depth: 0,
         context: {
           disableRevalidate: true,
+          skipSiteThemePaletteValidation: true,
         },
       })
     }),

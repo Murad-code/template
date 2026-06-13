@@ -3,6 +3,11 @@ import { revalidateTag } from 'next/cache'
 import { APIError } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
+import {
+  normalizeAndValidatePalette,
+  normalizeHexColor,
+  type PaletteInput,
+} from '@/utilities/themePaletteValidation'
 
 const colorField = (
   name: string,
@@ -15,6 +20,11 @@ const colorField = (
   name,
   type: 'text' as const,
   label,
+  validate: (value: unknown) => {
+    const normalized = normalizeHexColor(typeof value === 'string' ? value : null)
+    if (!normalized) return `${label} must be a valid hex color (#RRGGBB).`
+    return true
+  },
   admin: {
     components: {
       Field: '@/components/admin/ColorPickerField#ColorPickerField',
@@ -101,8 +111,34 @@ export const ThemePalettes: CollectionConfig = {
   hooks: {
     beforeChange: [
       (async ({ req, operation, data, originalDoc }) => {
+        const incomingData = (data ?? {}) as Record<string, unknown>
         const paletteID = originalDoc?.id
-        if (operation !== 'update' || !paletteID) return data
+        const mergedPalette: PaletteInput = {
+          color1: typeof incomingData.color1 === 'string' ? incomingData.color1 : originalDoc?.color1,
+          color2: typeof incomingData.color2 === 'string' ? incomingData.color2 : originalDoc?.color2,
+          color3: typeof incomingData.color3 === 'string' ? incomingData.color3 : originalDoc?.color3,
+          color4: typeof incomingData.color4 === 'string' ? incomingData.color4 : originalDoc?.color4,
+          color5: typeof incomingData.color5 === 'string' ? incomingData.color5 : originalDoc?.color5,
+          lightText:
+            typeof incomingData.lightText === 'string' ? incomingData.lightText : originalDoc?.lightText,
+          darkText: typeof incomingData.darkText === 'string' ? incomingData.darkText : originalDoc?.darkText,
+        }
+        let normalizedPalette
+        try {
+          normalizedPalette = normalizeAndValidatePalette(mergedPalette, 'Theme palette')
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Invalid palette configuration.'
+          throw new APIError(message, 400)
+        }
+        incomingData.color1 = normalizedPalette.color1
+        incomingData.color2 = normalizedPalette.color2
+        incomingData.color3 = normalizedPalette.color3
+        incomingData.color4 = normalizedPalette.color4
+        incomingData.color5 = normalizedPalette.color5
+        incomingData.lightText = normalizedPalette.lightText
+        incomingData.darkText = normalizedPalette.darkText
+
+        if (operation !== 'update' || !paletteID) return incomingData
 
         const hasAuthenticatedUser = Boolean(req.user)
         const existing = await req.payload.findByID({
@@ -124,7 +160,7 @@ export const ThemePalettes: CollectionConfig = {
           }
         }
 
-        return data
+        return incomingData
       }) as CollectionBeforeChangeHook,
     ],
     beforeDelete: [

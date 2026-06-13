@@ -49,3 +49,9 @@ export function getContrastBadge(ratio: number | null): { label: string; tone: '
   if (ratio >= 3) return { label: `Contrast large-text only (${ratio.toFixed(2)}:1)`, tone: 'warn' }
   return { label: `Contrast fail (${ratio.toFixed(2)}:1)`, tone: 'bad' }
 }
+
+export function getBestReadableText(background?: string | null): '#000000' | '#FFFFFF' {
+  const blackRatio = getContrastRatio('#000000', background) ?? 0
+  const whiteRatio = getContrastRatio('#FFFFFF', background) ?? 0
+  return whiteRatio >= blackRatio ? '#FFFFFF' : '#000000'
+}

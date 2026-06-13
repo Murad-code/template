@@ -38,8 +38,12 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
 
   if (!colors.length) return null
 
-  const lightTextContrast = getContrastBadge(getContrastRatio(values.lightText, values.color1))
-  const darkTextContrast = getContrastBadge(getContrastRatio(values.darkText, values.color5))
+  const checks = [
+    { label: 'Light text on Color 1 (background)', ratio: getContrastRatio(values.lightText, values.color1) },
+    { label: 'Light text on Color 2 (card)', ratio: getContrastRatio(values.lightText, values.color2) },
+    { label: 'Dark text on Color 5 (background)', ratio: getContrastRatio(values.darkText, values.color5) },
+    { label: 'Dark text on Color 4 (card)', ratio: getContrastRatio(values.darkText, values.color4) },
+  ]
   const badgeStyle = (tone: 'good' | 'warn' | 'bad') => ({
     display: 'inline-block',
     borderRadius: 999,
@@ -87,8 +91,15 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
         ))}
       </div>
       <div style={{ marginTop: 10 }}>
-        <span style={badgeStyle(lightTextContrast.tone)}>Light text on Color 1: {lightTextContrast.label}</span>
-        <span style={badgeStyle(darkTextContrast.tone)}>Dark text on Color 5: {darkTextContrast.label}</span>
+        {checks.map((check) => {
+          const badge = getContrastBadge(check.ratio)
+          return (
+            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <span style={badgeStyle(badge.tone)}>{badge.label}</span>
+              <span style={{ fontSize: 12, color: 'var(--theme-elevation-700)' }}>{check.label}</span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

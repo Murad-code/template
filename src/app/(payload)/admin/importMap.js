@@ -37,6 +37,7 @@ import { SiteThemeLivePreviewBridge as SiteThemeLivePreviewBridge_f2efe13ad30b04
 import { PaletteRelationshipField as PaletteRelationshipField_edfb9e32f306231c189475ba16110fad } from '@/components/admin/PaletteRelationshipField'
 import { PaletteSelectionPreview as PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1 } from '@/components/admin/PaletteSelectionPreview'
 import { PaletteHelp as PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c } from '@/components/admin/PaletteHelp'
+import { PaletteAutomationTools as PaletteAutomationTools_aa74acaef45908964a55ad29543cca82 } from '@/components/admin/PaletteAutomationTools'
 import { BrandIcon as BrandIcon_d9087a380941d12f95aff168665b00b4 } from '@/components/admin/BrandIcon'
 import { BrandLogo as BrandLogo_fd0a9bbb35693e340bbbfa9596236d37 } from '@/components/admin/BrandLogo'
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
@@ -84,6 +85,7 @@ export const importMap = {
   "@/components/admin/PaletteRelationshipField#PaletteRelationshipField": PaletteRelationshipField_edfb9e32f306231c189475ba16110fad,
   "@/components/admin/PaletteSelectionPreview#PaletteSelectionPreview": PaletteSelectionPreview_6a8b5e1f860f6ad62618948dbb034de1,
   "@/components/admin/PaletteHelp#PaletteHelp": PaletteHelp_8ae32d0d990938238bbf53ebe7455d7c,
+  "@/components/admin/PaletteAutomationTools#PaletteAutomationTools": PaletteAutomationTools_aa74acaef45908964a55ad29543cca82,
   "@/components/admin/BrandIcon#BrandIcon": BrandIcon_d9087a380941d12f95aff168665b00b4,
   "@/components/admin/BrandLogo#BrandLogo": BrandLogo_fd0a9bbb35693e340bbbfa9596236d37,
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,
