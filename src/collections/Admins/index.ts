@@ -5,12 +5,11 @@ import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { checkRole } from '@/access/utilities'
+import { ensureFirstUserIsRoot } from '@/collections/Users/hooks/ensureFirstUserIsAdmin'
+import { enforceRootRoleGovernance, preventLastRootDeletion } from '@/collections/Users/hooks/enforceRootRoleGovernance'
 
-import { ensureFirstUserIsRoot } from './hooks/ensureFirstUserIsAdmin'
-import { enforceRootRoleGovernance, preventLastRootDeletion } from './hooks/enforceRootRoleGovernance'
-
-export const Users: CollectionConfig = {
-  slug: 'users',
+export const Admins: CollectionConfig = {
+  slug: 'admins',
   access: {
     admin: ({ req: { user } }) => checkRole(['admin'], user),
     create: publicAccess,
@@ -40,7 +39,7 @@ export const Users: CollectionConfig = {
         read: adminOnlyFieldAccess,
         update: adminOnlyFieldAccess,
       },
-      defaultValue: ['customer'],
+      defaultValue: ['admin'],
       hasMany: true,
       hooks: {
         beforeChange: [ensureFirstUserIsRoot],
@@ -54,41 +53,7 @@ export const Users: CollectionConfig = {
           label: 'admin',
           value: 'admin',
         },
-        {
-          label: 'customer',
-          value: 'customer',
-        },
       ],
-    },
-    {
-      name: 'orders',
-      type: 'join',
-      collection: 'orders',
-      on: 'customer',
-      admin: {
-        allowCreate: false,
-        defaultColumns: ['id', 'createdAt', 'total', 'currency', 'items'],
-      },
-    },
-    {
-      name: 'cart',
-      type: 'join',
-      collection: 'carts',
-      on: 'customer',
-      admin: {
-        allowCreate: false,
-        defaultColumns: ['id', 'createdAt', 'total', 'currency', 'items'],
-      },
-    },
-    {
-      name: 'addresses',
-      type: 'join',
-      collection: 'addresses',
-      on: 'customer',
-      admin: {
-        allowCreate: false,
-        defaultColumns: ['id'],
-      },
     },
   ],
   hooks: {

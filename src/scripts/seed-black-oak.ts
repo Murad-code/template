@@ -11,15 +11,15 @@ const mode: SeedMode = modeArg === 'booking' || modeArg === 'ecommerce' || modeA
 async function run() {
   const payload = await getPayload({ config })
 
-  const users = await payload.find({
-    collection: 'users',
+  const admins = await payload.find({
+    collection: 'admins',
     depth: 0,
     limit: 1,
   })
 
-  const adminUser = users.docs[0]
+  const adminUser = admins.docs[0]
   if (!adminUser) {
-    throw new Error('No user found. Create an admin user first, then run the seed script again.')
+    throw new Error('No admin found. Create an admin/root user first, then run the seed script again.')
   }
 
   const req = await createLocalReq({ user: adminUser }, payload)

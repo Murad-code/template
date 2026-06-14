@@ -26,7 +26,7 @@ export const ForgotPasswordForm: React.FC = () => {
 
   const onSubmit = useCallback(async (data: FormData) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/forgot-password`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/customers/forgot-password`,
       {
         body: JSON.stringify(data),
         headers: {
@@ -55,7 +55,7 @@ export const ForgotPasswordForm: React.FC = () => {
             <p>
               {`Please enter your email below. You will receive an email message with instructions on
               how to reset your password. To manage your all users, `}
-              <Link href="/admin/collections/users">login to the admin dashboard</Link>.
+              <Link href="/admin/collections/admins">login to the admin dashboard</Link>.
             </p>
           </div>
           <form className="max-w-lg" onSubmit={handleSubmit(onSubmit)}>

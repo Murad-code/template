@@ -68,11 +68,13 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
+    admins: AdminAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
-    users: User;
+    admins: Admin;
+    customers: Customer;
     pages: Page;
     categories: Category;
     'theme-palettes': ThemePalette;
@@ -99,7 +101,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    users: {
+    customers: {
       orders: 'orders';
       cart: 'carts';
       addresses: 'addresses';
@@ -112,7 +114,8 @@ export interface Config {
     };
   };
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    admins: AdminsSelect<false> | AdminsSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'theme-palettes': ThemePalettesSelect<false> | ThemePalettesSelect<true>;
@@ -160,7 +163,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: Admin | Customer;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -172,7 +175,7 @@ export interface Config {
     collections: {
       addresses: Address;
       carts: Cart;
-      customers?: User;
+      customers: Customer;
       orders: Order;
       products: Product;
       transactions: Transaction;
@@ -182,7 +185,25 @@ export interface Config {
     };
   };
 }
-export interface UserAuthOperations {
+export interface AdminAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface CustomerAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -202,12 +223,38 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "admins".
  */
-export interface User {
+export interface Admin {
   id: number;
   name?: string | null;
-  roles?: ('admin' | 'customer')[] | null;
+  roles?: ('root' | 'admin')[] | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'admins';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers".
+ */
+export interface Customer {
+  id: number;
+  name?: string | null;
   orders?: {
     docs?: (number | Order)[];
     hasNextPage?: boolean;
@@ -240,7 +287,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
-  collection: 'users';
+  collection: 'customers';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -269,7 +316,7 @@ export interface Order {
     country?: string | null;
     phone?: string | null;
   };
-  customer?: (number | null) | User;
+  customer?: (number | null) | Customer;
   customerEmail?: string | null;
   transactions?: (number | Transaction)[] | null;
   status?: OrderStatus;
@@ -1158,7 +1205,7 @@ export interface Transaction {
     phone?: string | null;
   };
   status: 'pending' | 'succeeded' | 'failed' | 'cancelled' | 'expired' | 'refunded';
-  customer?: (number | null) | User;
+  customer?: (number | null) | Customer;
   customerEmail?: string | null;
   order?: (number | null) | Order;
   cart?: (number | null) | Cart;
@@ -1182,7 +1229,7 @@ export interface Cart {
       }[]
     | null;
   secret?: string | null;
-  customer?: (number | null) | User;
+  customer?: (number | null) | Customer;
   purchasedAt?: string | null;
   status?: ('active' | 'purchased' | 'abandoned') | null;
   subtotal?: number | null;
@@ -1196,7 +1243,7 @@ export interface Cart {
  */
 export interface Address {
   id: number;
-  customer?: (number | null) | User;
+  customer?: (number | null) | Customer;
   title?: string | null;
   firstName?: string | null;
   lastName?: string | null;
@@ -1314,7 +1361,7 @@ export interface BookingSlot {
   /**
    * Optional staff member assigned to this slot.
    */
-  staff?: (number | null) | User;
+  staff?: (number | null) | Admin;
   active?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1336,7 +1383,7 @@ export interface Booking {
   /**
    * Customer account (leave empty for guest bookings).
    */
-  customer?: (number | null) | User;
+  customer?: (number | null) | Customer;
   /**
    * Email used for booking confirmation and receipts.
    */
@@ -1494,8 +1541,12 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'admins';
+        value: number | Admin;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: number | Customer;
       } | null)
     | ({
         relationTo: 'pages';
@@ -1578,10 +1629,15 @@ export interface PayloadLockedDocument {
         value: number | Transaction;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: number | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: number | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -1591,10 +1647,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: number | Admin;
+      }
+    | {
+        relationTo: 'customers';
+        value: number | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -1621,11 +1682,34 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "admins_select".
  */
-export interface UsersSelect<T extends boolean = true> {
+export interface AdminsSelect<T extends boolean = true> {
   name?: T;
   roles?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  name?: T;
   orders?: T;
   cart?: T;
   addresses?: T;

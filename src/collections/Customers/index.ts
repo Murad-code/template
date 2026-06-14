@@ -1,19 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
-import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
-import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { checkRole } from '@/access/utilities'
 
-import { ensureFirstUserIsRoot } from './hooks/ensureFirstUserIsAdmin'
-import { enforceRootRoleGovernance, preventLastRootDeletion } from './hooks/enforceRootRoleGovernance'
-
-export const Users: CollectionConfig = {
-  slug: 'users',
+export const Customers: CollectionConfig = {
+  slug: 'customers',
   access: {
     admin: ({ req: { user } }) => checkRole(['admin'], user),
-    create: publicAccess,
+    create: () => true,
     delete: adminOnly,
     read: adminOrSelf,
     unlock: adminOnly,
@@ -21,7 +16,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: 'Users',
-    defaultColumns: ['name', 'email', 'roles'],
+    defaultColumns: ['name', 'email', 'createdAt'],
     useAsTitle: 'name',
   },
   auth: {
@@ -31,34 +26,6 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-    },
-    {
-      name: 'roles',
-      type: 'select',
-      access: {
-        create: adminOnlyFieldAccess,
-        read: adminOnlyFieldAccess,
-        update: adminOnlyFieldAccess,
-      },
-      defaultValue: ['customer'],
-      hasMany: true,
-      hooks: {
-        beforeChange: [ensureFirstUserIsRoot],
-      },
-      options: [
-        {
-          label: 'root',
-          value: 'root',
-        },
-        {
-          label: 'admin',
-          value: 'admin',
-        },
-        {
-          label: 'customer',
-          value: 'customer',
-        },
-      ],
     },
     {
       name: 'orders',
@@ -91,8 +58,4 @@ export const Users: CollectionConfig = {
       },
     },
   ],
-  hooks: {
-    beforeChange: [enforceRootRoleGovernance],
-    beforeDelete: [preventLastRootDeletion],
-  },
 }

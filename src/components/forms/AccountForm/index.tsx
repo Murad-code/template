@@ -6,7 +6,7 @@ import { Message } from '@/components/Message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User } from '@/payload-types'
+import { Customer } from '@/payload-types'
 import { useAuth } from '@/providers/Auth'
 import { useRouter } from 'next/navigation'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
@@ -15,7 +15,7 @@ import { toast } from 'sonner'
 
 type FormData = {
   email: string
-  name: User['name']
+  name: Customer['name']
   password: string
   passwordConfirm: string
 }
@@ -40,7 +40,7 @@ export const AccountForm: React.FC = () => {
   const onSubmit = useCallback(
     async (data: FormData) => {
       if (user) {
-        const response = await fetch(`/api/users/${user.id}`, {
+        const response = await fetch(`/api/customers/${user.id}`, {
           // Make sure to include cookies with fetch
           body: JSON.stringify(data),
           credentials: 'include',

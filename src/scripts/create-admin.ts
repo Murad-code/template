@@ -24,7 +24,7 @@ async function run() {
   const payload = await getPayload({ config })
 
   const existing = await payload.find({
-    collection: 'users',
+    collection: 'admins',
     depth: 0,
     limit: 1,
     where: {
@@ -37,7 +37,7 @@ async function run() {
   if (existing.docs.length > 0) {
     const user = existing.docs[0]
     await payload.update({
-      collection: 'users',
+      collection: 'admins',
       id: user.id,
       data: {
         name: adminName,
@@ -51,7 +51,7 @@ async function run() {
   }
 
   await payload.create({
-    collection: 'users',
+    collection: 'admins',
     data: {
       name: adminName,
       email,
