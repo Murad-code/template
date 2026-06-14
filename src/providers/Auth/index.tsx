@@ -103,13 +103,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
         method: 'POST',
       })
-
-      if (res.ok) {
-        setUser(null)
-        setStatus('loggedOut')
-      } else {
+      if (!res.ok && res.status !== 401 && res.status !== 404) {
         throw new Error('An error occurred while attempting to logout.')
       }
+
+      setUser(null)
+      setStatus('loggedOut')
     } catch (e) {
       throw new Error('An error occurred while attempting to logout.')
     }
@@ -131,11 +130,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(meUser || null)
           setStatus(meUser ? 'loggedIn' : undefined)
         } else {
-          throw new Error('An error occurred while fetching your account.')
+          setUser(null)
+          setStatus(undefined)
         }
       } catch (e) {
         setUser(null)
-        throw new Error('An error occurred while fetching your account.')
+        setStatus(undefined)
       }
     }
 
