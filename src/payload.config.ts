@@ -18,6 +18,7 @@ import { fileURLToPath } from 'url'
 
 import { BookingSlots } from '@/collections/BookingSlots'
 import { cleanupExpiredStockReservationsEndpoint } from '@/endpoints/cleanupExpiredStockReservations'
+import { seedHeaderCoreLinksEndpoint } from '@/endpoints/seedHeaderCoreLinks'
 import { StockReservations } from '@/collections/StockReservations'
 import { BookingTransactions } from '@/collections/BookingTransactions'
 import { BookingWaitlist } from '@/collections/BookingWaitlist'
@@ -145,7 +146,7 @@ export default buildConfig({
     },
   }),
   email: emailAdapter,
-  endpoints: [cleanupExpiredStockReservationsEndpoint],
+  endpoints: [cleanupExpiredStockReservationsEndpoint, seedHeaderCoreLinksEndpoint],
   globals: [Header, Footer, SiteTheme, BlockedDates, BookingSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',

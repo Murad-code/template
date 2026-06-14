@@ -10,6 +10,8 @@ import { MobileMenu } from './MobileMenu'
 import { LogoIcon } from '@/components/icons/logo'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/utilities/cn'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/providers/Auth'
 
 type NavItem = NonNullable<Header['navItems']>[number]
 
@@ -20,6 +22,7 @@ type Props = {
 
 export function HeaderClient({ menu, ecommerceEnabled }: Props) {
   const pathname = usePathname()
+  const { user } = useAuth()
 
   return (
     <div className="relative z-20 bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
@@ -55,15 +58,16 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
             ) : null}
           </div>
 
-          {ecommerceEnabled ? (
-            <div className="flex justify-end md:w-1/3 gap-4">
+          <div className="flex justify-end md:w-1/3 gap-4 items-center">
+            <Button asChild className="hidden md:inline-flex" size="sm" variant="outline">
+              <Link href={user ? '/logout' : '/login'}>{user ? 'Log out' : 'Log in'}</Link>
+            </Button>
+            {ecommerceEnabled ? (
               <Suspense fallback={<OpenCartButton />}>
                 <Cart />
               </Suspense>
-            </div>
-          ) : (
-            <div className="hidden w-1/3 md:block" aria-hidden />
-          )}
+            ) : null}
+          </div>
         </div>
       </nav>
     </div>

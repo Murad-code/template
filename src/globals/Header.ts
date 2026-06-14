@@ -7,7 +7,7 @@ export const Header: GlobalConfig = {
   slug: 'header',
   admin: {
     description:
-      'Core nav links are generated from PROJECT_TYPE (see src/config/nav.ts). Add optional extra links here; URLs that match the generated set are skipped on the site.',
+      'Manage primary header navigation links for the frontend site. Add /shop, /book and /account to drive product, workshop/service and account journeys.',
   },
   access: {
     read: () => true,
@@ -15,19 +15,27 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'headerNavHelp',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/HeaderNavHelp#HeaderNavHelp',
+        },
+      },
+    },
+    {
       name: 'navItems',
       type: 'array',
-      label: 'Extra nav links (optional)',
+      label: 'Header nav links',
       admin: {
-        description:
-          'Optional links appended after Home / Shop / Book / Account. Use for pages like Contact or Pricing.',
+        description: 'These links are rendered directly in the frontend header navigation.',
       },
       fields: [
         link({
           appearances: false,
         }),
       ],
-      maxRows: 6,
+      maxRows: 10,
     },
   ],
 }

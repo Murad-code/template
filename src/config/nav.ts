@@ -35,46 +35,6 @@ export function navItemKey(item: HeaderNavItem | FooterNavItem): string {
   return `item:${item.id ?? 'unknown'}`
 }
 
-/** Core header links from PROJECT_TYPE (no CMS setup required). */
-export function getDerivedHeaderNavItems(config: SiteConfig): HeaderNavItem[] {
-  const items: HeaderNavItem[] = [
-    {
-      id: 'derived-nav-home',
-      link: { type: 'custom', label: 'Home', url: '/', newTab: false },
-    },
-  ]
-  if (config.ecommerceEnabled) {
-    items.push({
-      id: 'derived-nav-shop',
-      link: { type: 'custom', label: 'Shop', url: '/shop', newTab: false },
-    })
-  }
-  if (config.bookingEnabled) {
-    items.push({
-      id: 'derived-nav-book',
-      link: { type: 'custom', label: 'Book', url: '/book', newTab: false },
-    })
-  }
-  return items
-}
-
-function getAccountNavItem(): HeaderNavItem {
-  return {
-    id: 'derived-nav-account',
-    link: { type: 'custom', label: 'Account', url: '/account', newTab: false },
-  }
-}
-
-/** Keep Account as the final item; append CMS items before it unless duplicated. */
-export function getEffectiveHeaderNavItems(header: Header, config: SiteConfig): HeaderNavItem[] {
-  const derived = getDerivedHeaderNavItems(config)
-  const accountItem = getAccountNavItem()
-  const accountKey = navItemKey(accountItem)
-  const used = new Set([...derived.map(navItemKey), accountKey])
-  const extras = (header.navItems ?? []).filter((item) => !used.has(navItemKey(item)))
-  return [...derived, ...extras, accountItem]
-}
-
 /** Core footer links from PROJECT_TYPE. */
 export function getDerivedFooterNavItems(config: SiteConfig): FooterNavItem[] {
   const items: FooterNavItem[] = []

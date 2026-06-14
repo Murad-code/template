@@ -2495,7 +2495,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Core nav links are generated from PROJECT_TYPE (see src/config/nav.ts). Add optional extra links here; URLs that match the generated set are skipped on the site.
+ * Manage primary header navigation links for the frontend site. Add /shop, /book and /account to drive product, workshop/service and account journeys.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
@@ -2503,7 +2503,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Header {
   id: number;
   /**
-   * Optional links appended after Home / Shop / Book / Account. Use for pages like Contact or Pricing.
+   * These links are rendered directly in the frontend header navigation.
    */
   navItems?:
     | {

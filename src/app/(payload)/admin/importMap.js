@@ -32,6 +32,7 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { InventoryCell as InventoryCell_5db5f93db0d6a12915a59d276d573534 } from '@/components/admin/InventoryCell'
 import { OrderDownloadInvoiceButton as OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451 } from '@/components/OrderDownloadInvoiceButton'
 import { OrderRefundButton as OrderRefundButton_6323877c231bce4442c019769ca0a2cc } from '@/components/OrderRefundButton'
+import { HeaderNavHelp as HeaderNavHelp_52da824b37d0f33bcdc35343ba0abe8d } from '@/components/admin/HeaderNavHelp'
 import { TypographyFontSelectField as TypographyFontSelectField_677811ae973e3180110e74d19b8650e0 } from '@/components/admin/TypographyFontSelectField'
 import { SiteThemeLivePreviewBridge as SiteThemeLivePreviewBridge_f2efe13ad30b049cb2ab747b932eec83 } from '@/components/admin/SiteThemeLivePreviewBridge'
 import { PaletteRelationshipField as PaletteRelationshipField_edfb9e32f306231c189475ba16110fad } from '@/components/admin/PaletteRelationshipField'
@@ -80,6 +81,7 @@ export const importMap = {
   "@/components/admin/InventoryCell#InventoryCell": InventoryCell_5db5f93db0d6a12915a59d276d573534,
   "@/components/OrderDownloadInvoiceButton#OrderDownloadInvoiceButton": OrderDownloadInvoiceButton_1231176588dcef3bb080b1ca436c8451,
   "@/components/OrderRefundButton#OrderRefundButton": OrderRefundButton_6323877c231bce4442c019769ca0a2cc,
+  "@/components/admin/HeaderNavHelp#HeaderNavHelp": HeaderNavHelp_52da824b37d0f33bcdc35343ba0abe8d,
   "@/components/admin/TypographyFontSelectField#TypographyFontSelectField": TypographyFontSelectField_677811ae973e3180110e74d19b8650e0,
   "@/components/admin/SiteThemeLivePreviewBridge#SiteThemeLivePreviewBridge": SiteThemeLivePreviewBridge_f2efe13ad30b049cb2ab747b932eec83,
   "@/components/admin/PaletteRelationshipField#PaletteRelationshipField": PaletteRelationshipField_edfb9e32f306231c189475ba16110fad,

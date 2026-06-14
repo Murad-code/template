@@ -115,6 +115,15 @@ function richTextFrom(...children: Array<ReturnType<typeof lexicalParagraph> | R
   }
 }
 
+function customHeaderNavItem(
+  label: string,
+  url: string,
+): NonNullable<Header['navItems']>[number] {
+  return {
+    link: { type: 'custom', label, url, newTab: false },
+  }
+}
+
 async function optionalSeedImage(...segments: string[]): Promise<string | null> {
   const absolutePath = path.join(process.cwd(), 'seed', ...segments)
   try {
@@ -1194,28 +1203,30 @@ export const seed = async ({
     })
   }
 
+  const shouldSeedEcommerce = mode === 'ecommerce' || mode === 'hybrid'
+  const shouldSeedBooking = mode === 'booking' || mode === 'hybrid'
+
   payload.logger.info(`— Seeding globals...`)
 
   const { defaultPalette } = await upsertThemePalettes(payload)
 
-  // Header/footer primary links are derived from PROJECT_TYPE (see src/config/nav.ts).
+  const headerNavItems: NonNullable<Header['navItems']> = [
+    customHeaderNavItem('About', '/about'),
+    ...(shouldSeedEcommerce
+      ? [customHeaderNavItem('Shop', '/shop')]
+      : []),
+    ...(shouldSeedBooking
+      ? [customHeaderNavItem('Workshops', '/book')]
+      : []),
+    customHeaderNavItem('Account', '/account'),
+    customHeaderNavItem('Blog', '/blog'),
+    customHeaderNavItem('Contact', '/contact'),
+  ]
+
   await payload.updateGlobal({
     slug: 'header',
     data: {
-      navItems: [
-        {
-          link: { type: 'custom', label: 'About', url: '/about', newTab: false },
-        },
-        {
-          link: { type: 'custom', label: 'Workshops', url: '/workshops', newTab: false },
-        },
-        {
-          link: { type: 'custom', label: 'Blog', url: '/blog', newTab: false },
-        },
-        {
-          link: { type: 'custom', label: 'Contact', url: '/contact', newTab: false },
-        },
-      ],
+      navItems: headerNavItems,
     } as Partial<Header>,
   })
   await payload.updateGlobal({
@@ -1232,9 +1243,6 @@ export const seed = async ({
       disableRevalidate: true,
     },
   })
-
-  const shouldSeedEcommerce = mode === 'ecommerce' || mode === 'hybrid'
-  const shouldSeedBooking = mode === 'booking' || mode === 'hybrid'
 
   if (shouldSeedEcommerce) {
     payload.logger.info(`— Seeding addresses...`)
