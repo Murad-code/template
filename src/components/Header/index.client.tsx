@@ -59,7 +59,14 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
           </div>
 
           <div className="flex justify-end md:w-1/3 gap-4 items-center">
-            <Button asChild className="hidden md:inline-flex" size="sm" variant="outline">
+            <Button
+              asChild
+              variant="nav"
+              size="clear"
+              className={cn('navLink relative items-end hidden md:inline-flex', {
+                active: pathname === '/login',
+              })}
+            >
               <Link href={user ? '/logout' : '/login'}>{user ? 'Log out' : 'Log in'}</Link>
             </Button>
             {ecommerceEnabled ? (
