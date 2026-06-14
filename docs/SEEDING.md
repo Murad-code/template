@@ -6,7 +6,7 @@ The seed creates a demo site from local content in the `seed/` directory. You ca
 
 - A `seed/` directory at the project root.
 - Product subfolders inside `seed/`, each containing at least one image (see [Seed folder structure](#seed-folder-structure)).
-- App running and an admin user (seeding is triggered from the admin dashboard).
+- App running and a root user (seeding is triggered from the admin dashboard).
 
 ## Seed folder structure
 
@@ -36,7 +36,7 @@ seed/
 3. Click **Seed your database**.
 4. Wait for the success message, then open the site (e.g. Home link) to see the demo.
 
-Seeding is done via `POST /next/seed` with body `{ "mode": "ecommerce" }`, `{ "mode": "booking" }`, or `{ "mode": "hybrid" }`. Only admin users can call it.
+Seeding is done via `POST /next/seed` with body `{ "mode": "ecommerce" }`, `{ "mode": "booking" }`, or `{ "mode": "hybrid" }`. Only root users can call it.
 
 ## CLI usage (repeatable deployment)
 
@@ -49,7 +49,7 @@ pnpm seed:blackoak ecommerce
 pnpm seed:blackoak booking
 ```
 
-This requires at least one user account in the database (typically your admin account).
+This requires at least one user account in the database (typically your root account).
 
 ## What the seed does (both modes)
 
@@ -78,7 +78,7 @@ This requires at least one user account in the database (typically your admin ac
 | `Seed directory "seed" not found` | Create a `seed/` folder at the project root and add at least one product subfolder with images. |
 | `Seed directory contains no product folders with images` | Ensure subfolders contain only image files (`.jpg`, `.jpeg`, `.png`, `.webp`). |
 | `No images available for homepage` | Add at least one image in a product folder (or a root hero image). |
-| 403 on seed | You must be logged in as an admin. |
+| 403 on seed | You must be logged in as a root user. |
 | Revalidation errors in logs | Normal when seeding; the app may not be running for revalidation. |
 
 ## Technical notes

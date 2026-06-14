@@ -39,10 +39,11 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`, create your first admin, and validate key flows:
+Open `http://localhost:3000`, create your first user (auto-promoted to `root` when database is empty), and validate key flows:
 
 - storefront pages
 - admin login/content editing
+- root login can create non-root admin users
 - checkout (if ecommerce/hybrid)
 - booking flow (if booking/hybrid)
 

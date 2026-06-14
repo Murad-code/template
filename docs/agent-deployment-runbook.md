@@ -58,6 +58,9 @@ Preferred source of truth:
 - `PAYLOAD_SECRET` (32+ chars)
 - `PREVIEW_SECRET`
 - `CRON_SECRET`
+- `ROOT_EMAIL` (bootstrap root account email)
+- `ROOT_PASSWORD` (bootstrap root account password; strong unique value)
+- `ROOT_NAME` (optional, defaults to company name)
 
 ### F) Email provider (required for production email flows)
 
@@ -102,11 +105,12 @@ At the start of a deployment workflow, the agent should ask these questions in c
 5. What DB values should be used (`DB_USER`, `DB_PASSWORD`, `DB_NAME`)?
 6. What ports should be used (`LOCAL_DB_PORT`, `APP_HOST_PORT`)?
 7. What are the required app secrets (`PAYLOAD_SECRET`, `PREVIEW_SECRET`, `CRON_SECRET`)?
-8. Which email provider is used (Resend vs SMTP), and what are the exact env values?
-9. Are Stripe keys required for this project type, and if so what are they?
-10. Should low-stock alerts be enabled, and what recipient should be used?
-11. Is this a fresh DB initialization or an existing volume that must be preserved?
-12. Should the agent do step-by-step confirmation after every command block? (default: yes)
+8. What root bootstrap credentials should be used (`ROOT_EMAIL`, `ROOT_PASSWORD`, optional `ROOT_NAME`)?
+9. Which email provider is used (Resend vs SMTP), and what are the exact env values?
+10. Are Stripe keys required for this project type, and if so what are they?
+11. Should low-stock alerts be enabled, and what recipient should be used?
+12. Is this a fresh DB initialization or an existing volume that must be preserved?
+13. Should the agent do step-by-step confirmation after every command block? (default: yes)
 
 ## Canonical Docs Order
 
@@ -366,15 +370,39 @@ Emergency-only workaround:
 - Apply targeted SQL (`CREATE TABLE IF NOT EXISTS`, `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`) to restore service quickly.
 - Still create and deploy a real migration commit immediately after; do not leave manual SQL as the only fix.
 
-## First Admin Bootstrap (fresh projects)
+## Root Bootstrap (fresh projects)
 
-After first successful deploy and migration:
+After first successful deploy and migration, create the root account from the runtime container:
+
+```bash
+cd DEPLOY_DIR
+docker compose exec -T app sh -lc 'pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"'
+```
+
+Alternative runtimes:
+
+```bash
+# Docker standalone container
+docker exec -it CONTAINER_NAME pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"
+
+# Kubernetes
+kubectl exec -it POD_NAME -- pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"
+```
+
+Then verify:
 
 1. Open `https://DOMAIN/admin`
-2. Create the first admin user
-3. Confirm admin login works
-4. Validate at least one content write in admin
-5. Re-check app logs for errors after login/write
+2. Log in with the root account
+3. Create at least one non-root admin user for day-to-day operations
+4. Confirm admin login works for the new admin user
+5. Validate at least one content write in admin
+6. Re-check app logs for errors after login/write
+
+Operational policy:
+
+- Root is a platform/operator account, not a day-to-day content account.
+- Root-only features (for example seeding and maintenance controls) should remain restricted.
+- Keep at least two root users for resilience, or maintain a tested break-glass runbook.
 
 ## Prompt Template For Future Agent
 
@@ -402,6 +430,9 @@ Project values:
 - PAYLOAD_SECRET=...
 - PREVIEW_SECRET=...
 - CRON_SECRET=...
+- ROOT_EMAIL=...
+- ROOT_PASSWORD=...
+- ROOT_NAME=... (optional)
 - RESEND_API_KEY=... (or SMTP_HOST/SMTP_PORT/SMTP_SECURE/SMTP_USER/SMTP_PASS)
 - SMTP_FROM_EMAIL=...
 - SMTP_FROM_NAME=...
@@ -419,7 +450,7 @@ Execution requirements:
 4) Give me one step at a time and wait for my output before next step.
 5) Run preflight checks before build/deploy.
 6) Include validation commands after each phase.
-7) Include first-admin bootstrap steps for fresh projects.
+7) Include root bootstrap steps for fresh projects (container-based `pnpm create:root`).
 8) If anything fails, diagnose and provide the minimum fix with exact commands.
 9) For fast-path updates, run `pnpm payload migrate:status` on VPS after migrate and block seed/admin checks until no schema drift errors appear in logs.
 ```

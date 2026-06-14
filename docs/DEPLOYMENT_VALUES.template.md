@@ -47,6 +47,9 @@ Suggested workflow:
 - `PAYLOAD_SECRET` (32+ chars): `REPLACE_PAYLOAD_SECRET`
 - `PREVIEW_SECRET`: `REPLACE_PREVIEW_SECRET`
 - `CRON_SECRET`: `REPLACE_CRON_SECRET`
+- `ROOT_EMAIL`: `REPLACE_ROOT_EMAIL`
+- `ROOT_PASSWORD`: `REPLACE_ROOT_PASSWORD`
+- `ROOT_NAME` (optional): `REPLACE_ROOT_NAME`
 
 ## Email
 
@@ -76,4 +79,4 @@ Suggested workflow:
 
 - Step-by-step confirmation after each command block? (`yes`/`no`): `yes`
 - Run explicit post-deploy migration check even if entrypoint migrates? (`yes`/`no`): `yes`
-- Create first admin immediately after deploy? (`yes`/`no`): `yes`
+- Create root immediately after deploy and then a non-root admin? (`yes`/`no`): `yes`

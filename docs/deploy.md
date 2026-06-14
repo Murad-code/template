@@ -19,6 +19,32 @@ Use placeholders and replace values for each project:
 - Public Nginx is `app-nginx-1` in `/root/app` (ports `80/443`)
 - app is proxied by shared Nginx to its configured host port
 
+## Root operational policy
+
+- Treat `root` as an operator-only account (bootstrap/recovery/privileged actions), not day-to-day content operations.
+- On fresh deploys, bootstrap `root` first from the running container, then create one or more non-root `admin` users.
+- Keep root credentials in deployment secrets (`ROOT_EMAIL`, `ROOT_PASSWORD`, optional `ROOT_NAME`), never in git.
+
+Root bootstrap commands:
+
+```bash
+# Docker Compose stack
+cd REPLACE_DEPLOY_DIR
+docker compose exec -T app sh -lc 'pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"'
+
+# Docker standalone container
+docker exec -it REPLACE_CONTAINER_NAME pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"
+
+# Kubernetes pod
+kubectl exec -it REPLACE_POD_NAME -- pnpm create:root "$ROOT_EMAIL" "$ROOT_PASSWORD" "$ROOT_NAME"
+```
+
+After bootstrap:
+
+1. Log in at `https://REPLACE_DOMAIN/admin` with the root account.
+2. Create a non-root admin user for routine CMS access.
+3. Confirm admin login works and root-only controls remain restricted.
+
 ---
 
 ## Scenario A: code-only changes (no schema changes)
