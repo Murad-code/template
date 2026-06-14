@@ -15,6 +15,7 @@ import { getPayload } from 'payload'
 import { OrderStatus } from '@/components/OrderStatus'
 import { AddressItem } from '@/components/addresses/AddressItem'
 import { AccountDetailMetaLabel, AccountDetailPanel } from '@/components/account/AccountDetailPanel'
+import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +32,7 @@ export default async function Order({ params, searchParams }: PageProps) {
 
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await getCustomerAuthUser(headers)
 
   const { id } = await params
   const { email = '', accessToken = '' } = await searchParams

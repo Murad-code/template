@@ -13,6 +13,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { getSiteConfig } from '@/config/site'
 import { AccountDetailMetaLabel, AccountDetailPanel } from '@/components/account/AccountDetailPanel'
+import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,7 +25,7 @@ type PageProps = {
 export default async function BookingInvoicePage({ params, searchParams }: PageProps) {
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
-  const { user } = await payload.auth({ headers })
+  const user = await getCustomerAuthUser(headers)
   const { enableInvoices } = getSiteConfig()
 
   const { id } = await params
