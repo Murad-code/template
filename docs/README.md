@@ -30,3 +30,6 @@ This folder is intentionally small. Start here and open only the doc you need.
 - [`SEEDING.md`](./SEEDING.md)  
   Demo content seeding for local/testing environments.
 
+- [`known-bugs-and-features.md`](./known-bugs-and-features.md)  
+  Concise tracker for known bugs, planned features, workarounds, and resolution options.
+
