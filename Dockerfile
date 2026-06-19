@@ -23,7 +23,7 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile --ignore-scripts; \
+  elif [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile --ignore-scripts --config.minimumReleaseAge=0; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
@@ -63,6 +63,7 @@ RUN --mount=type=secret,id=build_env,target=/run/secrets/build_env \
   BUILD_DATABASE_URL="${DATABASE_URL}" && \
   set -a && . /run/secrets/build_env && set +a && \
   export DATABASE_URL="${BUILD_DATABASE_URL}" && \
+  export PNPM_CONFIG_MINIMUM_RELEASE_AGE=0 && \
   printf 'y\n' | ( \
     if [ -f yarn.lock ]; then yarn run build; \
     elif [ -f package-lock.json ]; then npm run build; \
