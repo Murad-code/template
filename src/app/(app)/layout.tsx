@@ -136,6 +136,8 @@ export async function generateMetadata() {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const isPlaywright = process.env.PLAYWRIGHT === 'true'
+
   return (
     <html
       className={[
@@ -169,7 +171,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <Providers>
-          <AdminBar />
+          {!isPlaywright && <AdminBar />}
           <LivePreviewListener />
           <ThemePreviewLiveSync />
 
