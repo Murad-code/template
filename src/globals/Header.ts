@@ -6,7 +6,7 @@ import { link } from '@/fields/link'
 
 const revalidateHeaderTag = () => {
   try {
-    revalidateTag('global_header')
+    revalidateTag('global_header', 'max')
   } catch {
     // Ignore when running outside Next.js request/render context (e.g. CLI scripts).
   }

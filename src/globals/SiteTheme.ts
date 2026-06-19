@@ -29,7 +29,7 @@ const colorField = (name: string, label: string, description?: string) => ({
 
 const revalidateSiteThemeTag = () => {
   try {
-    revalidateTag('global_site-theme')
+    revalidateTag('global_site-theme', 'max')
   } catch {
     // Ignore when running outside Next.js request/render context (e.g. CLI scripts).
   }
