@@ -18,6 +18,7 @@ export const Providers: React.FC<{
         <HeaderThemeProvider>
           <SonnerProvider />
           <EcommerceProvider
+            customersSlug="customers"
             currenciesConfig={ecommerceCurrenciesConfig}
             enableVariants={true}
             api={{
