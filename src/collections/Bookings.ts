@@ -55,7 +55,7 @@ export const Bookings: CollectionConfig = {
     {
       name: 'customer',
       type: 'relationship',
-      relationTo: 'customers',
+      relationTo: 'users',
       admin: {
         position: 'sidebar',
         description: 'Customer account (leave empty for guest bookings).',

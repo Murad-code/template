@@ -1,28 +1,27 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { headers as getHeaders } from 'next/headers.js'
+import configPromise from '@payload-config'
 import { Order } from '@/payload-types'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import { AddressListing } from '@/components/addresses/AddressListing'
 import { CreateAddressModal } from '@/components/addresses/CreateAddressModal'
 import { SurfaceCard } from '@/components/ui/surface-card'
-import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
-import configPromise from '@payload-config'
-import { headers as getHeaders } from 'next/headers.js'
 
 export default async function AddressesPage() {
   const headers = await getHeaders()
-  const user = await getCustomerAuthUser(headers)
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers })
+
+  let orders: Order[] | null = null
+
   if (!user) {
     redirect(
       `/login?warning=${encodeURIComponent('Please login to access your account settings.')}`,
     )
   }
-
-  const payload = await getPayload({ config: configPromise })
-
-  let orders: Order[] | null = null
 
   try {
     const ordersResult = await payload.find({

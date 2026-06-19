@@ -97,7 +97,7 @@ export const plugins: Plugin[] = [
       isDocumentOwner,
     },
     customers: {
-      slug: 'customers',
+      slug: 'users',
     },
     orders: {
       ordersCollectionOverride: ({ defaultCollection }) => ({
@@ -116,7 +116,7 @@ export const plugins: Plugin[] = [
               if (typeof customer === 'number') {
                 try {
                   const user = await req.payload.findByID({
-                    collection: 'customers',
+                    collection: 'users',
                     id: customer,
                     depth: 0,
                     req,
@@ -175,7 +175,7 @@ export const plugins: Plugin[] = [
               if (!customerId || (data.customerEmail != null && data.customerEmail !== '')) return data
               try {
                 const user = await req.payload.findByID({
-                  collection: 'customers',
+                  collection: 'users',
                   id: customerId,
                   depth: 0,
                   req,

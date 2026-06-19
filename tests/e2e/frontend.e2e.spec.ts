@@ -405,14 +405,11 @@ test.describe('Frontend', () => {
       data.roles = ['admin']
     }
 
-    const createEndpoint = isAdmin ? `${baseURL}/api/admins` : `${baseURL}/api/customers`
-    const loginEndpoint = isAdmin ? `${baseURL}/api/admins/login` : `${baseURL}/api/customers/login`
-
-    const response = await request.post(createEndpoint, {
+    const response = await request.post(`${baseURL}/api/users`, {
       data,
     })
 
-    const login = await request.post(loginEndpoint, {
+    const login = await request.post(`${baseURL}/api/users/login`, {
       data: {
         email,
         password,

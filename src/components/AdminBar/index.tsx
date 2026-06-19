@@ -6,7 +6,7 @@ import { cn } from '@/utilities/cn'
 import { useSelectedLayoutSegments } from 'next/navigation'
 import { PayloadAdminBar } from '@payloadcms/admin-bar'
 import React, { useState } from 'react'
-import { Admin } from '@/payload-types'
+import { User } from '@/payload-types'
 
 const collectionLabels = {
   pages: {
@@ -35,11 +35,8 @@ export const AdminBar: React.FC<{
   // @ts-ignore - todo fix, not sure why this is erroring
   const collection = collectionLabels?.[segments?.[1]] ? segments?.[1] : 'pages'
 
-  const onAuthChange = React.useCallback((user: Admin) => {
-    const canSeeAdmin =
-      user?.roles &&
-      Array.isArray(user?.roles) &&
-      (user.roles.includes('admin') || user.roles.includes('root'))
+  const onAuthChange = React.useCallback((user: User) => {
+    const canSeeAdmin = user?.roles && Array.isArray(user?.roles) && user?.roles?.includes('admin')
 
     setShow(Boolean(canSeeAdmin))
   }, [])

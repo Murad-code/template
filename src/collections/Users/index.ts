@@ -6,8 +6,7 @@ import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { checkRole } from '@/access/utilities'
 
-import { ensureFirstUserIsRoot } from './hooks/ensureFirstUserIsAdmin'
-import { enforceRootRoleGovernance, preventLastRootDeletion } from './hooks/enforceRootRoleGovernance'
+import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -43,13 +42,9 @@ export const Users: CollectionConfig = {
       defaultValue: ['customer'],
       hasMany: true,
       hooks: {
-        beforeChange: [ensureFirstUserIsRoot],
+        beforeChange: [ensureFirstUserIsAdmin],
       },
       options: [
-        {
-          label: 'root',
-          value: 'root',
-        },
         {
           label: 'admin',
           value: 'admin',
@@ -91,8 +86,4 @@ export const Users: CollectionConfig = {
       },
     },
   ],
-  hooks: {
-    beforeChange: [enforceRootRoleGovernance],
-    beforeDelete: [preventLastRootDeletion],
-  },
 }

@@ -8,7 +8,6 @@ import { createBookingCancelToken } from '@/utilities/bookingCancelToken'
 import { toDateOnlyString } from '@/utilities/dateOnly'
 import { sendBookingConfirmationEmail } from '@/utilities/sendBookingConfirmationEmail'
 import { validateSlotOfferingForBooking } from '@/utilities/bookingSlotOffering'
-import { isCustomerAuthUser } from '@/utilities/isCustomerAuthUser'
 
 function parseOptionalNumericId(value: unknown): number | undefined {
   if (value == null || value === '') return undefined
@@ -50,8 +49,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const payload = await getPayload({ config: configPromise })
   const requestHeaders = await headers()
-  const { user: authUser } = await payload.auth({ headers: requestHeaders })
-  const user = isCustomerAuthUser(authUser) ? authUser : null
+  const { user } = await payload.auth({ headers: requestHeaders })
 
   let stripePaymentIntentId: string | undefined
   let paidAmountPence: number | undefined
