@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Fragment, useCallback, useState, MouseEvent } from 'react'
+import React, { Fragment, useState, MouseEvent } from 'react'
 import { toast, useAuth } from '@payloadcms/ui'
 
 import './index.scss'
@@ -24,64 +24,61 @@ export const SeedButton: React.FC = () => {
   const [mode, setMode] = useState<SeedMode>('hybrid')
   const isRoot = Boolean(user?.roles?.includes('root'))
 
-  if (!isRoot) return null
+  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
 
-  const handleClick = useCallback(
-    async (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
+    if (seeded) {
+      toast.info('Database already seeded.')
+      return
+    }
+    if (loading) {
+      toast.info('Seeding already in progress.')
+      return
+    }
+    if (error) {
+      toast.error(`An error occurred, please refresh and try again.`)
+      return
+    }
 
-      if (seeded) {
-        toast.info('Database already seeded.')
-        return
-      }
-      if (loading) {
-        toast.info('Seeding already in progress.')
-        return
-      }
-      if (error) {
-        toast.error(`An error occurred, please refresh and try again.`)
-        return
-      }
+    setLoading(true)
 
-      setLoading(true)
-
-      try {
-        toast.promise(
-          new Promise((resolve, reject) => {
-            try {
-              fetch('/next/seed', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode }),
+    try {
+      toast.promise(
+        new Promise((resolve, reject) => {
+          try {
+            fetch('/next/seed', {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ mode }),
+            })
+              .then((res) => {
+                if (res.ok) {
+                  resolve(true)
+                  setSeeded(true)
+                } else {
+                  reject('An error occurred while seeding.')
+                }
               })
-                .then((res) => {
-                  if (res.ok) {
-                    resolve(true)
-                    setSeeded(true)
-                  } else {
-                    reject('An error occurred while seeding.')
-                  }
-                })
-                .catch((err) => {
-                  reject(err)
-                })
-            } catch (err) {
-              reject(err)
-            }
-          }),
-          {
-            loading: 'Seeding with data....',
-            success: <SuccessMessage />,
-            error: 'An error occurred while seeding.',
-          },
-        )
-      } catch (err) {
-        setError(err)
-      }
-    },
-    [loading, seeded, error, mode],
-  )
+              .catch((err) => {
+                reject(err)
+              })
+          } catch (err) {
+            reject(err)
+          }
+        }),
+        {
+          loading: 'Seeding with data....',
+          success: <SuccessMessage />,
+          error: 'An error occurred while seeding.',
+        },
+      )
+    } catch (err) {
+      setError(err)
+    }
+  }
+
+  if (!isRoot) return null
 
   let message = ''
   if (loading) message = ' (seeding...)'

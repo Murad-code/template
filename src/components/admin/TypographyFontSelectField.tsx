@@ -194,7 +194,7 @@ export const TypographyFontSelectField: SelectFieldClientComponent = ({ field, p
             ))
           ) : (
             <div style={{ padding: 12, color: 'var(--theme-elevation-600)', fontSize: 13 }}>
-              No fonts found for "{query}".
+              No fonts found for &quot;{query}&quot;.
             </div>
           )}
         </div>
