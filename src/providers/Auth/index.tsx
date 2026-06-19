@@ -1,6 +1,6 @@
 'use client'
 
-import type { Customer } from '@/payload-types'
+import type { User } from '@/payload-types'
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
@@ -15,7 +15,7 @@ type ForgotPassword = (args: { email: string }) => Promise<void> // eslint-disab
 
 type Create = (args: { email: string; password: string; passwordConfirm: string }) => Promise<void> // eslint-disable-line no-unused-vars
 
-type Login = (args: { email: string; password: string }) => Promise<Customer> // eslint-disable-line no-unused-vars
+type Login = (args: { email: string; password: string }) => Promise<User> // eslint-disable-line no-unused-vars
 
 type Logout = () => Promise<void>
 
@@ -25,22 +25,22 @@ type AuthContext = {
   login: Login
   logout: Logout
   resetPassword: ResetPassword
-  setUser: (user: Customer | null) => void // eslint-disable-line no-unused-vars
+  setUser: (user: User | null) => void // eslint-disable-line no-unused-vars
   status: 'loggedIn' | 'loggedOut' | undefined
-  user?: Customer | null
+  user?: User | null
 }
 
 const Context = createContext({} as AuthContext)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<Customer | null>()
+  const [user, setUser] = useState<User | null>()
 
   // used to track the single event of logging in or logging out
   // useful for `useEffect` hooks that should only run once
   const [status, setStatus] = useState<'loggedIn' | 'loggedOut' | undefined>()
   const create = useCallback<Create>(async (args) => {
     try {
-      const res = await fetch(`/api/customers/create`, {
+      const res = await fetch(`/api/users/create`, {
         body: JSON.stringify({
           email: args.email,
           password: args.password,
@@ -68,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = useCallback<Login>(async (args) => {
     try {
-      const res = await fetch(`/api/customers/login`, {
+      const res = await fetch(`/api/users/login`, {
         body: JSON.stringify({
           email: args.email,
           password: args.password,
@@ -96,19 +96,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = useCallback<Logout>(async () => {
     try {
-      const res = await fetch(`/api/customers/logout`, {
+      const res = await fetch(`/api/users/logout`, {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
         method: 'POST',
       })
-      if (!res.ok && res.status !== 401 && res.status !== 404) {
+
+      if (res.ok) {
+        setUser(null)
+        setStatus('loggedOut')
+      } else {
         throw new Error('An error occurred while attempting to logout.')
       }
-
-      setUser(null)
-      setStatus('loggedOut')
     } catch (e) {
       throw new Error('An error occurred while attempting to logout.')
     }
@@ -117,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const res = await fetch(`/api/customers/me`, {
+        const res = await fetch(`/api/users/me`, {
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
@@ -130,12 +131,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(meUser || null)
           setStatus(meUser ? 'loggedIn' : undefined)
         } else {
-          setUser(null)
-          setStatus(undefined)
+          throw new Error('An error occurred while fetching your account.')
         }
       } catch (e) {
         setUser(null)
-        setStatus(undefined)
+        throw new Error('An error occurred while fetching your account.')
       }
     }
 
@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const forgotPassword = useCallback<ForgotPassword>(async (args) => {
     try {
-      const res = await fetch(`/api/customers/forgot-password`, {
+      const res = await fetch(`/api/users/forgot-password`, {
         body: JSON.stringify({
           email: args.email,
         }),
@@ -169,7 +169,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const resetPassword = useCallback<ResetPassword>(async (args) => {
     try {
-      const res = await fetch(`/api/customers/reset-password`, {
+      const res = await fetch(`/api/users/reset-password`, {
         body: JSON.stringify({
           password: args.password,
           passwordConfirm: args.passwordConfirm,
@@ -213,6 +213,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   )
 }
 
-type UseAuth<T = Customer> = () => AuthContext // eslint-disable-line no-unused-vars
+type UseAuth<T = User> = () => AuthContext // eslint-disable-line no-unused-vars
 
 export const useAuth: UseAuth = () => useContext(Context)

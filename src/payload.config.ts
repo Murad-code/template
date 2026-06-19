@@ -28,8 +28,7 @@ import { Services } from '@/collections/Services'
 import { ThemePalettes } from '@/collections/ThemePalettes'
 import { Media } from '@/collections/Media'
 import { Pages } from '@/collections/Pages'
-import { Admins } from '@/collections/Admins'
-import { Customers } from '@/collections/Customers'
+import { Users } from '@/collections/Users'
 import { BlockedDates } from '@/globals/BlockedDates'
 import { BookingSettings } from '@/globals/BookingSettings'
 import { Footer } from '@/globals/Footer'
@@ -89,11 +88,10 @@ export default buildConfig({
       // Link to the frontend products page in the admin sidebar.
       afterNavLinks: ['@/components/ViewProductsLink'],
     },
-    user: Admins.slug,
+    user: Users.slug,
   },
   collections: [
-    Admins,
-    Customers,
+    Users,
     Pages,
     Categories,
     ThemePalettes,

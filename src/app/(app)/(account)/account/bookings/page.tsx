@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import { headers as getHeaders } from 'next/headers'
+import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 
 import { getSiteConfig } from '@/config/site'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
-import configPromise from '@payload-config'
 
 import { MyBookingsList } from './MyBookingsList'
 
@@ -17,12 +16,12 @@ export default async function MyBookingsPage() {
   }
 
   const headers = await getHeaders()
-  const user = await getCustomerAuthUser(headers)
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers })
+
   if (!user) {
     redirect(`/login?warning=${encodeURIComponent('Please log in to view your bookings.')}`)
   }
-
-  const payload = await getPayload({ config: configPromise })
 
   let bookings: Array<{
     id: number

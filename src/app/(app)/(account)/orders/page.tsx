@@ -7,10 +7,9 @@ import { getSiteConfig } from '@/config/site'
 import { OrderItem } from '@/components/OrderItem'
 import { SurfaceCard } from '@/components/ui/surface-card'
 import { headers as getHeaders } from 'next/headers'
+import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
-import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
-import configPromise from '@payload-config'
 
 export default async function Orders() {
   const { ecommerceEnabled, bookingEnabled } = getSiteConfig()
@@ -19,14 +18,14 @@ export default async function Orders() {
   }
 
   const headers = await getHeaders()
-  const user = await getCustomerAuthUser(headers)
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers })
+
+  let orders: Order[] | null = null
+
   if (!user) {
     redirect(`/login?warning=${encodeURIComponent('Please login to access your orders.')}`)
   }
-
-  const payload = await getPayload({ config: configPromise })
-
-  let orders: Order[] | null = null
 
   try {
     const ordersResult = await payload.find({

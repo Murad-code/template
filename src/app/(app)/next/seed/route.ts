@@ -21,7 +21,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const { user } = await payload.auth({ headers: requestHeaders })
 
-  if (!user || !checkRole(['root'], user)) {
+  if (!user || !checkRole(['admin'], user)) {
     return new Response('Action forbidden.', { status: 403 })
   }
 

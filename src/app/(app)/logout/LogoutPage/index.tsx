@@ -3,11 +3,9 @@
 import { useAuth } from '@/providers/Auth'
 import Link from 'next/link'
 import React, { Fragment, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 export const LogoutPage: React.FC = (props) => {
   const { logout } = useAuth()
-  const router = useRouter()
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
 
@@ -16,16 +14,13 @@ export const LogoutPage: React.FC = (props) => {
       try {
         await logout()
         setSuccess('Logged out successfully.')
-        setTimeout(() => {
-          router.replace('/login')
-        }, 300)
       } catch (_) {
         setError('You are already logged out.')
       }
     }
 
     void performLogout()
-  }, [logout, router])
+  }, [logout])
 
   return (
     <Fragment>

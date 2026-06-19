@@ -1,7 +1,7 @@
 'use client'
 
-import React, { Fragment, useState, MouseEvent } from 'react'
-import { toast, useAuth } from '@payloadcms/ui'
+import React, { Fragment, useCallback, useState, MouseEvent } from 'react'
+import { toast } from '@payloadcms/ui'
 
 import './index.scss'
 
@@ -17,14 +17,11 @@ const SuccessMessage: React.FC = () => (
 )
 
 export const SeedButton: React.FC = () => {
-  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const [mode, setMode] = useState<SeedMode>('hybrid')
-  const isRoot = Boolean(user?.roles?.includes('root'))
-
-  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback(async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
     if (seeded) {
@@ -76,9 +73,7 @@ export const SeedButton: React.FC = () => {
     } catch (err) {
       setError(err)
     }
-  }
-
-  if (!isRoot) return null
+  }, [seeded, loading, error, mode])
 
   let message = ''
   if (loading) message = ' (seeding...)'
@@ -86,31 +81,25 @@ export const SeedButton: React.FC = () => {
   if (error) message = ` (error: ${error})`
 
   return (
-    <li>
-      <Fragment>
-        <label htmlFor="seed-mode" style={{ marginRight: '8px' }}>
-          Seed as:
-        </label>
-        <select
-          id="seed-mode"
-          value={mode}
-          onChange={(e) => setMode(e.target.value as SeedMode)}
-          disabled={loading}
-          style={{ marginRight: '8px' }}
-        >
-          <option value="ecommerce">Ecommerce</option>
-          <option value="booking">Booking</option>
-          <option value="hybrid">Hybrid</option>
-        </select>
-        <button className="seedButton" onClick={handleClick}>
-          Seed your database
-        </button>
-        {message}
-      </Fragment>
-      {' with a few products and pages to jump-start your new project, then '}
-      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-      <a href="/">visit your website</a>
-      {' to see the results.'}
-    </li>
+    <Fragment>
+      <label htmlFor="seed-mode" style={{ marginRight: '8px' }}>
+        Seed as:
+      </label>
+      <select
+        id="seed-mode"
+        value={mode}
+        onChange={(e) => setMode(e.target.value as SeedMode)}
+        disabled={loading}
+        style={{ marginRight: '8px' }}
+      >
+        <option value="ecommerce">Ecommerce</option>
+        <option value="booking">Booking</option>
+        <option value="hybrid">Hybrid</option>
+      </select>
+      <button className="seedButton" onClick={handleClick}>
+        Seed your database
+      </button>
+      {message}
+    </Fragment>
   )
 }

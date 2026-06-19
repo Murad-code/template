@@ -64,7 +64,7 @@ export const BookingSlots: CollectionConfig = {
     {
       name: 'staff',
       type: 'relationship',
-      relationTo: 'admins',
+      relationTo: 'users',
       admin: { description: 'Optional staff member assigned to this slot.' },
     },
     {

@@ -3,14 +3,16 @@ import type { Metadata } from 'next'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import React from 'react'
 import { FindOrderForm } from '@/components/forms/FindOrderForm'
+import { getPayload } from 'payload'
 import { headers as getHeaders } from 'next/headers.js'
+import configPromise from '@payload-config'
 import { redirectIfEcommerceDisabled } from '@/utilities/requireEcommerce'
-import { getCustomerAuthUser } from '@/utilities/getCustomerAuthUser'
 
 export default async function FindOrderPage() {
   redirectIfEcommerceDisabled()
   const headers = await getHeaders()
-  const user = await getCustomerAuthUser(headers)
+  const payload = await getPayload({ config: configPromise })
+  const { user } = await payload.auth({ headers })
 
   return (
     <div className="container py-16">
