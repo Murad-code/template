@@ -28,7 +28,8 @@ Preferred source of truth:
 
 - `PROJECT_TYPE` (`ecommerce` | `booking` | `hybrid`)
 - `SITE_NAME`
-- `COMPANY_NAME`
+- `COMPANY_NAME` (server/internal usage)
+- `NEXT_PUBLIC_COMPANY_NAME` (required for client-rendered brand text)
 - `PROJECT_SLUG` (example: `client-portal`)
 - `DEPLOY_DIR` (recommended: `/root/PROJECT_SLUG`)
 
@@ -99,7 +100,7 @@ Preferred source of truth:
 At the start of a deployment workflow, the agent should ask these questions in chat:
 
 1. What `PROJECT_TYPE` is this deployment (`ecommerce`, `booking`, or `hybrid`)?
-2. What are `SITE_NAME` and `COMPANY_NAME`?
+2. What are `SITE_NAME`, `COMPANY_NAME`, and `NEXT_PUBLIC_COMPANY_NAME`?
 3. What are `DOMAIN` and `WWW_DOMAIN`?
 4. What Docker image tag should be built and deployed (`DOCKER_IMAGE`)?
 5. What DB values should be used (`DB_USER`, `DB_PASSWORD`, `DB_NAME`)?
@@ -415,6 +416,7 @@ Project values:
 - PROJECT_TYPE=...
 - SITE_NAME=...
 - COMPANY_NAME=...
+- NEXT_PUBLIC_COMPANY_NAME=...
 - PROJECT_SLUG=...
 - DEPLOY_DIR=...
 - DOMAIN=...

@@ -4,14 +4,13 @@ import type { Header } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { Button } from '@/components/ui/button'
-import { IconSquareButton } from '@/components/ui/icon-square-button'
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from '@/components/ui/sheet'
 import { useAuth } from '@/providers/Auth'
 import { MenuIcon } from 'lucide-react'
@@ -26,6 +25,8 @@ interface Props {
 
 export function MobileMenu({ menu, ecommerceEnabled }: Props) {
   const { user } = useAuth()
+  const companyName =
+    process.env.NEXT_PUBLIC_COMPANY_NAME || process.env.NEXT_PUBLIC_SITE_NAME || 'My Store'
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -50,14 +51,14 @@ export function MobileMenu({ menu, ecommerceEnabled }: Props) {
   return (
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
       <SheetTrigger asChild>
-        <IconSquareButton aria-label="Open menu">
+        <Button aria-label="Open menu" size="icon" variant="ghost">
           <MenuIcon className="h-4" />
-        </IconSquareButton>
+        </Button>
       </SheetTrigger>
 
       <SheetContent side="left" className="px-4">
         <SheetHeader className="px-0 pt-4 pb-0">
-          <SheetTitle>My Store</SheetTitle>
+          <SheetTitle>{companyName}</SheetTitle>
 
           <SheetDescription />
         </SheetHeader>

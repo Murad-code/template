@@ -13,7 +13,8 @@ Suggested workflow:
 - `PROJECT_TYPE`: `REPLACE_PROJECT_TYPE` (`ecommerce` | `booking` | `hybrid`)
 - `PROJECT_SLUG`: `REPLACE_PROJECT_SLUG`
 - `SITE_NAME`: `REPLACE_SITE_NAME`
-- `COMPANY_NAME`: `REPLACE_COMPANY_NAME`
+- `COMPANY_NAME`: `REPLACE_COMPANY_NAME` (server/internal usage)
+- `NEXT_PUBLIC_COMPANY_NAME`: `REPLACE_COMPANY_NAME` (client-visible brand name)
 
 ## Domains and URLs
 

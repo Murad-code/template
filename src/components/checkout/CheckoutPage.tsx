@@ -143,8 +143,8 @@ export const CheckoutPage: React.FC = () => {
         <h2 className="font-medium text-3xl">Contact</h2>
         {!user && (
           <SurfaceCard className="w-full gap-4 rounded-lg bg-accent p-4">
-            <div className="prose dark:prose-invert">
-              <Button asChild className="no-underline text-inherit">
+            <div>
+              <Button asChild variant="outline">
                 <Link href="/login">Log in</Link>
               </Button>
               <p className="mt-0">
