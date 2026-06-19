@@ -10,6 +10,6 @@ test.describe('Hybrid project type', () => {
     await expect(page).toHaveURL(/\/shop/)
 
     await page.goto(`${baseURL}/book`)
-    await expect(page.getByRole('heading', { name: /book a slot/i })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /book a service/i })).toBeVisible()
   })
 })

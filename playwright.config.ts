@@ -34,8 +34,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev',
-    reuseExistingServer: true,
+    command:
+      'PLAYWRIGHT=true NEXT_PUBLIC_SERVER_URL=http://localhost:3000 PAYLOAD_PUBLIC_SERVER_URL=http://localhost:3000 pnpm dev',
+    reuseExistingServer: false,
     url: 'http://localhost:3000',
   },
 })
