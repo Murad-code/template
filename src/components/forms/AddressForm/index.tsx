@@ -50,6 +50,8 @@ export const AddressForm: React.FC<Props> = ({
   callback,
   skipSubmission,
 }) => {
+  const [submitError, setSubmitError] = React.useState<null | string>(null)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
   const {
     register,
     handleSubmit,
@@ -64,17 +66,30 @@ export const AddressForm: React.FC<Props> = ({
   const onSubmit = useCallback(
     async (data: AddressFormValues) => {
       const newData = deepMergeSimple(initialData || {}, data)
+      setSubmitError(null)
+      setIsSubmitting(true)
 
-      if (!skipSubmission) {
-        if (addressID) {
-          await updateAddress(addressID, newData)
-        } else {
-          await createAddress(newData)
+      try {
+        if (!skipSubmission) {
+          if (addressID) {
+            await updateAddress(addressID, newData)
+          } else {
+            await createAddress(newData)
+          }
         }
-      }
 
-      if (callback) {
-        callback(newData)
+        if (callback) {
+          callback(newData)
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unable to save address.'
+        if (message.includes('User must be logged in')) {
+          setSubmitError('Please log in and try again to save your address.')
+          return
+        }
+        setSubmitError(message)
+      } finally {
+        setIsSubmitting(false)
       }
     },
     [initialData, skipSubmission, callback, addressID, updateAddress, createAddress],
@@ -83,6 +98,11 @@ export const AddressForm: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 mb-8">
+        {submitError && (
+          <FormItem>
+            <FormError message={submitError} />
+          </FormItem>
+        )}
         <div className="flex flex-col md:flex-row gap-4">
           <FormItem className="shrink">
             <Label htmlFor="title">Title</Label>
@@ -220,7 +240,9 @@ export const AddressForm: React.FC<Props> = ({
         </FormItem>
       </div>
 
-      <Button type="submit">Submit</Button>
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Saving...' : 'Submit'}
+      </Button>
     </form>
   )
 }
