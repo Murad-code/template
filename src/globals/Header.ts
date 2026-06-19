@@ -1,7 +1,16 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateTag } from 'next/cache'
 
 import { adminOnly } from '@/access/adminOnly'
 import { link } from '@/fields/link'
+
+const revalidateHeaderTag = () => {
+  try {
+    revalidateTag('global_header')
+  } catch {
+    // Ignore when running outside Next.js request/render context (e.g. CLI scripts).
+  }
+}
 
 export const Header: GlobalConfig = {
   slug: 'header',
@@ -38,4 +47,11 @@ export const Header: GlobalConfig = {
       maxRows: 10,
     },
   ],
+  hooks: {
+    afterChange: [
+      () => {
+        revalidateHeaderTag()
+      },
+    ],
+  },
 }
