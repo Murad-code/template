@@ -34,6 +34,7 @@ import { BookingSettings } from '@/globals/BookingSettings'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { SiteTheme } from '@/globals/SiteTheme'
+import { migrations } from './migrations'
 import { plugins } from './plugins'
 
 const filename = fileURLToPath(import.meta.url)
@@ -107,6 +108,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    prodMigrations: migrations,
+    // Local DB was synced via push for UI audit blocks; avoid interactive drizzle enum prompts.
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
   editor: lexicalEditor({
     features: () => {
