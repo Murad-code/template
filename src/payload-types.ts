@@ -146,6 +146,7 @@ export interface Config {
     header: Header;
     footer: Footer;
     'site-theme': SiteTheme;
+    'site-settings': SiteSetting;
     'blocked-dates': BlockedDate;
     'booking-settings': BookingSetting;
   };
@@ -153,6 +154,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-theme': SiteThemeSelect<false> | SiteThemeSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'blocked-dates': BlockedDatesSelect<false> | BlockedDatesSelect<true>;
     'booking-settings': BookingSettingsSelect<false> | BookingSettingsSelect<true>;
   };
@@ -738,6 +740,10 @@ export interface BannerBlock {
 export interface FormBlock {
   form: number | Form;
   enableIntro?: boolean | null;
+  /**
+   * Display public email, phone and address from Site settings beside the form.
+   */
+  showSiteContactDetails?: boolean | null;
   introContent?: {
     root: {
       type: string;
@@ -1977,6 +1983,7 @@ export interface BannerBlockSelect<T extends boolean = true> {
 export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
+  showSiteContactDetails?: T;
   introContent?: T;
   id?: T;
   blockName?: T;
@@ -2904,6 +2911,29 @@ export interface SiteTheme {
   createdAt?: string | null;
 }
 /**
+ * Public contact details for the contact page, plus who receives enquiry emails. Outbound mail still uses SMTP_FROM_EMAIL as the From address.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  publicEmail?: string | null;
+  publicPhone?: string | null;
+  publicAddress?: string | null;
+  /**
+   * Choose a specific inbox or an admin user account.
+   */
+  enquiryRecipientSource?: ('customEmail' | 'adminUser') | null;
+  enquiryEmail?: string | null;
+  /**
+   * Enquiries are sent to this admin user’s login email.
+   */
+  enquiryAdminUser?: (number | null) | User;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * Date ranges when the business is closed or bookings are disabled. Used to hide slots in booking flows.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3047,6 +3077,21 @@ export interface SiteThemeSelect<T extends boolean = true> {
         lightText?: T;
         darkText?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  publicEmail?: T;
+  publicPhone?: T;
+  publicAddress?: T;
+  enquiryRecipientSource?: T;
+  enquiryEmail?: T;
+  enquiryAdminUser?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
