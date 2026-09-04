@@ -14,6 +14,7 @@ import { readLocalFile } from './localFile'
 import { slugify } from './slugify'
 import { upsertThemePalettes } from '@/utilities/themePalettes'
 import { Address, Transaction } from '@/payload-types'
+import { getDefaultSiteSettingsData } from '@/utilities/getEnquiryRecipient'
 import type { Header, Footer, Media, Product, SiteTheme } from '@/payload-types'
 
 const collections: CollectionSlug[] = [
@@ -38,7 +39,7 @@ const collections: CollectionSlug[] = [
   'theme-palettes',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer', 'site-theme']
+const globals: GlobalSlug[] = ['header', 'footer', 'site-theme', 'site-settings']
 
 const baseAddressUKData: Transaction['billingAddress'] = {
   title: 'Mr.',
@@ -711,11 +712,13 @@ export const seed = async ({
       const data =
         global === 'site-theme'
           ? ({ paletteMode: 'palette', palette: null } as Partial<SiteTheme>)
-          : ({ navItems: [] } as Partial<Header> & Partial<Footer>)
+          : global === 'site-settings'
+            ? getDefaultSiteSettingsData()
+            : ({ navItems: [] } as Partial<Header> & Partial<Footer>)
 
       return payload.updateGlobal({
         slug: global,
-        data,
+        data: data as never,
         depth: 0,
         req,
         context: {
@@ -1254,6 +1257,15 @@ export const seed = async ({
       paletteMode: 'palette',
       palette: defaultPalette?.id,
     } as Partial<SiteTheme>,
+    depth: 0,
+    req,
+    context: {
+      disableRevalidate: true,
+    },
+  })
+  await payload.updateGlobal({
+    slug: 'site-settings',
+    data: getDefaultSiteSettingsData() as never,
     depth: 0,
     req,
     context: {

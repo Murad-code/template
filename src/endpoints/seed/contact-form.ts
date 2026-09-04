@@ -1,8 +1,13 @@
 import { RequiredDataFromCollectionSlug } from 'payload'
 
+import { getSiteConfig } from '@/config/site'
+
 export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = () => {
-  const brandName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Site'
-  const fromEmail = process.env.SMTP_FROM_EMAIL || `noreply@${brandName.toLowerCase().replace(/\s+/g, '')}.local`
+  const { companyName, siteName } = getSiteConfig()
+  const brandName = companyName || siteName || 'Site'
+  const fromEmail =
+    process.env.SMTP_FROM_EMAIL || `noreply@${brandName.toLowerCase().replace(/\s+/g, '')}.local`
+
   return {
     confirmationMessage: {
       root: {
@@ -17,7 +22,7 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'The contact form has been submitted successfully.',
+                text: 'Thanks — we have received your enquiry.',
                 version: 1,
               },
             ],
@@ -25,6 +30,25 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
             format: '',
             indent: 0,
             tag: 'h2',
+            version: 1,
+          },
+          {
+            type: 'paragraph',
+            children: [
+              {
+                type: 'text',
+                detail: 0,
+                format: 0,
+                mode: 'normal',
+                style: '',
+                text: `Someone from ${brandName} will get back to you as soon as possible.`,
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            textFormat: 0,
             version: 1,
           },
         ],
@@ -52,7 +76,7 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: 'Your contact form submission was successfully received.',
+                    text: `Thank you for contacting ${brandName}. We have received your enquiry and will reply soon.`,
                     version: 1,
                   },
                 ],
@@ -69,7 +93,7 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
             version: 1,
           },
         },
-        subject: "You've received a new message.",
+        subject: `We received your enquiry — ${brandName}`,
       },
     ],
     fields: [
@@ -79,13 +103,21 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
         blockType: 'text',
         label: 'Name',
         required: true,
-        width: 100,
+        width: 50,
       },
       {
         name: 'email',
         blockName: 'email',
         blockType: 'email',
         label: 'Email',
+        required: true,
+        width: 50,
+      },
+      {
+        name: 'phone',
+        blockName: 'phone',
+        blockType: 'text',
+        label: 'Phone',
         required: true,
         width: 100,
       },

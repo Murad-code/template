@@ -49,7 +49,7 @@ For the legacy homepage backup, use `pnpm seed:legacy` from the CLI.
 
 ## What the full seed creates
 
-1. Clears header/footer globals and seeded collections (categories, media, pages, products, forms, bookings, etc.).
+1. Clears header/footer/site-theme/site-settings globals and seeded collections (categories, media, pages, products, forms, bookings, etc.).
 2. Deletes the demo customer (`customer@blackoakdemo.local`) if present.
 3. Loads images from `seed/` and creates media records.
 4. Creates coffee/tea **categories**, **products**, **services**, contact form, and pages:
@@ -57,7 +57,19 @@ For the legacy homepage backup, use `pnpm seed:legacy` from the CLI.
    - **Block showcase** (`/block-showcase`)
    - About, Contact, Blog, marketing pages, brew guides
 5. Demo customer, addresses, cart, order, and sample bookings.
-6. Header/footer nav and theme palettes.
+6. Header/footer nav, theme palettes, and **Site settings** (public contact details + enquiry recipient).
+
+### Contact page and enquiries
+
+The seed publishes `/contact` with a form that collects **name, email, phone, and message**.
+
+- Visitor confirmation email is stored on the **Contact Form** document (`emails[]` → `{{email}}`).
+- Admin enquiry email is **not** hardcoded on the form. It is sent via `payload.sendEmail` (same Resend/SMTP adapter as invoices) to the **Site settings** enquiry recipient:
+  1. Custom enquiry email, or
+  2. Selected admin user’s email, then
+  3. `COMPANY_EMAIL` → `ADMIN_EMAIL` → `SMTP_FROM_EMAIL`
+
+Re-seed (or edit the form/page in admin) is required to refresh an existing database’s contact form fields and page copy. The Site settings global and enquiry hook apply without re-seed once migrations have run.
 
 ## Troubleshooting
 

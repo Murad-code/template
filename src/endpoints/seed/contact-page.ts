@@ -1,14 +1,19 @@
 import { RequiredDataFromCollectionSlug } from 'payload'
 
+import { getSiteConfig } from '@/config/site'
+
 import { heading, paragraph, richText } from './home'
 
 type ContactPageArgs = {
-  contactFormId: number
+  contactFormId: number | string
 }
 
 export const contactPageData: (
   args: ContactPageArgs,
 ) => RequiredDataFromCollectionSlug<'pages'> = ({ contactFormId }) => {
+  const { siteName } = getSiteConfig()
+  const brand = siteName || 'us'
+
   return {
     slug: 'contact',
     title: 'Contact',
@@ -18,7 +23,7 @@ export const contactPageData: (
       richText: richText(
         heading('Contact us', 'h1'),
         paragraph(
-          'Questions about coffee, workshops or orders? Send us a message and we will get back to you soon.',
+          `Questions about ${brand}, orders or bookings? Send an enquiry and we will get back to you soon.`,
         ),
       ),
     },
@@ -26,17 +31,17 @@ export const contactPageData: (
       {
         blockType: 'formBlock',
         enableIntro: true,
-        form: contactFormId,
+        showSiteContactDetails: true,
+        form: contactFormId as number,
         introContent: richText(
           heading('Send a message', 'h2'),
-          paragraph('Fill in the form below and our team will respond as soon as possible.'),
+          paragraph('Fill in the form below with your name, email, phone and message.'),
         ),
       },
     ],
     meta: {
-      title: 'Contact | Black Oak Coffee Co.',
-      description:
-        'Get in touch with Black Oak Coffee Co. about orders, workshops and general enquiries.',
+      title: `Contact | ${brand}`,
+      description: `Get in touch with ${brand} about orders, bookings and general enquiries.`,
     },
   }
 }
