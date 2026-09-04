@@ -1,0 +1,1625 @@
+{
+  "capturedAt": "2026-08-09T12:09:28.514Z",
+  "baseUrl": "https://muradsprojects.co.uk",
+  "routes": [
+    "/",
+    "/shop",
+    "/about",
+    "/blog",
+    "/contact",
+    "/book",
+    "/account",
+    "/find-order",
+    "/login"
+  ],
+  "captures": [
+    {
+      "route": "/",
+      "slug": "/",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/home.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/"
+      }
+    },
+    {
+      "route": "/",
+      "slug": "/",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/home.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/"
+      }
+    },
+    {
+      "route": "/",
+      "slug": "/",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/home.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/"
+      }
+    },
+    {
+      "route": "/",
+      "slug": "/",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/home.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/"
+      }
+    },
+    {
+      "route": "/shop",
+      "slug": "/shop",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/shop.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Shop | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/shop"
+      }
+    },
+    {
+      "route": "/shop",
+      "slug": "/shop",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/shop.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Shop | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/shop"
+      }
+    },
+    {
+      "route": "/shop",
+      "slug": "/shop",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/shop.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Shop | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/shop"
+      }
+    },
+    {
+      "route": "/shop",
+      "slug": "/shop",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/shop.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Shop | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/shop"
+      }
+    },
+    {
+      "route": "/about",
+      "slug": "/about",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/about.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "About Us | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/about"
+      }
+    },
+    {
+      "route": "/about",
+      "slug": "/about",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/about.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "About Us | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/about"
+      }
+    },
+    {
+      "route": "/about",
+      "slug": "/about",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/about.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "About Us | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/about"
+      }
+    },
+    {
+      "route": "/about",
+      "slug": "/about",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/about.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "About Us | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/about"
+      }
+    },
+    {
+      "route": "/blog",
+      "slug": "/blog",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/blog.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Brew Guides | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/blog"
+      }
+    },
+    {
+      "route": "/blog",
+      "slug": "/blog",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/blog.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Brew Guides | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/blog"
+      }
+    },
+    {
+      "route": "/blog",
+      "slug": "/blog",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/blog.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Brew Guides | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/blog"
+      }
+    },
+    {
+      "route": "/blog",
+      "slug": "/blog",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/blog.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "71.111px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Brew Guides | Black Oak Coffee Co. | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/blog"
+      }
+    },
+    {
+      "route": "/contact",
+      "slug": "/contact",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/contact.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Contact | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/contact"
+      }
+    },
+    {
+      "route": "/contact",
+      "slug": "/contact",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/contact.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Contact | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/contact"
+      }
+    },
+    {
+      "route": "/contact",
+      "slug": "/contact",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/contact.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Contact | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/contact"
+      }
+    },
+    {
+      "route": "/contact",
+      "slug": "/contact",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/contact.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": null,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Contact | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/contact"
+      }
+    },
+    {
+      "route": "/book",
+      "slug": "/book",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/book.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "30px",
+          "fontWeight": "500",
+          "lineHeight": "36px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/book"
+      }
+    },
+    {
+      "route": "/book",
+      "slug": "/book",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/book.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "30px",
+          "fontWeight": "500",
+          "lineHeight": "36px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/book"
+      }
+    },
+    {
+      "route": "/book",
+      "slug": "/book",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/book.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "30px",
+          "fontWeight": "500",
+          "lineHeight": "36px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/book"
+      }
+    },
+    {
+      "route": "/book",
+      "slug": "/book",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/book.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "30px",
+          "fontWeight": "500",
+          "lineHeight": "36px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/book"
+      }
+    },
+    {
+      "route": "/account",
+      "slug": "/account",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/account.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login?warning=Please%20login%20to%20access%20your%20account%20settings."
+      }
+    },
+    {
+      "route": "/account",
+      "slug": "/account",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/account.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login?warning=Please%20login%20to%20access%20your%20account%20settings."
+      }
+    },
+    {
+      "route": "/account",
+      "slug": "/account",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/account.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login?warning=Please%20login%20to%20access%20your%20account%20settings."
+      }
+    },
+    {
+      "route": "/account",
+      "slug": "/account",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/account.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login?warning=Please%20login%20to%20access%20your%20account%20settings."
+      }
+    },
+    {
+      "route": "/find-order",
+      "slug": "/find-order",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/find-order.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "lineHeight": "28px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Find order | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/find-order"
+      }
+    },
+    {
+      "route": "/find-order",
+      "slug": "/find-order",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/find-order.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "lineHeight": "28px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Find order | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/find-order"
+      }
+    },
+    {
+      "route": "/find-order",
+      "slug": "/find-order",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/find-order.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "lineHeight": "28px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Find order | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/find-order"
+      }
+    },
+    {
+      "route": "/find-order",
+      "slug": "/find-order",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/find-order.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "lineHeight": "28px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Find order | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/find-order"
+      }
+    },
+    {
+      "route": "/login",
+      "slug": "/login",
+      "viewport": "desktop",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/desktop/light/login.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login"
+      }
+    },
+    {
+      "route": "/login",
+      "slug": "/login",
+      "viewport": "desktop",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/desktop/dark/login.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login"
+      }
+    },
+    {
+      "route": "/login",
+      "slug": "/login",
+      "viewport": "mobile",
+      "theme": "light",
+      "screenshot": "docs/ui-audit/screenshots/mobile/light/login.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#FFFFFF",
+          "--foreground": "#111827",
+          "--card": "#F6F7F9",
+          "--card-foreground": "#111827",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(20.5% 0 0deg)",
+          "--primary-foreground": "oklch(98.5% 0 0deg)",
+          "--muted": "oklch(97% 0 0deg)",
+          "--muted-foreground": "oklch(55.6% 0 0deg)",
+          "--landing-background": "#FFFFFF",
+          "--landing-card-background": "#F6F7F9",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#111827",
+          "--landing-body": "#111827",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(17, 24, 39)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(17, 24, 39)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login"
+      }
+    },
+    {
+      "route": "/login",
+      "slug": "/login",
+      "viewport": "mobile",
+      "theme": "dark",
+      "screenshot": "docs/ui-audit/screenshots/mobile/dark/login.png",
+      "tokens": {
+        "cssVariables": {
+          "--background": "#111827",
+          "--foreground": "#F9FAFB",
+          "--card": "#1F2937",
+          "--card-foreground": "#F9FAFB",
+          "--border": "#D3D9E2",
+          "--primary": "oklch(98.5% 0 0deg)",
+          "--primary-foreground": "oklch(20.5% 0 0deg)",
+          "--muted": "oklch(26.9% 0 0deg)",
+          "--muted-foreground": "oklch(70.8% 0 0deg)",
+          "--landing-background": "#111827",
+          "--landing-card-background": "#1F2937",
+          "--landing-card-border": "#D3D9E2",
+          "--landing-heading": "#F9FAFB",
+          "--landing-body": "#F9FAFB",
+          "--radius": "0.625rem"
+        },
+        "body": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "fontFamily": "GeistSans, \"GeistSans Fallback\", ui-sans-serif, system-ui, sans-serif",
+          "fontSize": "16px",
+          "lineHeight": "24px"
+        },
+        "h1": {
+          "color": "rgb(249, 250, 251)",
+          "fontSize": "28.8px",
+          "fontWeight": "400",
+          "lineHeight": "43.2px",
+          "letterSpacing": "normal"
+        },
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "title": "Login | Black Oak Coffee Co.",
+        "url": "https://muradsprojects.co.uk/login"
+      }
+    }
+  ]
+}
