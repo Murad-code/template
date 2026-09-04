@@ -9,6 +9,7 @@ import { Width } from '../Width'
 import { capitaliseFirstLetter } from '@/utilities/capitaliseFirstLetter'
 import { FormItem } from '@/components/forms/FormItem'
 import { FormError } from '@/components/forms/FormError'
+import { ENQUIRY_MESSAGE_MIN, validateEnquiryMessage } from '@/utilities/validateEnquiryFields'
 
 export const Textarea: React.FC<
   TextField & {
@@ -40,9 +41,18 @@ export const Textarea: React.FC<
           id={name}
           rows={rows}
           {...register(name, {
+            minLength:
+              name === 'message'
+                ? {
+                    value: ENQUIRY_MESSAGE_MIN,
+                    message: `Message must be at least ${ENQUIRY_MESSAGE_MIN} characters.`,
+                  }
+                : undefined,
             required: requiredFromProps
               ? `${capitaliseFirstLetter(label || name)} is required.`
               : undefined,
+            validate:
+              name === 'message' ? (value) => validateEnquiryMessage(value) || true : undefined,
           })}
         />
 

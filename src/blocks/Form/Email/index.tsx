@@ -9,6 +9,7 @@ import { Width } from '../Width'
 import { FormItem } from '@/components/forms/FormItem'
 import { FormError } from '@/components/forms/FormError'
 import { capitaliseFirstLetter } from '@/utilities/capitaliseFirstLetter'
+import { ENQUIRY_EMAIL_PATTERN, validateEnquiryEmail } from '@/utilities/validateEnquiryFields'
 
 export const Email: React.FC<
   EmailField & {
@@ -25,14 +26,19 @@ export const Email: React.FC<
       <FormItem>
         <Label htmlFor={name}>{label}</Label>
         <Input
+          autoComplete="email"
           defaultValue={defaultValue}
           id={name}
-          type="text"
+          type="email"
           {...register(name, {
-            pattern: /^\S[^\s@]*@\S+$/,
+            pattern: {
+              value: ENQUIRY_EMAIL_PATTERN,
+              message: 'Enter a valid email address.',
+            },
             required: requiredFromProps
               ? `${capitaliseFirstLetter(label || name)} is required.`
               : undefined,
+            validate: (value) => validateEnquiryEmail(value) || true,
           })}
         />
 
