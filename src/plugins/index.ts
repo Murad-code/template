@@ -17,8 +17,13 @@ import { VariantsCollection } from '@/collections/Variants'
 import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { customerOnlyFieldAccess } from '@/access/customerOnlyFieldAccess'
+import { publicAccess } from '@/access/publicAccess'
 import { isAdmin } from '@/access/isAdmin'
 import { isDocumentOwner } from '@/access/isDocumentOwner'
+import {
+  notifyEnquirySubmission,
+  validateEnquirySubmission,
+} from '@/hooks/formSubmissionsEnquiry'
 import { sendOrderConfirmationEmail } from '@/utilities/sendOrderConfirmationEmail'
 import {
   cartReservationAfterChange,
@@ -55,11 +60,15 @@ export const plugins: Plugin[] = [
       admin: {
         group: 'Content',
       },
+      hooks: {
+        beforeChange: [validateEnquirySubmission],
+        afterChange: [notifyEnquirySubmission],
+      },
     },
     formOverrides: {
       access: {
         delete: isAdmin,
-        read: isAdmin,
+        read: publicAccess,
         update: isAdmin,
         create: isAdmin,
       },
