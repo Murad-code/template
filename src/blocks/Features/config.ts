@@ -7,6 +7,8 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { link } from '@/fields/link'
+
 export const Features: Block = {
   slug: 'features',
   interfaceName: 'FeaturesBlock',
@@ -27,6 +29,7 @@ export const Features: Block = {
       options: [
         { label: 'Cards', value: 'cards' },
         { label: 'Minimal', value: 'minimal' },
+        { label: 'Linked cards', value: 'linkedCards' },
       ],
     },
     {
@@ -35,6 +38,12 @@ export const Features: Block = {
       required: true,
       fields: [
         { name: 'title', type: 'text', required: true },
+        {
+          name: 'icon',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Optional icon',
+        },
         {
           name: 'description',
           type: 'richText',
@@ -47,6 +56,18 @@ export const Features: Block = {
             ],
           }),
         },
+        {
+          name: 'enableLink',
+          type: 'checkbox',
+          label: 'Enable link',
+        },
+        link({
+          overrides: {
+            admin: {
+              condition: (_: unknown, { enableLink }: { enableLink?: boolean }) => Boolean(enableLink),
+            },
+          },
+        }),
       ],
     },
   ],
