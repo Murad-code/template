@@ -36,15 +36,26 @@ export const FormBlock: React.FC<
     id?: DefaultDocumentIDType
   }
 > = (props) => {
-  const {
-    enableIntro,
-    form: formFromProps,
-    form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
-    introContent,
-  } = props
+  const form =
+    props.form && typeof props.form === 'object' && 'fields' in props.form ? props.form : null
+
+  if (!form) {
+    return null
+  }
+
+  return <FormBlockContent {...props} form={form} />
+}
+
+const FormBlockContent: React.FC<
+  FormBlockType & {
+    id?: DefaultDocumentIDType
+  }
+> = (props) => {
+  const { enableIntro, form, introContent } = props
+  const { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = form
 
   const formMethods = useForm({
-    defaultValues: buildInitialFormState(formFromProps.fields),
+    defaultValues: buildInitialFormState(form.fields),
   })
   const {
     control,
@@ -140,28 +151,26 @@ export const FormBlock: React.FC<
           {!hasSubmitted && (
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4 last:mb-0">
-                {formFromProps &&
-                  formFromProps.fields &&
-                  formFromProps.fields?.map((field, index) => {
-                    const Field: React.FC<any> | undefined =
-                      fields?.[field.blockType as keyof typeof fields]
+                {form.fields?.map((field, index) => {
+                  const Field: React.FC<any> | undefined =
+                    fields?.[field.blockType as keyof typeof fields]
 
-                    if (Field) {
-                      return (
-                        <div className="mb-6 last:mb-0" key={index}>
-                          <Field
-                            form={formFromProps}
-                            {...field}
-                            {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
-                          />
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
+                  if (Field) {
+                    return (
+                      <div className="mb-6 last:mb-0" key={index}>
+                        <Field
+                          form={form}
+                          {...field}
+                          {...formMethods}
+                          control={control}
+                          errors={errors}
+                          register={register}
+                        />
+                      </div>
+                    )
+                  }
+                  return null
+                })}
               </div>
 
               <Button form={formID} type="submit" variant="default">
