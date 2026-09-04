@@ -369,15 +369,17 @@ That's it! The Docker instance will help you get up and running quickly while al
 
 ### Seed
 
-To seed the database with a few pages, products, and orders you can click the 'seed database' link from the admin panel.
+Seed the hybrid demo (shop + booking, marketing home, block showcase page):
 
-The seed script will also create a demo user for demonstration purposes only:
+```bash
+pnpm seed
+```
 
-- Demo Customer
-  - Email: `customer@example.com`
-  - Password: `password`
+Or click **Seed your database** on the Payload admin dashboard. See [`docs/SEEDING.md`](docs/SEEDING.md) for legacy home backup (`pnpm seed:legacy`) and palette-only seeding (`pnpm seed:theme-palettes`).
 
-> NOTICE: seeding the database is destructive because it drops your current database to populate a fresh one from the seed template. Only run this command if you are starting a new project or can afford to lose your current data.
+The seed also creates a demo customer (`customer@blackoakdemo.local` / `password`).
+
+> NOTICE: seeding is destructive for demo collections — only run when starting fresh or when you can afford to lose current demo data.
 
 ## Production
 

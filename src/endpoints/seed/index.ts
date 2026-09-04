@@ -5,10 +5,13 @@ import path from 'path'
 
 import { contactFormData } from './contact-form'
 import { contactPageData } from './contact-page'
+import { blockShowcasePageData } from './block-showcase'
+import { legacyHomePageData } from './home-legacy'
 import { homePageData } from './home'
+import { buildHeaderNavItems } from './header-nav'
 import { discoverSeedDir } from './discover'
 import { readLocalFile } from './localFile'
-import { slugify } from './marquee-product'
+import { slugify } from './slugify'
 import { upsertThemePalettes } from '@/utilities/themePalettes'
 import { Address, Transaction } from '@/payload-types'
 import type { Header, Footer, Media, Product, SiteTheme } from '@/payload-types'
@@ -51,6 +54,7 @@ const SEEDED_CUSTOMER_EMAIL = 'customer@blackoakdemo.local'
 const SEEDED_CONTACT_EMAIL = 'muradk2512@gmail.com'
 
 export type SeedMode = 'ecommerce' | 'booking' | 'hybrid'
+export type SeedHomeLayout = 'legacy' | 'showcase'
 
 type CoffeeProductSeed = {
   folderName: string
@@ -112,15 +116,6 @@ function richTextFrom(...children: Array<ReturnType<typeof lexicalParagraph> | R
       indent: 0,
       version: 1,
     },
-  }
-}
-
-function customHeaderNavItem(
-  label: string,
-  url: string,
-): NonNullable<Header['navItems']>[number] {
-  return {
-    link: { type: 'custom', label, url, newTab: false },
   }
 }
 
@@ -695,17 +690,19 @@ export const seed = async ({
   payload,
   req,
   mode = 'ecommerce',
+  homeLayout = 'showcase',
 }: {
   payload: Payload
   req: PayloadRequest
   mode?: SeedMode
+  homeLayout?: SeedHomeLayout
 }): Promise<void> => {
   const seedContext = {
     disableRevalidate: true,
     disableEmail: true,
   }
 
-  payload.logger.info(`Seeding database (mode: ${mode})...`)
+  payload.logger.info(`Seeding database (mode: ${mode}, home: ${homeLayout})...`)
 
   payload.logger.info(`— Clearing collections and globals...`)
 
@@ -720,6 +717,7 @@ export const seed = async ({
         slug: global,
         data,
         depth: 0,
+        req,
         context: {
           disableRevalidate: true,
           skipSiteThemePaletteValidation: true,
@@ -921,15 +919,38 @@ export const seed = async ({
   const fallbackImage = availableImages[0]
   const homeImage = heroMedia ?? fallbackImage ?? null
   if (!homeImage) throw new Error('No images available for homepage.')
+  const homeSeedArgs = {
+    contentImage: homeImage,
+    metaImage: homeImage,
+    categoryIds: {
+      coffee: categories.get('coffee'),
+      bundles: categories.get('coffee-bundles'),
+    },
+  }
+  const homeData =
+    homeLayout === 'legacy' ? legacyHomePageData(homeSeedArgs) : homePageData(homeSeedArgs)
+
   await payload.create({
     collection: 'pages',
     depth: 0,
     context: {
       ...seedContext,
     },
-    data: homePageData({
+    data: homeData,
+  })
+
+  await payload.create({
+    collection: 'pages',
+    depth: 0,
+    context: {
+      ...seedContext,
+    },
+    data: blockShowcasePageData({
       contentImage: homeImage,
       metaImage: homeImage,
+      contactFormId: contactForm.id,
+      products,
+      categoryIds: { coffee: categories.get('coffee') },
     }),
   })
 
@@ -1026,7 +1047,7 @@ export const seed = async ({
     context: {
       ...seedContext,
     },
-    data: contactPageData({ contactForm }),
+    data: contactPageData({ contactFormId: contactForm.id }),
   })
 
   await payload.create({
@@ -1211,28 +1232,21 @@ export const seed = async ({
 
   const { defaultPalette } = await upsertThemePalettes(payload)
 
-  const headerNavItems: NonNullable<Header['navItems']> = [
-    customHeaderNavItem('About', '/about'),
-    ...(shouldSeedEcommerce
-      ? [customHeaderNavItem('Shop', '/shop')]
-      : []),
-    ...(shouldSeedBooking
-      ? [customHeaderNavItem('Workshops', '/book')]
-      : []),
-    customHeaderNavItem('Account', '/account'),
-    customHeaderNavItem('Blog', '/blog'),
-    customHeaderNavItem('Contact', '/contact'),
-  ]
+  const headerNavItems = buildHeaderNavItems(mode)
 
   await payload.updateGlobal({
     slug: 'header',
     data: {
       navItems: headerNavItems,
     } as Partial<Header>,
+    depth: 0,
+    req,
   })
   await payload.updateGlobal({
     slug: 'footer',
     data: { navItems: [] } as Partial<Footer>,
+    depth: 0,
+    req,
   })
   await payload.updateGlobal({
     slug: 'site-theme',
@@ -1240,10 +1254,16 @@ export const seed = async ({
       paletteMode: 'palette',
       palette: defaultPalette?.id,
     } as Partial<SiteTheme>,
+    depth: 0,
+    req,
     context: {
       disableRevalidate: true,
     },
   })
+
+  payload.logger.info(
+    `— Header nav seeded (${headerNavItems.length} links${shouldSeedEcommerce ? ', includes Shop' : ''}${shouldSeedBooking ? ', includes Workshops' : ''}).`,
+  )
 
   if (shouldSeedEcommerce) {
     payload.logger.info(`— Seeding addresses...`)

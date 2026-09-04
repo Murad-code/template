@@ -3,10 +3,9 @@ import 'dotenv/config'
 import config from '@payload-config'
 import { createLocalReq, getPayload } from 'payload'
 
-import { seed, type SeedMode } from '@/endpoints/seed'
+import { seed, type SeedHomeLayout } from '@/endpoints/seed'
 
-const modeArg = process.argv[2]
-const mode: SeedMode = modeArg === 'booking' || modeArg === 'ecommerce' || modeArg === 'hybrid' ? modeArg : 'hybrid'
+const homeLayout: SeedHomeLayout = process.argv[2] === 'legacy' ? 'legacy' : 'showcase'
 
 async function run() {
   const payload = await getPayload({ config })
@@ -23,9 +22,14 @@ async function run() {
   }
 
   const req = await createLocalReq({ user: adminUser }, payload)
-  await seed({ payload, req, mode })
+  await seed({ payload, req, mode: 'hybrid', homeLayout })
 
-  payload.logger.info(`Black Oak seed completed in "${mode}" mode.`)
+  payload.logger.info(`Demo seed completed (hybrid, home: "${homeLayout}").`)
 }
 
-void run()
+run()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })

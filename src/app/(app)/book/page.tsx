@@ -278,7 +278,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                     </div>
                   </div>
 
-                  <Button asChild className="w-full border-transparent bg-background hover:bg-background/90">
+                  <Button asChild variant="outline" className="w-full">
                     <span>View details and book</span>
                   </Button>
                 </article>

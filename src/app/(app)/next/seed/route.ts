@@ -1,18 +1,14 @@
 import { createLocalReq, getPayload } from 'payload'
-import { seed, type SeedMode } from '@/endpoints/seed'
+import { seed, type SeedHomeLayout } from '@/endpoints/seed'
 import config from '@payload-config'
 import { headers } from 'next/headers'
 
-import { getSiteConfig } from '@/config/site'
 import { checkRole } from '@/access/utilities'
 
 export const maxDuration = 300 // This function can run for a maximum of 300 seconds
 
-function normalizeMode(mode: unknown): SeedMode {
-  if (mode === 'ecommerce' || mode === 'booking' || mode === 'hybrid') return mode
-  const { projectType } = getSiteConfig()
-  if (projectType === 'booking' || projectType === 'hybrid') return projectType
-  return 'ecommerce'
+function normalizeHomeLayout(layout: unknown): SeedHomeLayout {
+  return layout === 'legacy' ? 'legacy' : 'showcase'
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -27,11 +23,11 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     const body = await request.json().catch(() => ({}))
-    const mode = normalizeMode(body.mode)
+    const homeLayout = normalizeHomeLayout(body.homeLayout)
 
     const payloadReq = await createLocalReq({ user }, payload)
 
-    await seed({ payload, req: payloadReq, mode })
+    await seed({ payload, req: payloadReq, mode: 'hybrid', homeLayout })
 
     return Response.json({ success: true })
   } catch (e) {

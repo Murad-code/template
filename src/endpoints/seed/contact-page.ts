@@ -1,76 +1,42 @@
-import type { Form } from '@/payload-types'
-
 import { RequiredDataFromCollectionSlug } from 'payload'
 
-type ProductArgs = {
-  contactForm: Form
+import { heading, paragraph, richText } from './home'
+
+type ContactPageArgs = {
+  contactFormId: number
 }
 
-export const contactPageData: (args: ProductArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
-  contactForm,
-}) => {
+export const contactPageData: (
+  args: ContactPageArgs,
+) => RequiredDataFromCollectionSlug<'pages'> = ({ contactFormId }) => {
   return {
     slug: 'contact',
+    title: 'Contact',
     _status: 'published',
     hero: {
-      type: 'none',
+      type: 'lowImpact',
+      richText: richText(
+        heading('Contact us', 'h1'),
+        paragraph(
+          'Questions about coffee, workshops or orders? Send us a message and we will get back to you soon.',
+        ),
+      ),
     },
     layout: [
       {
         blockType: 'formBlock',
         enableIntro: true,
-        form: contactForm,
-        introContent: {
-          root: {
-            type: 'root',
-            children: [
-              {
-                type: 'heading',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Contact us',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h3',
-                version: 1,
-              },
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Use the form below and our team will get back to you as soon as possible.',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
-              },
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
-          },
-        },
+        form: contactFormId,
+        introContent: richText(
+          heading('Send a message', 'h2'),
+          paragraph('Fill in the form below and our team will respond as soon as possible.'),
+        ),
       },
     ],
-    title: 'Contact',
+    meta: {
+      title: 'Contact | Black Oak Coffee Co.',
+      description:
+        'Get in touch with Black Oak Coffee Co. about orders, workshops and general enquiries.',
+    },
   }
 }

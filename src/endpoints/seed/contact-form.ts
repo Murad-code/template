@@ -35,7 +35,6 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
       },
     },
     confirmationType: 'message',
-    createdAt: '2023-01-12T21:47:41.374Z',
     emails: [
       {
         emailFrom: `"${brandName}" \u003C${fromEmail}\u003E`,
@@ -91,14 +90,6 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
         width: 100,
       },
       {
-        name: 'subject',
-        blockName: 'subject',
-        blockType: 'text',
-        label: 'Subject',
-        required: true,
-        width: 100,
-      },
-      {
         name: 'message',
         blockName: 'message',
         blockType: 'textarea',
@@ -107,9 +98,7 @@ export const contactFormData: () => RequiredDataFromCollectionSlug<'forms'> = ()
         width: 100,
       },
     ],
-    redirect: undefined,
-    submitButtonLabel: 'Submit',
+    submitButtonLabel: 'Send message',
     title: 'Contact Form',
-    updatedAt: '2023-01-12T21:47:41.374Z',
   }
 }
