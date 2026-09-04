@@ -3,6 +3,13 @@ import type { CollectionConfig } from 'payload'
 import { Banner } from '@/blocks/Banner/config'
 import { Carousel } from '@/blocks/Carousel/config'
 import { ThreeItemGrid } from '@/blocks/ThreeItemGrid/config'
+import { LogoCloud } from '@/blocks/LogoCloud/config'
+import { Newsletter } from '@/blocks/Newsletter/config'
+import { ProductShowcase } from '@/blocks/ProductShowcase/config'
+import { ServiceShowcase } from '@/blocks/ServiceShowcase/config'
+import { SplitFeature } from '@/blocks/SplitFeature/config'
+import { Stats } from '@/blocks/Stats/config'
+import { Testimonials } from '@/blocks/Testimonials/config'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { adminOnly } from '@/access/adminOnly'
 import { Archive } from '@/blocks/ArchiveBlock/config'
@@ -100,6 +107,13 @@ export const Pages: CollectionConfig = {
                 FormBlock,
                 FAQ,
                 Features,
+                Testimonials,
+                LogoCloud,
+                Stats,
+                ProductShowcase,
+                Newsletter,
+                SplitFeature,
+                ServiceShowcase,
               ],
               required: true,
             },
