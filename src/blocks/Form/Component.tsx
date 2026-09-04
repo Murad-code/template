@@ -1,185 +1,104 @@
-'use client'
+import React from 'react'
+
 import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
-
-import { useRouter } from 'next/navigation'
-import React, { useCallback, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
-import { RichText } from '@/components/RichText'
-import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import type { DefaultDocumentIDType } from 'payload'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 
-import { buildInitialFormState } from './buildInitialFormState'
-import { fields } from './fields'
-import { getClientSideURL } from '@/utilities/getURL'
-import { DefaultDocumentIDType } from 'payload'
+import { getSiteConfig } from '@/config/site'
+import { SiteContactDetails, type SiteContactDetailsData } from '@/components/SiteContactDetails'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { FormBlockClient } from './Component.client'
 
-export type Value = unknown
-
-export interface Property {
-  [key: string]: Value
-}
-
-export interface Data {
-  [key: string]: Property | Property[]
-}
-
-export type FormBlockType = {
-  blockName?: string
+export type FormBlockComponentProps = {
+  blockName?: string | null
   blockType?: 'formBlock'
-  enableIntro: boolean
-  form: FormType
-  introContent?: SerializedEditorState
+  enableIntro?: boolean | null
+  showSiteContactDetails?: boolean | null
+  form: FormType | number | string
+  introContent?: SerializedEditorState | null
+  id?: DefaultDocumentIDType
+  contactDetails?: SiteContactDetailsData | null
 }
 
-export const FormBlock: React.FC<
-  FormBlockType & {
-    id?: DefaultDocumentIDType
-  }
-> = (props) => {
-  const form =
-    props.form && typeof props.form === 'object' && 'fields' in props.form ? props.form : null
+export const FormBlock: React.FC<FormBlockComponentProps> = async (props) => {
+  const form = await resolveForm(props.form)
 
-  if (!form) {
-    return null
-  }
+  if (!form) return null
 
-  return <FormBlockContent {...props} form={form} />
-}
+  const contactDetails = props.showSiteContactDetails
+    ? await loadContactDetails()
+    : props.contactDetails || null
 
-const FormBlockContent: React.FC<
-  FormBlockType & {
-    id?: DefaultDocumentIDType
-  }
-> = (props) => {
-  const { enableIntro, form, introContent } = props
-  const { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = form
-
-  const formMethods = useForm({
-    defaultValues: buildInitialFormState(form.fields),
-  })
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    register,
-  } = formMethods
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [hasSubmitted, setHasSubmitted] = useState<boolean>()
-  const [error, setError] = useState<{ message: string; status?: string } | undefined>()
-  const router = useRouter()
-
-  const onSubmit = useCallback(
-    (data: Data) => {
-      let loadingTimerID: ReturnType<typeof setTimeout>
-      const submitForm = async () => {
-        setError(undefined)
-
-        const dataToSend = Object.entries(data).map(([name, value]) => ({
-          field: name,
-          value,
-        }))
-
-        // delay loading indicator by 1s
-        loadingTimerID = setTimeout(() => {
-          setIsLoading(true)
-        }, 1000)
-
-        try {
-          const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
-            body: JSON.stringify({
-              form: formID,
-              submissionData: dataToSend,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            method: 'POST',
-          })
-
-          const res = await req.json()
-
-          clearTimeout(loadingTimerID)
-
-          if (req.status >= 400) {
-            setIsLoading(false)
-
-            setError({
-              message: res.errors?.[0]?.message || 'Internal Server Error',
-              status: res.status,
-            })
-
-            return
-          }
-
-          setIsLoading(false)
-          setHasSubmitted(true)
-
-          if (confirmationType === 'redirect' && redirect) {
-            const { url } = redirect
-
-            const redirectUrl = url
-
-            if (redirectUrl) router.push(redirectUrl)
-          }
-        } catch (err) {
-          console.warn(err)
-          setIsLoading(false)
-          setError({
-            message: 'Something went wrong.',
-          })
-        }
-      }
-
-      void submitForm()
-    },
-    [router, formID, redirect, confirmationType],
+  const showSidebar = Boolean(
+    props.showSiteContactDetails &&
+      contactDetails &&
+      (contactDetails.email || contactDetails.phone || contactDetails.address),
   )
 
   return (
-    <div className="container lg:max-w-3xl">
-      {enableIntro && introContent && !hasSubmitted && (
-        <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
+    <div className={showSidebar ? 'container' : 'container lg:max-w-3xl'}>
+      {showSidebar ? (
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+          <SiteContactDetails details={contactDetails ?? {}} />
+          <FormBlockClient
+            enableIntro={props.enableIntro}
+            form={form}
+            introContent={props.introContent}
+          />
+        </div>
+      ) : (
+        <FormBlockClient
+          enableIntro={props.enableIntro}
+          form={form}
+          introContent={props.introContent}
+        />
       )}
-      <div className="rounded-[0.8rem] bg-surface-soft-panel p-4 shadow-[var(--elevation-soft)] lg:p-6">
-        <FormProvider {...formMethods}>
-          {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
-          )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
-          {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
-          {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4 last:mb-0">
-                {form.fields?.map((field, index) => {
-                  const Field: React.FC<any> | undefined =
-                    fields?.[field.blockType as keyof typeof fields]
-
-                  if (Field) {
-                    return (
-                      <div className="mb-6 last:mb-0" key={index}>
-                        <Field
-                          form={form}
-                          {...field}
-                          {...formMethods}
-                          control={control}
-                          errors={errors}
-                          register={register}
-                        />
-                      </div>
-                    )
-                  }
-                  return null
-                })}
-              </div>
-
-              <Button form={formID} type="submit" variant="default">
-                {submitButtonLabel}
-              </Button>
-            </form>
-          )}
-        </FormProvider>
-      </div>
     </div>
   )
+}
+
+function toPublicForm(form: FormType | Record<string, unknown>): FormType {
+  const { emails: _emails, ...rest } = form as FormType & { emails?: unknown }
+  return rest as FormType
+}
+
+async function resolveForm(
+  formRef: FormBlockComponentProps['form'],
+): Promise<FormType | null> {
+  if (formRef && typeof formRef === 'object' && 'fields' in formRef) {
+    return toPublicForm(formRef)
+  }
+
+  const id =
+    typeof formRef === 'number' || typeof formRef === 'string'
+      ? formRef
+      : null
+  if (id == null || id === '') return null
+
+  const payload = await getPayload({ config: configPromise })
+  try {
+    const doc = await payload.findByID({
+      collection: 'forms',
+      id,
+      depth: 0,
+      overrideAccess: true,
+    })
+    return toPublicForm(doc as unknown as FormType)
+  } catch {
+    return null
+  }
+}
+
+async function loadContactDetails(): Promise<SiteContactDetailsData> {
+  const settings = await getCachedGlobal('site-settings', 0)()
+  const site = getSiteConfig()
+
+  return {
+    siteName: site.siteName,
+    email: settings?.publicEmail || site.companyEmail,
+    phone: settings?.publicPhone || site.companyPhone,
+    address: settings?.publicAddress || site.companyAddress,
+  }
 }

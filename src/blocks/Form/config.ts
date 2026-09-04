@@ -23,6 +23,16 @@ export const FormBlock: Block = {
       label: 'Enable Intro Content',
     },
     {
+      name: 'showSiteContactDetails',
+      type: 'checkbox',
+      label: 'Show site contact details',
+      defaultValue: false,
+      admin: {
+        description:
+          'Display public email, phone and address from Site settings beside the form.',
+      },
+    },
+    {
       name: 'introContent',
       type: 'richText',
       admin: {
