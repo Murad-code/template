@@ -515,6 +515,13 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    enableTrustRow?: boolean | null;
+    trustItems?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
     media?: (number | null) | Media;
   };
   layout: (
@@ -528,6 +535,13 @@ export interface Page {
     | FormBlock
     | FAQBlock
     | FeaturesBlock
+    | TestimonialsBlock
+    | LogoCloudBlock
+    | StatsBlock
+    | ProductShowcaseBlock
+    | NewsletterBlock
+    | SplitFeatureBlock
+    | ServiceShowcaseBlock
   )[];
   meta?: {
     title?: string | null;
@@ -697,7 +711,7 @@ export interface ThreeItemGridBlock {
  * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
+  style: 'info' | 'promo' | 'warning' | 'error' | 'success';
   content: {
     root: {
       type: string;
@@ -952,9 +966,10 @@ export interface FAQBlock {
  */
 export interface FeaturesBlock {
   title?: string | null;
-  layout?: ('cards' | 'minimal') | null;
+  layout?: ('cards' | 'minimal' | 'linkedCards') | null;
   items: {
     title: string;
+    icon?: (number | null) | Media;
     description?: {
       root: {
         type: string;
@@ -970,6 +985,21 @@ export interface FeaturesBlock {
       };
       [k: string]: unknown;
     } | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?: {
+        relationTo: 'pages';
+        value: number | Page;
+      } | null;
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
     id?: string | null;
   }[];
   id?: string | null;
@@ -978,23 +1008,203 @@ export interface FeaturesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "variants".
+ * via the `definition` "TestimonialsBlock".
  */
-export interface Variant {
-  id: number;
-  /**
-   * Used for administrative purposes, not shown to customers. This is populated by default.
-   */
+export interface TestimonialsBlock {
+  eyebrow?: string | null;
   title?: string | null;
-  product: number | Product;
-  options: (number | VariantOption)[];
-  inventory?: number | null;
-  priceInGBPEnabled?: boolean | null;
-  priceInGBP?: number | null;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt?: string | null;
-  _status?: ('draft' | 'published') | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  layout?: ('grid' | 'carousel') | null;
+  items: {
+    quote: string;
+    author: string;
+    role?: string | null;
+    rating?: number | null;
+    photo?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonials';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoCloudBlock".
+ */
+export interface LogoCloudBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  layout?: ('grid' | 'marquee') | null;
+  logos: {
+    image?: (number | null) | Media;
+    /**
+     * Used when no image is provided.
+     */
+    label?: string | null;
+    url?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoCloud';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  layout?: ('bar' | 'cards') | null;
+  items: {
+    value: string;
+    label: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductShowcaseBlock".
+ */
+export interface ProductShowcaseBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  layout?: ('grid' | 'carousel') | null;
+  populateBy?: ('collection' | 'selection') | null;
+  categories?: (number | Category)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'products';
+        value: number | Product;
+      }[]
+    | null;
+  enableViewAllLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'productShowcase';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsletterBlock".
+ */
+export interface NewsletterBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  placeholder?: string | null;
+  buttonLabel?: string | null;
+  successMessage?: string | null;
+  privacyNote?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'newsletter';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitFeatureBlock".
+ */
+export interface SplitFeatureBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  media?: (number | null) | Media;
+  imagePosition?: ('right' | 'left') | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'splitFeature';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceShowcaseBlock".
+ */
+export interface ServiceShowcaseBlock {
+  eyebrow?: string | null;
+  title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
+  populateBy?: ('collection' | 'selection') | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'services';
+        value: number | Service;
+      }[]
+    | null;
+  enableViewAllLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceShowcase';
 }
 /**
  * Bookable services (e.g. Consultation, Session). Each booking is for one service.
@@ -1040,6 +1250,26 @@ export interface Service {
   linkedProduct?: (number | null) | Product;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants".
+ */
+export interface Variant {
+  id: number;
+  /**
+   * Used for administrative purposes, not shown to customers. This is populated by default.
+   */
+  title?: string | null;
+  product: number | Product;
+  options: (number | VariantOption)[];
+  inventory?: number | null;
+  priceInGBPEnabled?: boolean | null;
+  priceInGBP?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1589,6 +1819,13 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               id?: T;
             };
+        enableTrustRow?: T;
+        trustItems?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
         media?: T;
       };
   layout?:
@@ -1604,6 +1841,13 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
         features?: T | FeaturesBlockSelect<T>;
+        testimonials?: T | TestimonialsBlockSelect<T>;
+        logoCloud?: T | LogoCloudBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
+        productShowcase?: T | ProductShowcaseBlockSelect<T>;
+        newsletter?: T | NewsletterBlockSelect<T>;
+        splitFeature?: T | SplitFeatureBlockSelect<T>;
+        serviceShowcase?: T | ServiceShowcaseBlockSelect<T>;
       };
   meta?:
     | T
@@ -1764,8 +2008,180 @@ export interface FeaturesBlockSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
+        icon?: T;
         description?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
         id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock_select".
+ */
+export interface TestimonialsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  layout?: T;
+  items?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        role?: T;
+        rating?: T;
+        photo?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoCloudBlock_select".
+ */
+export interface LogoCloudBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  layout?: T;
+  logos?:
+    | T
+    | {
+        image?: T;
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  layout?: T;
+  items?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductShowcaseBlock_select".
+ */
+export interface ProductShowcaseBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  layout?: T;
+  populateBy?: T;
+  categories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  enableViewAllLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsletterBlock_select".
+ */
+export interface NewsletterBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  placeholder?: T;
+  buttonLabel?: T;
+  successMessage?: T;
+  privacyNote?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SplitFeatureBlock_select".
+ */
+export interface SplitFeatureBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  richText?: T;
+  media?: T;
+  imagePosition?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceShowcaseBlock_select".
+ */
+export interface ServiceShowcaseBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  title?: T;
+  description?: T;
+  align?: T;
+  populateBy?: T;
+  limit?: T;
+  selectedDocs?: T;
+  enableViewAllLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
       };
   id?: T;
   blockName?: T;
