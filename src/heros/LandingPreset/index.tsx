@@ -2,13 +2,21 @@ import React from 'react'
 
 import type { Page } from '@/payload-types'
 
-import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import { RichText } from '@/components/RichText'
+import { HeroLinks } from '@/heros/shared/HeroLinks'
+import { HeroTrustRow } from '@/heros/shared/HeroTrustRow'
 
 type LandingPresetHeroProps = Page['hero']
 
-export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({ links, media, richText, type }) => {
+export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({
+  enableTrustRow,
+  links,
+  media,
+  richText,
+  trustItems,
+  type,
+}) => {
   if (type === 'landingSpotlight') {
     return (
       <section className="-mt-10 bg-[var(--landing-background)] md:-mt-14">
@@ -23,14 +31,9 @@ export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({ links, med
                 />
               )}
               {Array.isArray(links) && links.length > 0 && (
-                <ul className="flex flex-wrap justify-center gap-3">
-                  {links.map(({ link }, index) => (
-                    <li key={index}>
-                      <CMSLink {...link} />
-                    </li>
-                  ))}
-                </ul>
+                <HeroLinks className="mt-0 justify-center" links={links} />
               )}
+              <HeroTrustRow enabled={enableTrustRow} items={trustItems} />
             </div>
             {media && typeof media === 'object' && (
               <div className="mt-10 overflow-hidden rounded-xl shadow-sm shadow-black/10 dark:shadow-black/40">
@@ -55,15 +58,8 @@ export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({ links, med
                 enableGutter={false}
               />
             )}
-            {Array.isArray(links) && links.length > 0 && (
-              <ul className="flex flex-wrap gap-3">
-                {links.map(({ link }, index) => (
-                  <li key={index}>
-                    <CMSLink {...link} />
-                  </li>
-                ))}
-              </ul>
-            )}
+            {Array.isArray(links) && links.length > 0 && <HeroLinks className="mt-0" links={links} />}
+            <HeroTrustRow enabled={enableTrustRow} items={trustItems} />
           </div>
           <div>
             {media && typeof media === 'object' && (

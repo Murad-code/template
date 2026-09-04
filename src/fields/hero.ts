@@ -43,6 +43,27 @@ export const hero: Field = {
       },
     }),
     {
+      name: 'enableTrustRow',
+      type: 'checkbox',
+      label: 'Show trust row',
+      defaultValue: false,
+    },
+    {
+      name: 'trustItems',
+      type: 'array',
+      admin: {
+        condition: (_, { enableTrustRow }) => Boolean(enableTrustRow),
+      },
+      fields: [
+        {
+          name: 'text',
+          type: 'text',
+          required: true,
+        },
+      ],
+      label: 'Trust items',
+    },
+    {
       name: 'media',
       type: 'upload',
       admin: {
