@@ -33,6 +33,7 @@ import { BlockedDates } from '@/globals/BlockedDates'
 import { BookingSettings } from '@/globals/BookingSettings'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
+import { SiteSettings } from '@/globals/SiteSettings'
 import { SiteTheme } from '@/globals/SiteTheme'
 import { migrations } from './migrations'
 import { plugins } from './plugins'
@@ -149,7 +150,7 @@ export default buildConfig({
   }),
   email: emailAdapter,
   endpoints: [cleanupExpiredStockReservationsEndpoint, seedHeaderCoreLinksEndpoint],
-  globals: [Header, Footer, SiteTheme, BlockedDates, BookingSettings],
+  globals: [Header, Footer, SiteTheme, SiteSettings, BlockedDates, BookingSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
