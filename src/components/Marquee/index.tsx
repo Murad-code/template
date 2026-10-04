@@ -14,20 +14,20 @@ export const Marquee: React.FC<{ items: string[] }> = ({ items }) => {
   if (items.length < 3) return null
 
   return (
-    <div className="marquee bg-surface-footer border-border-subtle border-y py-5">
+    <div className="marquee border-border bg-muted border-y py-4">
       {/* Rendered twice, and the track slides by exactly half its own width:
           that is what makes the seam invisible. The second copy is hidden
           from assistive technology so the strip is announced once. */}
       <div className="marquee-track">
         {[0, 1].map((copy) => (
-          <ul key={copy} className="flex shrink-0" aria-hidden={copy === 1 || undefined}>
+          <ul aria-hidden={copy === 1 || undefined} className="flex shrink-0" key={copy}>
             {items.map((item) => (
               <li
+                className="text-caption text-foreground flex shrink-0 items-center gap-6 px-6 font-medium tracking-[0.18em] uppercase"
                 key={item}
-                className="text-text-inverse/70 flex shrink-0 items-center gap-6 px-6 text-sm font-semibold tracking-[0.2em] uppercase"
               >
                 {item}
-                <span aria-hidden="true" className="bg-accent size-1.5 rounded-full" />
+                <span aria-hidden="true" className="bg-border-strong size-1.5 rounded-full" />
               </li>
             ))}
           </ul>
