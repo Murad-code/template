@@ -7,8 +7,7 @@ import { getSiteConfig } from '@/config/site'
 export default async function ViewProductsLink() {
   const { ecommerceEnabled, bookingEnabled, serverURL } = getSiteConfig()
   const base = serverURL.replace(/\/$/, '')
-  const linkClass =
-    'nav__link block py-2 no-underline text-inherit hover:opacity-80'
+  const linkClass = 'nav__link block py-2 no-underline text-inherit hover:opacity-80'
 
   if (ecommerceEnabled && bookingEnabled) {
     return (
@@ -49,7 +48,13 @@ export default async function ViewProductsLink() {
     )
   }
   return (
-    <a href={base} target="_blank" rel="noopener noreferrer" className={linkClass} style={{ padding: '0.5rem 0' }}>
+    <a
+      href={base}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={linkClass}
+      style={{ padding: '0.5rem 0' }}
+    >
       View site
     </a>
   )

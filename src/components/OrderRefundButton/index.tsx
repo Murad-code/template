@@ -7,7 +7,8 @@ export function OrderRefundButton() {
   const { id } = useDocumentInfo()
   const status = useFormFields(([fields]) => fields.status?.value as string | undefined)
   const orderAmountPence = useFormFields(
-    ([fields]) => (fields as { amount?: { value?: number | null } }).amount?.value as number | undefined | null,
+    ([fields]) =>
+      (fields as { amount?: { value?: number | null } }).amount?.value as number | undefined | null,
   )
   const isRefunded = status === 'refunded'
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,10 @@ export function OrderRefundButton() {
   const orderTotalPounds = orderTotalPence / 100
   const partialPounds = partialAmountPounds === '' ? null : parseFloat(partialAmountPounds)
   const isValidPartial =
-    partialPounds !== null && !Number.isNaN(partialPounds) && partialPounds > 0 && partialPounds <= orderTotalPounds
+    partialPounds !== null &&
+    !Number.isNaN(partialPounds) &&
+    partialPounds > 0 &&
+    partialPounds <= orderTotalPounds
   const refundPence =
     partialPounds !== null && isValidPartial ? Math.round(partialPounds * 100) : orderTotalPence
 
@@ -44,7 +48,10 @@ export function OrderRefundButton() {
         setMessage({ type: 'error', text: data.error || `Error ${res.status}` })
         return
       }
-      setMessage({ type: 'success', text: 'Order refunded successfully. Refresh to see updated status.' })
+      setMessage({
+        type: 'success',
+        text: 'Order refunded successfully. Refresh to see updated status.',
+      })
     } catch (e) {
       setMessage({ type: 'error', text: e instanceof Error ? e.message : 'Request failed' })
     } finally {
@@ -55,7 +62,9 @@ export function OrderRefundButton() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {isRefunded ? (
-        <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>Order is refunded.</span>
+        <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>
+          Order is refunded.
+        </span>
       ) : (
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -92,14 +101,25 @@ export function OrderRefundButton() {
           <Button
             buttonStyle="primary"
             onClick={handleRefund}
-            disabled={loading || orderTotalPence <= 0 || (partialAmountPounds !== '' && !isValidPartial)}
+            disabled={
+              loading || orderTotalPence <= 0 || (partialAmountPounds !== '' && !isValidPartial)
+            }
           >
-            {loading ? 'Refunding…' : refundPence < orderTotalPence ? 'Refund partial amount' : 'Refund full amount'}
+            {loading
+              ? 'Refunding…'
+              : refundPence < orderTotalPence
+                ? 'Refund partial amount'
+                : 'Refund full amount'}
           </Button>
         </>
       )}
       {message && (
-        <span style={{ color: message.type === 'error' ? 'var(--theme-error-500)' : 'var(--theme-success-500)', fontSize: 12 }}>
+        <span
+          style={{
+            color: message.type === 'error' ? 'var(--theme-error-500)' : 'var(--theme-success-500)',
+            fontSize: 12,
+          }}
+        >
           {message.text}
         </span>
       )}

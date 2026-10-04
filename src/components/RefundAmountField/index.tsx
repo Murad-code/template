@@ -7,10 +7,10 @@ import type { UIFieldClientComponent } from 'payload'
  * Displays the refund amount in pounds. The value is stored in pence (cents) for Stripe.
  */
 export const RefundAmountField: UIFieldClientComponent = (props) => {
-  const value = useFormFields(([fields]) => (fields as { refundAmount?: { value?: number | null } }).refundAmount?.value ?? null) as
-    | number
-    | null
-    | undefined
+  const value = useFormFields(
+    ([fields]) =>
+      (fields as { refundAmount?: { value?: number | null } }).refundAmount?.value ?? null,
+  ) as number | null | undefined
 
   const label = (props as { label?: string }).label ?? 'Refund amount'
   const description = (props as { description?: string }).description

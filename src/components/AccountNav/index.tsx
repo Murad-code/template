@@ -61,7 +61,8 @@ export const AccountNav: React.FC<Props> = ({ className, bookingEnabled }) => {
               asChild
               variant="link"
               className={clsx('text-primary/50 hover:text-primary hover:no-underline', {
-                'text-primary': pathname === '/account/bookings' || pathname.includes('/account/bookings'),
+                'text-primary':
+                  pathname === '/account/bookings' || pathname.includes('/account/bookings'),
               })}
             >
               <Link href="/account/bookings">My bookings</Link>

@@ -26,11 +26,12 @@ export const PaletteHelp: UIFieldClientComponent = () => {
         Create a named palette once, then select it from the palette dropdown anytime.
       </div>
       <div style={{ fontSize: 12, color: 'var(--theme-elevation-600)' }}>
-        To create or manage palettes, go to the <strong>Theme Palettes</strong> page in the admin panel.
+        To create or manage palettes, go to the <strong>Theme Palettes</strong> page in the admin
+        panel.
       </div>
       <div style={{ fontSize: 12, color: 'var(--theme-elevation-600)', marginTop: 6 }}>
-        The preview now shows pass/fail contrast checks per role pair. In custom mode, use the helper actions
-        to auto-generate dark values and auto-fix text contrast before refining.
+        The preview now shows pass/fail contrast checks per role pair. In custom mode, use the
+        helper actions to auto-generate dark values and auto-fix text contrast before refining.
       </div>
     </div>
   )

@@ -16,9 +16,16 @@ type PaletteSwatchCellProps = {
   cellData?: unknown
 }
 
-export const PaletteSwatchCell: React.FC<PaletteSwatchCellProps> = ({ data, rowData, cellData }) => {
+export const PaletteSwatchCell: React.FC<PaletteSwatchCellProps> = ({
+  data,
+  rowData,
+  cellData,
+}) => {
   const row = ((rowData || data || {}) as PaletteRow) || {}
-  const color1 = (typeof row.color1 === 'string' ? row.color1 : cellData) as string | null | undefined
+  const color1 = (typeof row.color1 === 'string' ? row.color1 : cellData) as
+    | string
+    | null
+    | undefined
   const swatches = [
     { key: 'Light BG', color: row.color1 },
     { key: 'Light Card', color: row.color2 },
@@ -27,11 +34,13 @@ export const PaletteSwatchCell: React.FC<PaletteSwatchCellProps> = ({ data, rowD
     { key: 'Dark BG', color: row.color5 },
     { key: 'Light Text', color: row.lightText },
     { key: 'Dark Text', color: row.darkText },
-  ].filter((item): item is { key: string; color: string } => Boolean(item.color && item.color.trim()))
+  ].filter((item): item is { key: string; color: string } =>
+    Boolean(item.color && item.color.trim()),
+  )
   const resolvedSwatches = swatches.length
     ? swatches
-    : [{ key: 'Light BG', color: color1 }].filter(
-        (item): item is { key: string; color: string } => Boolean(item.color && item.color.trim()),
+    : [{ key: 'Light BG', color: color1 }].filter((item): item is { key: string; color: string } =>
+        Boolean(item.color && item.color.trim()),
       )
 
   if (!resolvedSwatches.length) {
@@ -39,7 +48,14 @@ export const PaletteSwatchCell: React.FC<PaletteSwatchCellProps> = ({ data, rowD
   }
 
   return (
-    <span style={{ display: 'inline-flex', overflow: 'hidden', borderRadius: 6, border: '1px solid var(--theme-elevation-200)' }}>
+    <span
+      style={{
+        display: 'inline-flex',
+        overflow: 'hidden',
+        borderRadius: 6,
+        border: '1px solid var(--theme-elevation-200)',
+      }}
+    >
       {resolvedSwatches.map((swatch, index) => (
         <span
           key={`${swatch.key}-${swatch.color}-${index}`}
@@ -47,7 +63,8 @@ export const PaletteSwatchCell: React.FC<PaletteSwatchCellProps> = ({ data, rowD
             width: 16,
             height: 20,
             backgroundColor: swatch.color,
-            borderRight: index === resolvedSwatches.length - 1 ? 'none' : '1px solid rgba(0,0,0,0.08)',
+            borderRight:
+              index === resolvedSwatches.length - 1 ? 'none' : '1px solid rgba(0,0,0,0.08)',
           }}
           title={`${swatch.key}: ${swatch.color}`}
         />

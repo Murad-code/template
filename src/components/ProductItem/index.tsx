@@ -22,7 +22,11 @@ export const ProductItem: React.FC<Props> = ({
   currencyCode,
 }) => {
   const { title } = product
-  const { image, price: itemPrice, variantLabel } = resolveProductVariantDisplay({ product, variant })
+  const {
+    image,
+    price: itemPrice,
+    variantLabel,
+  } = resolveProductVariantDisplay({ product, variant })
   const itemURL = `/products/${product.slug}${variant ? `?variant=${variant.id}` : ''}`
 
   return (

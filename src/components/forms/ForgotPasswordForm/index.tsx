@@ -50,7 +50,7 @@ export const ForgotPasswordForm: React.FC = () => {
     <Fragment>
       {!success && (
         <React.Fragment>
-          <h1 className="text-xl mb-4">Forgot Password</h1>
+          <h1 className="text-h2 mb-4">Forgot Password</h1>
           <div className="prose dark:prose-invert mb-8">
             <p>
               {`Please enter your email below. You will receive an email message with instructions on
@@ -81,7 +81,7 @@ export const ForgotPasswordForm: React.FC = () => {
       )}
       {success && (
         <React.Fragment>
-          <h1 className="text-xl mb-4">Request submitted</h1>
+          <h1 className="text-h2 mb-4">Request submitted</h1>
           <div className="prose dark:prose-invert">
             <p>Check your email for a link that will allow you to securely reset your password.</p>
           </div>

@@ -39,7 +39,11 @@ function navItemPath(item: HeaderNavItem): string | null {
   const link = item.link
   if (!link) return null
   if (link.type === 'custom') return normalizePath(link.url)
-  if (link.type === 'reference' && link.reference?.value && typeof link.reference.value === 'object') {
+  if (
+    link.type === 'reference' &&
+    link.reference?.value &&
+    typeof link.reference.value === 'object'
+  ) {
     const slug = link.reference.value.slug
     return typeof slug === 'string' ? normalizePath(`/${slug}`) : null
   }
@@ -78,12 +82,17 @@ export const HeaderNavHelp: UIFieldClientComponent = () => {
           return [...rowMap.entries()]
             .sort((a, b) => a[0] - b[0])
             .map(([, row]) => row)
-            .filter((row): row is { label: string; url: string } => Boolean(row.label?.trim()) && Boolean(row.url?.trim()))
+            .filter(
+              (row): row is { label: string; url: string } =>
+                Boolean(row.label?.trim()) && Boolean(row.url?.trim()),
+            )
             .map((row) => ({ link: { type: 'custom' as const, label: row.label, url: row.url } }))
         })()
 
   const usedPaths = new Set(
-    existing.map((item) => navItemPath(item)).filter((pathValue): pathValue is string => Boolean(pathValue)),
+    existing
+      .map((item) => navItemPath(item))
+      .filter((pathValue): pathValue is string => Boolean(pathValue)),
   )
   const missingCoreLinks = CORE_LINKS.filter(({ url }) => !usedPaths.has(url.toLowerCase()))
 
@@ -110,7 +119,9 @@ export const HeaderNavHelp: UIFieldClientComponent = () => {
           toast.info('No missing core header links were added.')
         }
         if ((data.trimmed ?? 0) > 0) {
-          toast.info(`Trimmed ${data.trimmed} extra nav link(s) to keep within the 10-link header limit.`)
+          toast.info(
+            `Trimmed ${data.trimmed} extra nav link(s) to keep within the 10-link header limit.`,
+          )
         }
         setTimeout(() => window.location.reload(), 300)
       })
@@ -134,8 +145,9 @@ export const HeaderNavHelp: UIFieldClientComponent = () => {
     >
       <div style={{ fontWeight: 600, marginBottom: 6 }}>Header link note</div>
       <div style={{ fontSize: 13, color: 'var(--theme-elevation-700)', marginBottom: 8 }}>
-        Add <strong>/shop</strong>, <strong>/book</strong> and <strong>/account</strong> here to power key user
-        journeys. They route visitors to products (shop), services/workshops (book), and the customer account area.
+        Add <strong>/shop</strong>, <strong>/book</strong> and <strong>/account</strong> here to
+        power key user journeys. They route visitors to products (shop), services/workshops (book),
+        and the customer account area.
       </div>
       <div style={{ fontSize: 12, color: 'var(--theme-elevation-600)', marginBottom: 10 }}>
         Use the helper to add missing core links quickly. Existing links are preserved.

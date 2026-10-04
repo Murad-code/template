@@ -60,11 +60,15 @@ export const LineItemRow: React.FC<LineItemRowProps> = ({
               {variantLabel}
             </p>
           ) : null}
-          {typeof quantity === 'number' ? <div className="text-sm text-muted-foreground">x{quantity}</div> : null}
+          {typeof quantity === 'number' ? (
+            <div className="text-sm text-muted-foreground">x{quantity}</div>
+          ) : null}
         </div>
 
         <div className="flex flex-col items-end gap-2">
-          {typeof price === 'number' ? <Price amount={price} className="text-right text-sm" /> : null}
+          {typeof price === 'number' ? (
+            <Price amount={price} className="text-right text-sm" />
+          ) : null}
           {trailing}
         </div>
       </div>

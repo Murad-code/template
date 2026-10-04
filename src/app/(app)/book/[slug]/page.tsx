@@ -1,7 +1,7 @@
 import { BookingForm } from '@/components/BookingForm'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
-import { SurfaceCard } from '@/components/ui/surface-card'
+import { Card } from '@/components/ui/card'
 import { Spec, SpecList } from '@/components/ui/spec-list'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
@@ -84,7 +84,7 @@ export default async function ServiceBookingPage({
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-start">
         <div className="space-y-5">
-          <SurfaceCard className="rounded-2xl overflow-hidden border-0 py-0 shadow-sm shadow-black/10 dark:shadow-black/40">
+          <Card className="overflow-hidden py-0">
             {service.image && typeof service.image === 'object' ? (
               <Media
                 resource={service.image}
@@ -94,7 +94,7 @@ export default async function ServiceBookingPage({
             ) : (
               <div className="aspect-4/3 bg-muted" />
             )}
-          </SurfaceCard>
+          </Card>
           <div className="space-y-3">
             <h1 className="text-h1">{service.name}</h1>
             <p className="text-muted-foreground">
@@ -115,13 +115,13 @@ export default async function ServiceBookingPage({
           </div>
         </div>
 
-        <SurfaceCard className="w-full p-6 md:p-8 lg:mx-auto lg:max-w-136">
+        <Card className="w-full p-6 md:p-8 lg:mx-auto lg:max-w-136">
           <h2 className="text-xl font-medium mb-6">Book this service</h2>
           <BookingForm
             initialServiceSlugOrId={service.slug}
             initialProductId={initialProductId ?? null}
           />
-        </SurfaceCard>
+        </Card>
       </section>
     </div>
   )

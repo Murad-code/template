@@ -48,7 +48,7 @@ export default async function MyBookingsPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-medium mb-2">My bookings</h1>
+      <h1 className="text-h1 mb-2">My bookings</h1>
       <p className="text-muted-foreground mb-8">Bookings linked to your account.</p>
       <MyBookingsList bookings={bookings} />
     </div>

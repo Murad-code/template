@@ -1,7 +1,8 @@
 import React from 'react'
 
 export function BrandIcon() {
-  const iconURL = process.env.NEXT_PUBLIC_BRAND_ICON_URL || process.env.NEXT_PUBLIC_BRAND_LOGO_URL || ''
+  const iconURL =
+    process.env.NEXT_PUBLIC_BRAND_ICON_URL || process.env.NEXT_PUBLIC_BRAND_LOGO_URL || ''
   const brandName = process.env.COMPANY_NAME || process.env.SITE_NAME || 'Brand'
 
   if (!iconURL) {

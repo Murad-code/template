@@ -40,7 +40,7 @@ export function FilterItemDropdown({ list }: { list: ListItem[] }) {
   return (
     <div className="relative" ref={ref}>
       <div
-        className="flex w-full items-center justify-between rounded bg-muted/70 px-4 py-2 text-sm shadow-sm shadow-black/5 dark:shadow-black/20"
+        className="border-border bg-background text-body-sm interactive-focus flex h-10 w-full items-center justify-between rounded-sm border px-3"
         onClick={() => {
           setOpenSelect(!openSelect)
         }}

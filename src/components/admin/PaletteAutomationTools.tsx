@@ -53,8 +53,12 @@ export const PaletteAutomationTools: UIFieldClientComponent = () => {
   const onGenerateDark = () => {
     const color1 = normalizeHexColor(values.color1)
     const color2 = normalizeHexColor(values.color2)
-    const generatedColor5 = color1 ? darken(color1, 0.88) : normalizeHexColor(values.color5) || '#111827'
-    const generatedColor4 = color2 ? darken(color2, 0.72) : normalizeHexColor(values.color4) || '#1F2937'
+    const generatedColor5 = color1
+      ? darken(color1, 0.88)
+      : normalizeHexColor(values.color5) || '#111827'
+    const generatedColor4 = color2
+      ? darken(color2, 0.72)
+      : normalizeHexColor(values.color4) || '#1F2937'
 
     setColor5(generatedColor5)
     setColor4(generatedColor4)

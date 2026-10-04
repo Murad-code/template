@@ -49,13 +49,13 @@ export default async function AccountPage() {
 
   return (
     <>
-      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
-        <h1 className="text-3xl font-medium mb-8">Account settings</h1>
+      <SurfaceCard className="gap-6 p-8">
+        <h1 className="text-h1 mb-8">Account settings</h1>
         <AccountForm />
       </SurfaceCard>
 
-      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
-        <h2 className="text-3xl font-medium mb-8">Recent Orders</h2>
+      <SurfaceCard className="gap-6 p-8">
+        <h2 className="text-h1 mb-8">Recent orders</h2>
 
         <div className="prose dark:prose-invert mb-8">
           <p>

@@ -43,32 +43,20 @@ export function OrderDownloadInvoiceButton() {
         <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>
           Invoice available for download (order was refunded).
         </span>
-        <Button
-          buttonStyle="secondary"
-          onClick={handleDownload}
-          disabled={loading}
-        >
+        <Button buttonStyle="secondary" onClick={handleDownload} disabled={loading}>
           {loading ? 'Downloading…' : 'Download invoice'}
         </Button>
-        {error && (
-          <span style={{ fontSize: 12, color: 'var(--theme-error-500)' }}>{error}</span>
-        )}
+        {error && <span style={{ fontSize: 12, color: 'var(--theme-error-500)' }}>{error}</span>}
       </div>
     )
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Button
-        buttonStyle="secondary"
-        onClick={handleDownload}
-        disabled={loading}
-      >
+      <Button buttonStyle="secondary" onClick={handleDownload} disabled={loading}>
         {loading ? 'Downloading…' : 'Download invoice'}
       </Button>
-      {error && (
-        <span style={{ fontSize: 12, color: 'var(--theme-error-500)' }}>{error}</span>
-      )}
+      {error && <span style={{ fontSize: 12, color: 'var(--theme-error-500)' }}>{error}</span>}
     </div>
   )
 }

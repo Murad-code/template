@@ -66,7 +66,7 @@ export function BookingCalendar({
   }
 
   return (
-    <div className="booking-calendar w-fit rounded-md bg-background p-3 shadow-sm shadow-black/5 dark:shadow-black/20">
+    <div className="booking-calendar border-border bg-background w-fit rounded-lg border p-3">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
           value={selectedDate}

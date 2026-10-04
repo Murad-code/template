@@ -7,7 +7,8 @@ export function BookingRefundButton() {
   const { id } = useDocumentInfo()
   const status = useFormFields(([fields]) => fields.status?.value as string | undefined)
   const amountPence = useFormFields(
-    ([fields]) => (fields as { amount?: { value?: number | null } }).amount?.value as number | undefined | null,
+    ([fields]) =>
+      (fields as { amount?: { value?: number | null } }).amount?.value as number | undefined | null,
   )
   const isRefunded = status === 'refunded'
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,10 @@ export function BookingRefundButton() {
   const totalPounds = totalPence / 100
   const partialPounds = partialAmountPounds === '' ? null : parseFloat(partialAmountPounds)
   const isValidPartial =
-    partialPounds !== null && !Number.isNaN(partialPounds) && partialPounds > 0 && partialPounds <= totalPounds
+    partialPounds !== null &&
+    !Number.isNaN(partialPounds) &&
+    partialPounds > 0 &&
+    partialPounds <= totalPounds
   const refundPence =
     partialPounds !== null && isValidPartial ? Math.round(partialPounds * 100) : totalPence
 
@@ -41,7 +45,10 @@ export function BookingRefundButton() {
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        setMessage({ type: 'error', text: (data as { error?: string }).error || `Error ${res.status}` })
+        setMessage({
+          type: 'error',
+          text: (data as { error?: string }).error || `Error ${res.status}`,
+        })
         return
       }
       setMessage({ type: 'success', text: 'Refund processed. Refresh to see updated status.' })
@@ -55,7 +62,9 @@ export function BookingRefundButton() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {isRefunded ? (
-        <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>Booking is refunded.</span>
+        <span style={{ fontSize: 12, color: 'var(--theme-elevation-500)' }}>
+          Booking is refunded.
+        </span>
       ) : (
         <>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -94,7 +103,11 @@ export function BookingRefundButton() {
             onClick={handleRefund}
             disabled={loading || totalPence <= 0 || (partialAmountPounds !== '' && !isValidPartial)}
           >
-            {loading ? 'Refunding…' : refundPence < totalPence ? 'Refund partial amount' : 'Refund full amount'}
+            {loading
+              ? 'Refunding…'
+              : refundPence < totalPence
+                ? 'Refund partial amount'
+                : 'Refund full amount'}
           </Button>
         </>
       )}

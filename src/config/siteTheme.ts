@@ -15,7 +15,6 @@ type PaletteColors = {
   brand: string
   cardBackground: string
   cardBorder: string
-  heading: string
 }
 
 type PaletteMode = {
@@ -84,7 +83,6 @@ const fallbackPalette: PaletteMode = {
     brand: '#1F2937',
     cardBackground: '#F6F7F9',
     cardBorder: '#E5E7EB',
-    heading: '#111827',
     body: '#111827',
   },
   dark: {
@@ -92,7 +90,6 @@ const fallbackPalette: PaletteMode = {
     brand: '#E5E7EB',
     cardBackground: '#1F2937',
     cardBorder: '#374151',
-    heading: '#F9FAFB',
     body: '#F9FAFB',
   },
 }
@@ -124,7 +121,6 @@ function mapCustomPaletteToMode(input: {
       brand: c4,
       cardBackground: c2,
       cardBorder: c3,
-      heading: lightText,
       body: lightText,
     },
     dark: {
@@ -132,7 +128,6 @@ function mapCustomPaletteToMode(input: {
       brand: c3,
       cardBackground: c4,
       cardBorder: c3,
-      heading: darkText,
       body: darkText,
     },
   }
@@ -246,11 +241,6 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
     '--text-primary': body,
     '--text-secondary': ensureContrast(mix(body, background, 0.72), background, 4.5),
     '--text-inverse': opposite.body,
-    '--landing-background': background,
-    '--landing-card-background': cardBackground,
-    '--landing-card-border': cardBorder,
-    '--landing-heading': mode.heading,
-    '--landing-body': body,
   }
 }
 

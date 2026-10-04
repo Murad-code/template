@@ -26,7 +26,10 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
       lightText: typed.lightText?.value ?? '',
       darkText: typed.darkText?.value ?? '',
     }
-  }) as Record<'color1' | 'color2' | 'color3' | 'color4' | 'color5' | 'lightText' | 'darkText', string>
+  }) as Record<
+    'color1' | 'color2' | 'color3' | 'color4' | 'color5' | 'lightText' | 'darkText',
+    string
+  >
 
   const colors = colorMeta
     .map((item) => ({
@@ -39,10 +42,22 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
   if (!colors.length) return null
 
   const checks = [
-    { label: 'Light text on Color 1 (background)', ratio: getContrastRatio(values.lightText, values.color1) },
-    { label: 'Light text on Color 2 (card)', ratio: getContrastRatio(values.lightText, values.color2) },
-    { label: 'Dark text on Color 5 (background)', ratio: getContrastRatio(values.darkText, values.color5) },
-    { label: 'Dark text on Color 4 (card)', ratio: getContrastRatio(values.darkText, values.color4) },
+    {
+      label: 'Light text on Color 1 (background)',
+      ratio: getContrastRatio(values.lightText, values.color1),
+    },
+    {
+      label: 'Light text on Color 2 (card)',
+      ratio: getContrastRatio(values.lightText, values.color2),
+    },
+    {
+      label: 'Dark text on Color 5 (background)',
+      ratio: getContrastRatio(values.darkText, values.color5),
+    },
+    {
+      label: 'Dark text on Color 4 (card)',
+      ratio: getContrastRatio(values.darkText, values.color4),
+    },
   ]
   const badgeStyle = (tone: 'good' | 'warn' | 'bad') => ({
     display: 'inline-block',
@@ -51,24 +66,21 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
     fontSize: 11,
     fontWeight: 600,
     marginRight: 8,
-    color:
-      tone === 'good'
-        ? '#14532d'
-        : tone === 'warn'
-          ? '#78350f'
-          : '#7f1d1d',
-    background:
-      tone === 'good'
-        ? '#dcfce7'
-        : tone === 'warn'
-          ? '#fef3c7'
-          : '#fee2e2',
+    color: tone === 'good' ? '#14532d' : tone === 'warn' ? '#78350f' : '#7f1d1d',
+    background: tone === 'good' ? '#dcfce7' : tone === 'warn' ? '#fef3c7' : '#fee2e2',
   })
 
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ fontWeight: 600, marginBottom: 8 }}>Palette preview</div>
-      <div style={{ display: 'grid', gap: 10, gridTemplateColumns: 'repeat(auto-fit, minmax(92px, 1fr))', width: '100%' }}>
+      <div
+        style={{
+          display: 'grid',
+          gap: 10,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(92px, 1fr))',
+          width: '100%',
+        }}
+      >
         {colors.map((item, index) => (
           <div key={`${item.hex}-${index}`} style={{ minWidth: 0 }}>
             <div
@@ -81,10 +93,24 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
               }}
               title={item.hex}
             />
-            <div style={{ marginTop: 6, fontSize: 12, fontFamily: 'var(--font-mono)', lineHeight: 1.2 }}>
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 12,
+                fontFamily: 'var(--font-mono)',
+                lineHeight: 1.2,
+              }}
+            >
               {item.hex}
             </div>
-            <div style={{ marginTop: 2, fontSize: 11, color: 'var(--theme-elevation-600)', lineHeight: 1.2 }}>
+            <div
+              style={{
+                marginTop: 2,
+                fontSize: 11,
+                color: 'var(--theme-elevation-600)',
+                lineHeight: 1.2,
+              }}
+            >
               {item.label}
             </div>
           </div>
@@ -94,9 +120,14 @@ export const ThemePaletteFormPreview: UIFieldClientComponent = () => {
         {checks.map((check) => {
           const badge = getContrastBadge(check.ratio)
           return (
-            <div key={check.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+            <div
+              key={check.label}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}
+            >
               <span style={badgeStyle(badge.tone)}>{badge.label}</span>
-              <span style={{ fontSize: 12, color: 'var(--theme-elevation-700)' }}>{check.label}</span>
+              <span style={{ fontSize: 12, color: 'var(--theme-elevation-700)' }}>
+                {check.label}
+              </span>
             </div>
           )
         })}

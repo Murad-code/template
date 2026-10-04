@@ -46,8 +46,8 @@ export default async function Orders() {
 
   return (
     <>
-      <SurfaceCard className="w-full gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
-        <h1 className="text-3xl font-medium mb-8">Orders</h1>
+      <SurfaceCard className="w-full gap-6 p-8">
+        <h1 className="text-h1 mb-8">Orders</h1>
         {(!orders || !Array.isArray(orders) || orders?.length === 0) && (
           <p className="">You have no orders.</p>
         )}

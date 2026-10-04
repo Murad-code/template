@@ -177,7 +177,8 @@ export const TypographyFontSelectField: SelectFieldClientComponent = ({ field, p
                   cursor: 'pointer',
                   border: 0,
                   borderBottom: '1px solid var(--theme-elevation-100)',
-                  background: font.value === selectedValue ? 'var(--theme-elevation-100)' : 'transparent',
+                  background:
+                    font.value === selectedValue ? 'var(--theme-elevation-100)' : 'transparent',
                   padding: '9px 10px',
                   textAlign: 'left',
                   display: 'flex',

@@ -36,8 +36,7 @@ export function BookingPaymentStep({ amountPence, onSuccess, onCancel, returnUrl
     const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url:
-          returnUrl ?? (typeof window !== 'undefined' ? window.location.href : '/'),
+        return_url: returnUrl ?? (typeof window !== 'undefined' ? window.location.href : '/'),
       },
       redirect: 'if_required',
     })
@@ -59,9 +58,7 @@ export function BookingPaymentStep({ amountPence, onSuccess, onCancel, returnUrl
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {amountPence != null && (
-        <p className="text-sm text-muted-foreground">
-          Total: £{(amountPence / 100).toFixed(2)}
-        </p>
+        <p className="text-sm text-muted-foreground">Total: £{(amountPence / 100).toFixed(2)}</p>
       )}
       <PaymentElement />
       {error && <p className="text-sm text-destructive">{error}</p>}

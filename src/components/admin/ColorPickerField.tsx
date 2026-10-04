@@ -20,7 +20,8 @@ function isHex(value: string): boolean {
 
 export const ColorPickerField: TextFieldClientComponent = ({ field, path }) => {
   const label = typeof field.label === 'string' ? field.label : field.name
-  const description = typeof field.admin?.description === 'string' ? field.admin.description : undefined
+  const description =
+    typeof field.admin?.description === 'string' ? field.admin.description : undefined
   const { setValue, value } = useField<string>({ path })
 
   const normalized = normalizeHex(value || '')
@@ -38,7 +39,12 @@ export const ColorPickerField: TextFieldClientComponent = ({ field, path }) => {
         <input
           aria-label={`${label} color picker`}
           onChange={(event) => setValue(event.target.value.toUpperCase())}
-          style={{ width: 44, height: 32, borderRadius: 6, border: '1px solid var(--theme-elevation-300)' }}
+          style={{
+            width: 44,
+            height: 32,
+            borderRadius: 6,
+            border: '1px solid var(--theme-elevation-300)',
+          }}
           type="color"
           value={swatchValue}
         />

@@ -45,5 +45,8 @@ export const AccountDetailMetaLabel: React.FC<React.ComponentProps<'p'>> = ({
   className,
   ...props
 }) => (
-  <p className={cn('mb-1 text-sm font-mono uppercase text-muted-foreground', className)} {...props} />
+  <p
+    className={cn('mb-1 text-sm font-mono uppercase text-muted-foreground', className)}
+    {...props}
+  />
 )

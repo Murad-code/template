@@ -34,8 +34,11 @@ export const AddressListing: React.FC = () => {
       })
 
       if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { errors?: { message?: string }[] } | null
-        const message = payload?.errors?.[0]?.message ?? 'Unable to delete this address. Please try again.'
+        const payload = (await response.json().catch(() => null)) as {
+          errors?: { message?: string }[]
+        } | null
+        const message =
+          payload?.errors?.[0]?.message ?? 'Unable to delete this address. Please try again.'
         throw new Error(message)
       }
 

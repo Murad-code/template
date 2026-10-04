@@ -133,77 +133,69 @@ export default async function Order({ params, searchParams }: PageProps) {
       backLabel={user ? 'All orders' : undefined}
       badgeLabel={`Order #${order.id}`}
     >
-        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
-          <div className="">
-            <AccountDetailMetaLabel>Order Date</AccountDetailMetaLabel>
-            <p className="text-lg">
-              <time dateTime={order.createdAt}>
-                {formatDateTime({ date: order.createdAt })}
-              </time>
-            </p>
-          </div>
-
-          <div className="">
-            <AccountDetailMetaLabel>Total</AccountDetailMetaLabel>
-            {order.amount && <Price className="text-lg" amount={order.amount} />}
-          </div>
-
-          {order.status && (
-            <div className="grow max-w-1/3">
-              <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
-              <OrderStatus className="text-sm" status={order.status} />
-            </div>
-          )}
+      <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
+        <div className="">
+          <AccountDetailMetaLabel>Order Date</AccountDetailMetaLabel>
+          <p className="text-lg">
+            <time dateTime={order.createdAt}>{formatDateTime({ date: order.createdAt })}</time>
+          </p>
         </div>
 
-        {invoicePdfHref ? (
-          <div>
-            <Button asChild variant="outline" className="w-fit">
-              <a href={invoicePdfHref}>Download PDF invoice</a>
-            </Button>
-          </div>
-        ) : null}
+        <div className="">
+          <AccountDetailMetaLabel>Total</AccountDetailMetaLabel>
+          {order.amount && <Price className="text-lg" amount={order.amount} />}
+        </div>
 
-        {order.items && (
-          <div>
-            <h2 className="mb-4 font-mono text-sm uppercase text-muted-foreground">Items</h2>
-            <ul className="flex flex-col gap-6">
-              {order.items?.map((item, index) => {
-                if (typeof item.product === 'string') {
-                  return null
-                }
-
-                if (!item.product || typeof item.product !== 'object') {
-                  return <div key={index}>This item is no longer available.</div>
-                }
-
-                const variant =
-                  item.variant && typeof item.variant === 'object' ? item.variant : undefined
-
-                return (
-                  <li key={item.id}>
-                    <ProductItem
-                      product={item.product}
-                      quantity={item.quantity}
-                      variant={variant}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
+        {order.status && (
+          <div className="grow max-w-1/3">
+            <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
+            <OrderStatus className="text-sm" status={order.status} />
           </div>
         )}
+      </div>
 
-        {order.shippingAddress && (
-          <div>
-            <h2 className="mb-4 font-mono text-sm uppercase text-muted-foreground">
-              Shipping Address
-            </h2>
+      {invoicePdfHref ? (
+        <div>
+          <Button asChild variant="outline" className="w-fit">
+            <a href={invoicePdfHref}>Download PDF invoice</a>
+          </Button>
+        </div>
+      ) : null}
 
-            {/* @ts-expect-error - some kind of type hell */}
-            <AddressItem address={order.shippingAddress} hideActions />
-          </div>
-        )}
+      {order.items && (
+        <div>
+          <h2 className="spec-list mb-4">Items</h2>
+          <ul className="flex flex-col gap-6">
+            {order.items?.map((item, index) => {
+              if (typeof item.product === 'string') {
+                return null
+              }
+
+              if (!item.product || typeof item.product !== 'object') {
+                return <div key={index}>This item is no longer available.</div>
+              }
+
+              const variant =
+                item.variant && typeof item.variant === 'object' ? item.variant : undefined
+
+              return (
+                <li key={item.id}>
+                  <ProductItem product={item.product} quantity={item.quantity} variant={variant} />
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+
+      {order.shippingAddress && (
+        <div>
+          <h2 className="spec-list mb-4">Shipping Address</h2>
+
+          {/* @ts-expect-error - some kind of type hell */}
+          <AddressItem address={order.shippingAddress} hideActions />
+        </div>
+      )}
     </AccountDetailPanel>
   )
 }

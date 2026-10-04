@@ -23,9 +23,12 @@ export function MyBookingsList({ bookings }: { bookings: Row[] }) {
   }
 
   return (
-    <ul className="divide-y divide-border/60 rounded-md bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
+    <ul className="divide-border border-border bg-card divide-y rounded-lg border">
       {bookings.map((b) => (
-        <li key={b.id} className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <li
+          key={b.id}
+          className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div>
             <p className="font-medium">{serviceName(b)}</p>
             <p className="text-sm text-muted-foreground">

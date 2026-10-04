@@ -24,13 +24,19 @@ export const BeforeDashboard: React.FC = () => {
           {' to see the results.'}
         </li>
         <li>
-          {'Connect Stripe in your environment variables, then restart your server to enable checkout and booking payments.'}
+          {
+            'Connect Stripe in your environment variables, then restart your server to enable checkout and booking payments.'
+          }
         </li>
         <li>
-          {'Review products, services, pages and navigation to tailor this demo for your client brand and offer.'}
+          {
+            'Review products, services, pages and navigation to tailor this demo for your client brand and offer.'
+          }
         </li>
       </ul>
-      {'Tip: This welcome block is fully customizable and can be removed from your admin config at any time.'}
+      {
+        'Tip: This welcome block is fully customizable and can be removed from your admin config at any time.'
+      }
     </div>
   )
 }

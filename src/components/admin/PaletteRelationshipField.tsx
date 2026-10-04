@@ -15,12 +15,23 @@ type PaletteDoc = {
 }
 
 function Swatches({ palette }: { palette: PaletteDoc }) {
-  const colors = [palette.color1, palette.color2, palette.color3, palette.color4, palette.color5].filter(
-    (color): color is string => Boolean(color && color.trim()),
-  )
+  const colors = [
+    palette.color1,
+    palette.color2,
+    palette.color3,
+    palette.color4,
+    palette.color5,
+  ].filter((color): color is string => Boolean(color && color.trim()))
 
   return (
-    <span style={{ display: 'inline-flex', overflow: 'hidden', borderRadius: 6, border: '1px solid var(--theme-elevation-200)' }}>
+    <span
+      style={{
+        display: 'inline-flex',
+        overflow: 'hidden',
+        borderRadius: 6,
+        border: '1px solid var(--theme-elevation-200)',
+      }}
+    >
       {(colors.length ? colors : ['#d1d5db']).map((color, index) => (
         <span
           key={`${palette.id}-${color}-${index}`}
@@ -175,7 +186,8 @@ export const PaletteRelationshipField: RelationshipFieldClientComponent = ({ fie
                   width: '100%',
                   border: 0,
                   borderBottom: '1px solid var(--theme-elevation-100)',
-                  background: palette.id === selectedID ? 'var(--theme-elevation-100)' : 'transparent',
+                  background:
+                    palette.id === selectedID ? 'var(--theme-elevation-100)' : 'transparent',
                   padding: '8px 10px',
                   textAlign: 'left',
                   display: 'flex',
@@ -189,7 +201,9 @@ export const PaletteRelationshipField: RelationshipFieldClientComponent = ({ fie
               </button>
             ))
           ) : (
-            <div style={{ padding: 12, color: 'var(--theme-elevation-600)', fontSize: 13 }}>No palettes found.</div>
+            <div style={{ padding: 12, color: 'var(--theme-elevation-600)', fontSize: 13 }}>
+              No palettes found.
+            </div>
           )}
         </div>
       ) : null}

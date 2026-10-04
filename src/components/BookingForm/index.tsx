@@ -475,11 +475,7 @@ export function BookingForm({
         />
       </div>
       {message && (
-        <p
-          className={`text-sm ${
-            message.type === 'error' ? 'text-destructive' : 'text-success'
-          }`}
-        >
+        <p className={`text-sm ${message.type === 'error' ? 'text-destructive' : 'text-success'}`}>
           {message.text}
         </p>
       )}

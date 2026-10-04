@@ -47,8 +47,8 @@ export default async function AddressesPage() {
 
   return (
     <>
-      <SurfaceCard className="gap-6 rounded-lg border-0 p-8 shadow-sm shadow-black/10 dark:shadow-black/40">
-        <h1 className="text-3xl font-medium mb-8">Addresses</h1>
+      <SurfaceCard className="gap-6 p-8">
+        <h1 className="text-h1 mb-8">Addresses</h1>
 
         <div className="mb-8">
           <AddressListing />

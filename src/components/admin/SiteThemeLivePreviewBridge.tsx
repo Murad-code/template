@@ -99,7 +99,9 @@ export function SiteThemeLivePreviewBridge() {
     const selectedPalette =
       toPaletteLike(values.palette) || palettes.find((palette) => palette.id === paletteID) || null
     const selectedDarkPalette =
-      toPaletteLike(values.darkPalette) || palettes.find((palette) => palette.id === darkPaletteID) || null
+      toPaletteLike(values.darkPalette) ||
+      palettes.find((palette) => palette.id === darkPaletteID) ||
+      null
 
     return {
       paletteMode: values.paletteMode,

@@ -120,69 +120,67 @@ export default async function BookingInvoicePage({ params, searchParams }: PageP
       backLabel={user ? 'My bookings' : undefined}
       badgeLabel={`Booking #${booking.id}`}
     >
-        <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
-          <div>
-            <AccountDetailMetaLabel>Booked on</AccountDetailMetaLabel>
-            <p className="text-lg">
-              <time dateTime={booking.createdAt}>
-                {formatDateTime({ date: booking.createdAt })}
-              </time>
-            </p>
-          </div>
-
-          <div>
-            <AccountDetailMetaLabel>Appointment</AccountDetailMetaLabel>
-            <p className="text-lg">
-              <time dateTime={toDateOnlyString(booking.slotDate)}>
-                {formatDateDisplayDMY(booking.slotDate)}
-              </time>{' '}
-              at {booking.slotTime}
-            </p>
-          </div>
-
-          {booking.amount != null && booking.amount > 0 ? (
-            <div>
-              <AccountDetailMetaLabel>Total paid</AccountDetailMetaLabel>
-              <Price className="text-lg" amount={booking.amount} />
-            </div>
-          ) : (
-            <div>
-              <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
-              <p className="text-lg text-muted-foreground">No charge</p>
-            </div>
-          )}
+      <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
+        <div>
+          <AccountDetailMetaLabel>Booked on</AccountDetailMetaLabel>
+          <p className="text-lg">
+            <time dateTime={booking.createdAt}>{formatDateTime({ date: booking.createdAt })}</time>
+          </p>
         </div>
 
-        {invoicePdfHref ? (
-          <div>
-            <Button asChild variant="outline" className="w-fit">
-              <a href={invoicePdfHref}>Download PDF invoice</a>
-            </Button>
-          </div>
-        ) : null}
+        <div>
+          <AccountDetailMetaLabel>Appointment</AccountDetailMetaLabel>
+          <p className="text-lg">
+            <time dateTime={toDateOnlyString(booking.slotDate)}>
+              {formatDateDisplayDMY(booking.slotDate)}
+            </time>{' '}
+            at {booking.slotTime}
+          </p>
+        </div>
 
-        {service && (
+        {booking.amount != null && booking.amount > 0 ? (
           <div>
-            <h2 className="mb-2 font-mono text-sm uppercase text-muted-foreground">Service</h2>
-            <p className="text-lg font-medium">{service.name}</p>
-            {service.description ? (
-              <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
-            ) : null}
+            <AccountDetailMetaLabel>Total paid</AccountDetailMetaLabel>
+            <Price className="text-lg" amount={booking.amount} />
+          </div>
+        ) : (
+          <div>
+            <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
+            <p className="text-lg text-muted-foreground">No charge</p>
           </div>
         )}
+      </div>
 
-        <div className="flex flex-col sm:flex-row sm:gap-12 gap-4">
-          <div>
-            <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
-            <p className="text-lg capitalize">{booking.status}</p>
-          </div>
-          {booking.stripePaymentIntentId ? (
-            <div>
-              <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
-              <p className="text-sm text-muted-foreground">Received via card</p>
-            </div>
+      {invoicePdfHref ? (
+        <div>
+          <Button asChild variant="outline" className="w-fit">
+            <a href={invoicePdfHref}>Download PDF invoice</a>
+          </Button>
+        </div>
+      ) : null}
+
+      {service && (
+        <div>
+          <h2 className="spec-list mb-2">Service</h2>
+          <p className="text-h4">{service.name}</p>
+          {service.description ? (
+            <p className="text-sm text-muted-foreground mt-1">{service.description}</p>
           ) : null}
         </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row sm:gap-12 gap-4">
+        <div>
+          <AccountDetailMetaLabel>Status</AccountDetailMetaLabel>
+          <p className="text-lg capitalize">{booking.status}</p>
+        </div>
+        {booking.stripePaymentIntentId ? (
+          <div>
+            <AccountDetailMetaLabel>Payment</AccountDetailMetaLabel>
+            <p className="text-sm text-muted-foreground">Received via card</p>
+          </div>
+        ) : null}
+      </div>
     </AccountDetailPanel>
   )
 }
