@@ -249,6 +249,7 @@ In `src/components/ui/`:
 | `SpecList` / `Spec` | §7 |
 | `Input` · `Textarea` · `Select` · `Checkbox` · `Label` | Radix-backed, on the control radius |
 | `Dialog` · `Sheet` | `popover` surface, `shadow-overlay`, `overscroll-contain` |
+| `Calendar` | react-day-picker, styled from the tokens. Days are round because a date is a single point — the one place a full radius is the honest shape |
 | `Accordion` · `Carousel` · `Pagination` · `IconSquareButton` · `Sonner` | |
 
 The header's link style is `navLinkClassName` in `src/components/Header/`. It is not
