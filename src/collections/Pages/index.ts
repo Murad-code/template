@@ -1,6 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
 import { Banner } from '@/blocks/Banner/config'
+import { HeroCarousel } from '@/blocks/HeroCarousel/config'
+import { MarqueeBlock } from '@/blocks/Marquee/config'
 import { Carousel } from '@/blocks/Carousel/config'
 import { ThreeItemGrid } from '@/blocks/ThreeItemGrid/config'
 import { LogoCloud } from '@/blocks/LogoCloud/config'
@@ -97,6 +99,8 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               blocks: [
+                HeroCarousel,
+                MarqueeBlock,
                 CallToAction,
                 Content,
                 MediaBlock,

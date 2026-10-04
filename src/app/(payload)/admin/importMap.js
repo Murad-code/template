@@ -44,6 +44,7 @@ import { BrandLogo as BrandLogo_fd0a9bbb35693e340bbbfa9596236d37 } from '@/compo
 import { default as default_18f6e79a8f7205ca6aed55ca3617b9a1 } from '@/components/ViewProductsLink'
 import { BeforeDashboard as BeforeDashboard_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
 import { BeforeLogin as BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
+import { default as default_0b4739cd1d633dd184c8ba5ae38fe336 } from '@/components/admin/HomePageNavLink'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -94,5 +95,6 @@ export const importMap = {
   "@/components/ViewProductsLink#default": default_18f6e79a8f7205ca6aed55ca3617b9a1,
   "@/components/BeforeDashboard#BeforeDashboard": BeforeDashboard_1a7510af427896d367a49dbf838d2de6,
   "@/components/BeforeLogin#BeforeLogin": BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e,
+  "@/components/admin/HomePageNavLink#default": default_0b4739cd1d633dd184c8ba5ae38fe336,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

@@ -87,6 +87,9 @@ export default buildConfig({
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
+      // Shortcut straight to the home page document, which is edited far
+      // more often than any other page.
+      beforeNavLinks: ['@/components/admin/HomePageNavLink'],
       // Link to the frontend products page in the admin sidebar.
       afterNavLinks: ['@/components/ViewProductsLink'],
     },
