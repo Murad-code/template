@@ -42,10 +42,7 @@ export const Text: React.FC<
             required: requiredFromProps
               ? `${capitaliseFirstLetter(label || name)} is required.`
               : undefined,
-            validate:
-              name === 'phone'
-                ? (value) => validateEnquiryPhone(value) || true
-                : undefined,
+            validate: name === 'phone' ? (value) => validateEnquiryPhone(value) || true : undefined,
           })}
         />
 

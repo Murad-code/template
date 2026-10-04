@@ -33,8 +33,8 @@ export const FormBlock: React.FC<FormBlockComponentProps> = async (props) => {
 
   const showSidebar = Boolean(
     props.showSiteContactDetails &&
-      contactDetails &&
-      (contactDetails.email || contactDetails.phone || contactDetails.address),
+    contactDetails &&
+    (contactDetails.email || contactDetails.phone || contactDetails.address),
   )
 
   return (
@@ -64,17 +64,12 @@ function toPublicForm(form: FormType | Record<string, unknown>): FormType {
   return rest as FormType
 }
 
-async function resolveForm(
-  formRef: FormBlockComponentProps['form'],
-): Promise<FormType | null> {
+async function resolveForm(formRef: FormBlockComponentProps['form']): Promise<FormType | null> {
   if (formRef && typeof formRef === 'object' && 'fields' in formRef) {
     return toPublicForm(formRef)
   }
 
-  const id =
-    typeof formRef === 'number' || typeof formRef === 'string'
-      ? formRef
-      : null
+  const id = typeof formRef === 'number' || typeof formRef === 'string' ? formRef : null
   if (id == null || id === '') return null
 
   const payload = await getPayload({ config: configPromise })

@@ -21,7 +21,7 @@ export const TestimonialsCarousel: React.FC<{ items: Item[] }> = ({ items }) => 
       <CarouselContent>
         {items.map((item, index) => (
           <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={index}>
-            <figure className="flex h-full flex-col rounded-2xl border border-border bg-card p-6">
+            <figure className="border-border bg-card flex h-full flex-col rounded-lg border p-6">
               {item.rating ? (
                 <div className="mb-3 flex gap-1 text-primary">
                   {Array.from({ length: 5 }).map((_, starIndex) => (
@@ -38,7 +38,7 @@ export const TestimonialsCarousel: React.FC<{ items: Item[] }> = ({ items }) => 
                 )}
                 <div>
                   <p className="font-medium">{item.author}</p>
-                  {item.role && <p className="text-sm text-muted-foreground">{item.role}</p>}
+                  {item.role && <p className="text-body-sm text-muted-foreground">{item.role}</p>}
                 </div>
               </figcaption>
             </figure>

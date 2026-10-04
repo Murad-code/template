@@ -133,7 +133,9 @@ export const FormBlockClient: React.FC<FormBlockClientProps> = (props) => {
                     return (
                       <div
                         className={
-                          width < 100 ? 'mb-6 w-full px-1 md:w-1/2 last:mb-0' : 'mb-6 w-full px-1 last:mb-0'
+                          width < 100
+                            ? 'mb-6 w-full px-1 md:w-1/2 last:mb-0'
+                            : 'mb-6 w-full px-1 last:mb-0'
                         }
                         key={index}
                       >

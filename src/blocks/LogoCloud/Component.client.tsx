@@ -15,13 +15,13 @@ export const LogoCloudMarquee: React.FC<{ logos: Logo[] }> = ({ logos }) => {
       <div className="flex w-max animate-carousel gap-4">
         {items.map((logo, index) => (
           <div
-            className="flex h-16 min-w-[160px] items-center justify-center rounded-xl border border-border bg-card px-6"
+            className="flex h-16 min-w-[160px] items-center justify-center border-border bg-card rounded-lg border px-6"
             key={index}
           >
             {logo.image && typeof logo.image === 'object' ? (
               <Media className="max-h-8 w-auto opacity-70 grayscale" resource={logo.image} />
             ) : (
-              <span className="text-sm font-medium text-muted-foreground">{logo.label}</span>
+              <span className="text-body-sm text-muted-foreground font-medium">{logo.label}</span>
             )}
           </div>
         ))}

@@ -49,7 +49,7 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
 
   return (
     <section className="container">
-      <div className="rounded-2xl border border-border bg-card p-8 md:p-12">
+      <div className="border-border bg-card rounded-lg border p-8 md:p-12">
         <SectionHeader align={align} description={description} eyebrow={eyebrow} title={title} />
         {status === 'success' ? (
           <p className="text-base font-medium">{successMessage || 'Thanks for subscribing.'}</p>
@@ -57,7 +57,7 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
           <form className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
             <input
               aria-label="Email address"
-              className="h-11 flex-1 rounded-md border border-input bg-background px-4 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="border-input bg-background text-body-sm interactive-focus h-11 flex-1 rounded-sm border px-4"
               onChange={(event) => setEmail(event.target.value)}
               placeholder={placeholder || 'you@example.com'}
               required
@@ -70,9 +70,9 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
           </form>
         )}
         {privacyNote && status !== 'success' && (
-          <p className="mt-3 text-sm text-muted-foreground">{privacyNote}</p>
+          <p className="text-body-sm text-muted-foreground mt-3">{privacyNote}</p>
         )}
-        {errorMessage && <p className="mt-3 text-sm text-destructive">{errorMessage}</p>}
+        {errorMessage && <p className="text-body-sm text-destructive mt-3">{errorMessage}</p>}
       </div>
     </section>
   )

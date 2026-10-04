@@ -42,11 +42,7 @@ export const MediaBlock: React.FC<
         className,
       )}
     >
-      <Media
-        imgClassName={cn('rounded-[0.8rem] shadow-sm shadow-black/10 dark:shadow-black/40', imgClassName)}
-        resource={media}
-        src={staticImage}
-      />
+      <Media imgClassName={cn('rounded-lg', imgClassName)} resource={media} src={staticImage} />
       {caption && (
         <div
           className={cn(

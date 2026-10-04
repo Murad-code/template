@@ -43,7 +43,9 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
           eyebrow={eyebrow}
           title={title}
         />
-        {enableViewAllLink && link && <CMSLink {...link} appearance="outline" className="shrink-0" />}
+        {enableViewAllLink && link && (
+          <CMSLink {...link} appearance="outline" className="shrink-0" />
+        )}
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {services.map((service) => {
@@ -55,7 +57,7 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
 
           return (
             <Link
-              className="group flex h-full flex-col overflow-hidden rounded-2xl border bg-card transition-colors hover:border-primary/40"
+              className="group border-border hover:border-border-strong interactive-focus bg-card flex h-full flex-col overflow-hidden rounded-lg border transition-colors"
               href={`/book/${encodeURIComponent(serviceKey)}`}
               key={service.id}
             >
@@ -70,8 +72,8 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
               )}
               <article className="flex h-full flex-col justify-between gap-4 p-5">
                 <div className="space-y-3">
-                  <h3 className="text-lg font-medium">{service.name}</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className="text-h4">{service.name}</h3>
+                  <p className="text-body-sm text-muted-foreground">
                     {service.description || 'A guided session tailored to your needs.'}
                   </p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -89,7 +91,7 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
                     </span>
                   </div>
                 </div>
-                <span className="inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium group-hover:bg-muted">
+                <span className="border-border text-body-sm group-hover:bg-muted inline-flex h-10 items-center justify-center rounded-sm border px-4 font-medium">
                   View details and book
                 </span>
               </article>

@@ -13,7 +13,7 @@ export const FAQBlock: React.FC<FAQBlockProps> = (props) => {
   if (!items?.length) return null
   return (
     <div className="container">
-      {title && <h2 className="text-2xl font-medium mb-6">{title}</h2>}
+      {title && <h2 className="text-h2 mb-8">{title}</h2>}
       <Accordion type="single" collapsible className="w-full">
         {items.map((item, i) => (
           <AccordionItem key={i} value={`item-${i}`}>

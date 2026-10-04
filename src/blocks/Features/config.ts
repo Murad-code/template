@@ -68,7 +68,8 @@ export const Features: Block = {
         link({
           overrides: {
             admin: {
-              condition: (_: unknown, { enableLink }: { enableLink?: boolean }) => Boolean(enableLink),
+              condition: (_: unknown, { enableLink }: { enableLink?: boolean }) =>
+                Boolean(enableLink),
             },
           },
         }),

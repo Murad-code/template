@@ -30,8 +30,7 @@ export const FormBlock: Block = {
       label: 'Show site contact details',
       defaultValue: false,
       admin: {
-        description:
-          'Display public email, phone and address from Site settings beside the form.',
+        description: 'Display public email, phone and address from Site settings beside the form.',
       },
     },
     {

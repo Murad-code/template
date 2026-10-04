@@ -26,7 +26,7 @@ function TestimonialCard({
   role,
 }: NonNullable<TestimonialsBlockProps['items']>[number]) {
   return (
-    <figure className="flex h-full flex-col rounded-2xl border border-border bg-card p-6">
+    <figure className="border-border bg-card flex h-full flex-col rounded-lg border p-6">
       <Stars rating={rating} />
       <blockquote className="flex-1 text-base leading-relaxed">&ldquo;{quote}&rdquo;</blockquote>
       <figcaption className="mt-6 flex items-center gap-3">
@@ -35,7 +35,7 @@ function TestimonialCard({
         )}
         <div>
           <p className="font-medium">{author}</p>
-          {role && <p className="text-sm text-muted-foreground">{role}</p>}
+          {role && <p className="text-body-sm text-muted-foreground">{role}</p>}
         </div>
       </figcaption>
     </figure>

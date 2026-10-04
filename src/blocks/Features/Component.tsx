@@ -49,7 +49,7 @@ export const FeaturesBlock: React.FC<FeaturesBlockProps> = (props) => {
                 </div>
               )}
               {href ? (
-                <span className="mt-4 inline-block text-sm font-medium text-primary opacity-80 group-hover:opacity-100">
+                <span className="text-body-sm text-foreground decoration-border-strong group-hover:decoration-current mt-4 inline-block font-medium underline underline-offset-4">
                   {item.link?.label || 'Explore'} →
                 </span>
               ) : null}
