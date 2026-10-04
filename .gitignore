@@ -46,3 +46,12 @@ docs/DEPLOYMENT_VALUES.md
 
 # cursor local config
 .cursor/cli-config.json
+
+# agent skills
+# Installed skill bundles are vendored third-party content, restored from
+# skills-lock.json. The lock file is committed; the bundles are not.
+.claude/skills/
+.agents/skills/
+
+# verification build output (see tsconfig.json)
+/.next-verify/
