@@ -99,7 +99,10 @@ export const HeroCarouselClient: React.FC<{
     <section
       aria-label={many ? 'Highlights' : undefined}
       aria-roledescription={many ? 'carousel' : undefined}
-      className={cn('bg-primary relative isolate flex flex-col justify-center overflow-hidden', height)}
+      className={cn(
+        'bg-primary relative isolate flex flex-col justify-center overflow-hidden',
+        height,
+      )}
       data-tone="inverse"
       onBlur={() => setHeld(false)}
       onFocus={() => setHeld(true)}
@@ -154,10 +157,15 @@ export const HeroCarouselClient: React.FC<{
         )}
       </div>
 
-      {/* Wash so the heading keeps its contrast whatever photo is uploaded. */}
+      {/* Wash so the heading keeps its contrast whatever photo is uploaded.
+          It runs with the copy rather than over the whole frame: down the
+          page on narrow screens where the text is full width, and across to
+          the right on wide ones, where it clears before the photograph's
+          subject. A hero whose image is evenly dimmed may as well not have
+          one. */}
       <div
         aria-hidden="true"
-        className="from-primary/95 via-primary/80 to-primary/50 absolute inset-0 bg-gradient-to-r"
+        className="from-primary/80 to-primary/45 lg:from-primary/88 lg:via-primary/45 lg:to-primary/5 absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r"
       />
 
       {many && (
@@ -208,7 +216,10 @@ export const HeroCarouselClient: React.FC<{
                     </span>
                   </Heading>
                   {slide.subheading && (
-                    <p className="rise text-muted-foreground mt-6 text-lg sm:text-xl" style={rise(600)}>
+                    <p
+                      className="rise text-muted-foreground mt-6 text-lg sm:text-xl"
+                      style={rise(600)}
+                    >
                       {slide.subheading}
                     </p>
                   )}
@@ -279,7 +290,10 @@ export const HeroCarouselClient: React.FC<{
           <div className="relative z-10 container pt-12 pb-20 sm:pb-28 lg:pb-32">
             <ul className="grid gap-4 sm:grid-cols-3">
               {highlights.map((item) => (
-                <li className="border-border bg-card rounded-xl border p-5 backdrop-blur-sm" key={item.id}>
+                <li
+                  className="border-border bg-card rounded-xl border p-5 backdrop-blur-sm"
+                  key={item.id}
+                >
                   <p className="font-semibold">{item.title}</p>
                   {item.description && (
                     <p className="text-muted-foreground mt-1 text-sm">{item.description}</p>
