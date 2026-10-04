@@ -4,6 +4,7 @@ import * as migration_20260607_235952 from './20260607_235952';
 import * as migration_20260619_233159 from './20260619_233159';
 import * as migration_20260809_173733_ui_audit_blocks from './20260809_173733_ui_audit_blocks';
 import * as migration_20260904_210000_site_settings_enquiry from './20260904_210000_site_settings_enquiry';
+import * as migration_20261004_105148_port_smartmove_blocks from './20261004_105148_port_smartmove_blocks';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260904_210000_site_settings_enquiry.up,
     down: migration_20260904_210000_site_settings_enquiry.down,
     name: '20260904_210000_site_settings_enquiry',
+  },
+  {
+    up: migration_20261004_105148_port_smartmove_blocks.up,
+    down: migration_20261004_105148_port_smartmove_blocks.down,
+    name: '20261004_105148_port_smartmove_blocks'
   },
 ];

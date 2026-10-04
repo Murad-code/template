@@ -434,6 +434,8 @@ export interface VariantType {
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   layout?: ('inlineCard' | 'splitPanel') | null;
   richText?: {
     root: {
@@ -527,6 +529,8 @@ export interface Page {
     media?: (number | null) | Media;
   };
   layout: (
+    | HeroCarouselBlock
+    | MarqueeBlockType
     | CallToActionBlock
     | ContentBlock
     | MediaBlock
@@ -564,9 +568,79 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroCarouselBlock".
+ */
+export interface HeroCarouselBlock {
+  /**
+   * One slide renders as a still hero. Two or more rotate.
+   */
+  slides: {
+    heading: string;
+    subheading?: string | null;
+    image?: (number | null) | Media;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?: {
+              relationTo: 'pages';
+              value: number | Page;
+            } | null;
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  /**
+   * Rotation always stops on hover, on focus, and for visitors who have asked for reduced motion. A pause control is shown either way.
+   */
+  autoplay?: boolean | null;
+  minHeight?: ('standard' | 'tall' | 'full') | null;
+  /**
+   * Optional cards sitting below the banner copy.
+   */
+  highlights?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlockType".
+ */
+export interface MarqueeBlockType {
+  /**
+   * Short phrases that loop sideways. Three or more, otherwise the loop is visibly a loop.
+   */
+  items: {
+    label: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'marquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentBlock".
  */
 export interface ContentBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   columns?:
     | {
         size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
@@ -612,6 +686,8 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   media: number | Media;
   id?: string | null;
   blockName?: string | null;
@@ -622,6 +698,8 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   introContent?: {
     root: {
       type: string;
@@ -671,6 +749,8 @@ export interface Category {
  * via the `definition` "CarouselBlock".
  */
 export interface CarouselBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'products' | null;
   categories?: (number | Category)[] | null;
@@ -703,6 +783,8 @@ export interface CarouselBlock {
  * via the `definition` "ThreeItemGridBlock".
  */
 export interface ThreeItemGridBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   products?: (number | Product)[] | null;
   id?: string | null;
   blockName?: string | null;
@@ -713,6 +795,8 @@ export interface ThreeItemGridBlock {
  * via the `definition` "BannerBlock".
  */
 export interface BannerBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   style: 'info' | 'promo' | 'warning' | 'error' | 'success';
   content: {
     root: {
@@ -738,6 +822,8 @@ export interface BannerBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   form: number | Form;
   enableIntro?: boolean | null;
   /**
@@ -942,6 +1028,8 @@ export interface Form {
  * via the `definition` "FAQBlock".
  */
 export interface FAQBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   title?: string | null;
   items: {
     question: string;
@@ -971,10 +1059,62 @@ export interface FAQBlock {
  * via the `definition` "FeaturesBlock".
  */
 export interface FeaturesBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
+  eyebrow?: string | null;
   title?: string | null;
+  description?: string | null;
+  align?: ('left' | 'center') | null;
   layout?: ('cards' | 'minimal' | 'linkedCards') | null;
   items: {
     title: string;
+    iconName?:
+      | (
+          | 'award'
+          | 'badgeCheck'
+          | 'banknote'
+          | 'calendar'
+          | 'check'
+          | 'clipboardCheck'
+          | 'clock'
+          | 'coffee'
+          | 'compass'
+          | 'creditCard'
+          | 'gift'
+          | 'globe'
+          | 'graduationCap'
+          | 'handshake'
+          | 'headphones'
+          | 'heart'
+          | 'house'
+          | 'key'
+          | 'leaf'
+          | 'lifeBuoy'
+          | 'lock'
+          | 'mail'
+          | 'mapPin'
+          | 'messageCircle'
+          | 'package'
+          | 'phone'
+          | 'pound'
+          | 'rocket'
+          | 'search'
+          | 'settings'
+          | 'shield'
+          | 'sparkles'
+          | 'star'
+          | 'thumbsUp'
+          | 'timer'
+          | 'trendingUp'
+          | 'truck'
+          | 'users'
+          | 'wrench'
+          | 'zap'
+        )
+      | null;
+    /**
+     * Overrides the icon above. Use for a logo or a custom mark.
+     */
     icon?: (number | null) | Media;
     description?: {
       root: {
@@ -1017,6 +1157,8 @@ export interface FeaturesBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1039,6 +1181,8 @@ export interface TestimonialsBlock {
  * via the `definition` "LogoCloudBlock".
  */
 export interface LogoCloudBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1062,14 +1206,64 @@ export interface LogoCloudBlock {
  * via the `definition` "StatsBlock".
  */
 export interface StatsBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
   align?: ('left' | 'center') | null;
   layout?: ('bar' | 'cards') | null;
+  /**
+   * Counts from zero when the figures scroll into view. Values without a single number, such as 24/7, are left alone. Ignored for visitors who have asked for reduced motion.
+   */
+  countUp?: boolean | null;
   items: {
     value: string;
     label: string;
+    iconName?:
+      | (
+          | 'award'
+          | 'badgeCheck'
+          | 'banknote'
+          | 'calendar'
+          | 'check'
+          | 'clipboardCheck'
+          | 'clock'
+          | 'coffee'
+          | 'compass'
+          | 'creditCard'
+          | 'gift'
+          | 'globe'
+          | 'graduationCap'
+          | 'handshake'
+          | 'headphones'
+          | 'heart'
+          | 'house'
+          | 'key'
+          | 'leaf'
+          | 'lifeBuoy'
+          | 'lock'
+          | 'mail'
+          | 'mapPin'
+          | 'messageCircle'
+          | 'package'
+          | 'phone'
+          | 'pound'
+          | 'rocket'
+          | 'search'
+          | 'settings'
+          | 'shield'
+          | 'sparkles'
+          | 'star'
+          | 'thumbsUp'
+          | 'timer'
+          | 'trendingUp'
+          | 'truck'
+          | 'users'
+          | 'wrench'
+          | 'zap'
+        )
+      | null;
     id?: string | null;
   }[];
   id?: string | null;
@@ -1081,6 +1275,8 @@ export interface StatsBlock {
  * via the `definition` "ProductShowcaseBlock".
  */
 export interface ProductShowcaseBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1119,6 +1315,8 @@ export interface ProductShowcaseBlock {
  * via the `definition` "NewsletterBlock".
  */
 export interface NewsletterBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1136,6 +1334,8 @@ export interface NewsletterBlock {
  * via the `definition` "SplitFeatureBlock".
  */
 export interface SplitFeatureBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1155,7 +1355,20 @@ export interface SplitFeatureBlock {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Short ticked points under the text. Leave empty to omit.
+   */
+  points?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   media?: (number | null) | Media;
+  /**
+   * A very slow zoom that stops a large still from feeling like a screenshot. Ignored for visitors who have asked for reduced motion.
+   */
+  kenBurns?: boolean | null;
   imagePosition?: ('right' | 'left') | null;
   enableLink?: boolean | null;
   link?: {
@@ -1181,6 +1394,8 @@ export interface SplitFeatureBlock {
  * via the `definition` "ServiceShowcaseBlock".
  */
 export interface ServiceShowcaseBlock {
+  background?: ('default' | 'muted' | 'soft' | 'inverse') | null;
+  spacing?: ('default' | 'tight' | 'loose' | 'none') | null;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -1837,6 +2052,8 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroCarousel?: T | HeroCarouselBlockSelect<T>;
+        marquee?: T | MarqueeBlockTypeSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1870,9 +2087,65 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroCarouselBlock_select".
+ */
+export interface HeroCarouselBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        heading?: T;
+        subheading?: T;
+        image?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  autoplay?: T;
+  minHeight?: T;
+  highlights?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlockType_select".
+ */
+export interface MarqueeBlockTypeSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   layout?: T;
   richText?: T;
   links?:
@@ -1898,6 +2171,8 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  * via the `definition` "ContentBlock_select".
  */
 export interface ContentBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   columns?:
     | T
     | {
@@ -1924,6 +2199,8 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   media?: T;
   id?: T;
   blockName?: T;
@@ -1933,6 +2210,8 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   introContent?: T;
   populateBy?: T;
   relationTo?: T;
@@ -1947,6 +2226,8 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  * via the `definition` "CarouselBlock_select".
  */
 export interface CarouselBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   populateBy?: T;
   relationTo?: T;
   categories?: T;
@@ -1962,6 +2243,8 @@ export interface CarouselBlockSelect<T extends boolean = true> {
  * via the `definition` "ThreeItemGridBlock_select".
  */
 export interface ThreeItemGridBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   products?: T;
   id?: T;
   blockName?: T;
@@ -1971,6 +2254,8 @@ export interface ThreeItemGridBlockSelect<T extends boolean = true> {
  * via the `definition` "BannerBlock_select".
  */
 export interface BannerBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   style?: T;
   content?: T;
   id?: T;
@@ -1981,6 +2266,8 @@ export interface BannerBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   form?: T;
   enableIntro?: T;
   showSiteContactDetails?: T;
@@ -1993,6 +2280,8 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "FAQBlock_select".
  */
 export interface FAQBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   title?: T;
   items?:
     | T
@@ -2009,12 +2298,18 @@ export interface FAQBlockSelect<T extends boolean = true> {
  * via the `definition` "FeaturesBlock_select".
  */
 export interface FeaturesBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
+  eyebrow?: T;
   title?: T;
+  description?: T;
+  align?: T;
   layout?: T;
   items?:
     | T
     | {
         title?: T;
+        iconName?: T;
         icon?: T;
         description?: T;
         enableLink?: T;
@@ -2038,6 +2333,8 @@ export interface FeaturesBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
@@ -2061,6 +2358,8 @@ export interface TestimonialsBlockSelect<T extends boolean = true> {
  * via the `definition` "LogoCloudBlock_select".
  */
 export interface LogoCloudBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
@@ -2082,16 +2381,20 @@ export interface LogoCloudBlockSelect<T extends boolean = true> {
  * via the `definition` "StatsBlock_select".
  */
 export interface StatsBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
   align?: T;
   layout?: T;
+  countUp?: T;
   items?:
     | T
     | {
         value?: T;
         label?: T;
+        iconName?: T;
         id?: T;
       };
   id?: T;
@@ -2102,6 +2405,8 @@ export interface StatsBlockSelect<T extends boolean = true> {
  * via the `definition` "ProductShowcaseBlock_select".
  */
 export interface ProductShowcaseBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
@@ -2130,6 +2435,8 @@ export interface ProductShowcaseBlockSelect<T extends boolean = true> {
  * via the `definition` "NewsletterBlock_select".
  */
 export interface NewsletterBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
@@ -2146,12 +2453,21 @@ export interface NewsletterBlockSelect<T extends boolean = true> {
  * via the `definition` "SplitFeatureBlock_select".
  */
 export interface SplitFeatureBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
   align?: T;
   richText?: T;
+  points?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   media?: T;
+  kenBurns?: T;
   imagePosition?: T;
   enableLink?: T;
   link?:
@@ -2172,6 +2488,8 @@ export interface SplitFeatureBlockSelect<T extends boolean = true> {
  * via the `definition` "ServiceShowcaseBlock_select".
  */
 export interface ServiceShowcaseBlockSelect<T extends boolean = true> {
+  background?: T;
+  spacing?: T;
   eyebrow?: T;
   title?: T;
   description?: T;
