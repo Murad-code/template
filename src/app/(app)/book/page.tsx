@@ -218,20 +218,15 @@ export default async function BookPage({ searchParams }: BookPageProps) {
         {sp.product ? <input name="product" type="hidden" value={sp.product} /> : null}
 
         <div className="xl:col-span-5 flex items-center gap-3">
-          <Button
-            type="submit"
-            className="h-10 border-transparent bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            Apply filters
-          </Button>
-          <Button asChild variant="link" size="clear" className="text-sm">
+          <Button type="submit">Apply filters</Button>
+          <Button asChild size="sm" variant="ghost">
             <Link href={clearFiltersHref}>Reset all</Link>
           </Button>
         </div>
       </form>
 
       {normalizedQuery ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-body-sm text-muted-foreground">
           Showing {services.docs.length} {services.docs.length === 1 ? 'service' : 'services'} for{' '}
           <span className="font-medium text-foreground">&quot;{normalizedQuery}&quot;</span>
         </p>

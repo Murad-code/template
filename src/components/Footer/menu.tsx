@@ -12,14 +12,14 @@ export function FooterMenu({ menu }: Props) {
 
   return (
     <nav aria-label="Footer">
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-1.5">
         {menu.map((item) => {
           return (
             <li key={item.id}>
               <CMSLink
                 {...item.link}
                 appearance="inline"
-                className="text-body-sm text-muted-foreground hover:text-foreground interactive-focus rounded-xs transition-colors"
+                className="text-body-sm text-muted-foreground hover:text-foreground interactive-focus inline-flex min-h-6 items-center rounded-xs transition-colors"
               />
             </li>
           )

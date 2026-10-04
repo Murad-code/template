@@ -115,11 +115,18 @@ export default async function ShopPage({ searchParams }: Props) {
       )}
 
       {products?.docs.length > 0 ? (
-        <Grid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.docs.map((product) => {
-            return <ProductGridItem key={product.id} product={product} />
-          })}
-        </Grid>
+        <section aria-labelledby="product-results">
+          {/* The product titles are h3. Without this the outline jumped
+              straight from the page title to them. */}
+          <h2 className="sr-only" id="product-results">
+            Products
+          </h2>
+          <Grid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {products.docs.map((product) => {
+              return <ProductGridItem key={product.id} product={product} />
+            })}
+          </Grid>
+        </section>
       ) : null}
     </div>
   )

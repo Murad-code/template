@@ -16,7 +16,7 @@ async function CategoryList() {
 
   return (
     <div>
-      <h3 className="spec-list mb-3">Category</h3>
+      <h2 className="spec-list mb-3">Category</h2>
 
       {/* A rail on desktop, a single swipeable row on a phone. Stacked, five
           categories plus the sort control pushed the first product most of a

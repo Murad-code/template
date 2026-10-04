@@ -24,7 +24,7 @@ function PathFilterItem({ item }: { item: PathFilterItemType }) {
     <li className="mt-2.5 flex" key={item.title}>
       <DynamicTag
         className={clsx(
-          'text-body-sm text-muted-foreground hover:text-foreground w-full underline-offset-4 hover:underline',
+          'text-body-sm text-muted-foreground hover:text-foreground interactive-focus inline-flex min-h-6 w-full items-center rounded-xs underline-offset-4 hover:underline',
           {
             'underline underline-offset-4': active,
           },
@@ -90,7 +90,7 @@ export function ResetFiltersItem() {
   return (
     <li className="text-body-sm mt-4 flex">
       <button
-        className="w-full text-left underline underline-offset-4 hover:cursor-pointer"
+        className="text-muted-foreground hover:text-foreground interactive-focus inline-flex min-h-6 items-center rounded-xs text-left underline underline-offset-4"
         onClick={resetFilters}
         type="button"
       >

@@ -34,8 +34,14 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
         </div>
         <div className="flex w-full items-end justify-between">
           <div className="flex w-full items-end gap-6 md:w-1/3">
-            <Link className="flex w-full items-center justify-center pt-4 pb-4 md:w-auto" href="/">
-              <LogoIcon className="w-6 h-auto" />
+            <Link
+              className="interactive-focus flex w-full items-center justify-center rounded-xs pt-4 pb-4 md:w-auto"
+              href="/"
+            >
+              <LogoIcon className="h-auto w-6" />
+              {/* The logo's own label describes the mark; a link needs to say
+                  where it goes. */}
+              <span className="sr-only">Home</span>
             </Link>
             {menu.length ? (
               <ul className="hidden gap-4 text-sm md:flex md:items-center">

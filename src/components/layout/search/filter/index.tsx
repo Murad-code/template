@@ -21,7 +21,7 @@ export function FilterList({ list, title }: { list: ListItem[]; title?: string }
   return (
     <React.Fragment>
       <nav>
-        {title ? <h3 className="spec-list mb-3">{title}</h3> : null}
+        {title ? <h2 className="spec-list mb-3">{title}</h2> : null}
         <ul className="hidden md:block">
           <Suspense fallback={null}>
             <FilterItemList list={list} />
