@@ -5,28 +5,30 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/utilities/cn'
 
 const buttonVariants = cva(
-  'relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent text-sm font-medium text-foreground transition-[background-color,color,opacity] active:opacity-95 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*="size-"])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-focus-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+  // Controls sit one radius step tighter than the surfaces holding them, so a
+  // button inside a panel reads as the crisper of the two shapes. Focus comes
+  // from the shared `interactive-focus` utility rather than a per-variant ring,
+  // which is how it stays visible on a dark band as well as on the page.
+  'interactive-focus relative inline-flex shrink-0 items-center justify-center gap-2 rounded-sm border border-transparent text-body-sm font-medium whitespace-nowrap text-foreground transition-[background-color,border-color,color] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'border-destructive/30 bg-destructive text-destructive-foreground hover:bg-destructive/85 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
-        outline: 'border-border bg-background text-foreground hover:bg-muted/65',
-        subtle: 'bg-card text-card-foreground hover:bg-muted/75',
-        secondary: 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        default: 'bg-primary text-primary-foreground hover:bg-primary/88',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/88',
+        outline:
+          'border-border bg-background text-foreground hover:border-border-strong hover:bg-muted',
+        subtle: 'bg-card text-card-foreground hover:bg-muted',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
-          'border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-muted/60 hover:text-foreground hover:shadow-none active:translate-y-0 active:shadow-none [&.active]:text-foreground',
-        link:
-          'border-transparent bg-transparent p-0 text-primary underline-offset-4 shadow-none hover:bg-transparent hover:text-primary/85 hover:underline hover:shadow-none active:translate-y-0 active:shadow-none',
-        nav: 'border-transparent bg-transparent p-0 pt-2 pb-6 font-mono text-xs uppercase tracking-widest text-text-secondary shadow-none hover:bg-transparent hover:text-primary hover:shadow-none [&.active]:text-primary active:translate-y-0 active:shadow-none',
+          'bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground [&.active]:text-foreground',
+        link: 'h-auto bg-transparent p-0 text-foreground underline decoration-border-strong underline-offset-4 hover:decoration-current',
       },
       size: {
         clear: '',
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
+        default: 'h-10 px-4 py-2 has-[>svg]:px-3',
+        sm: 'h-8 gap-1.5 px-3 has-[>svg]:px-2.5',
+        lg: 'h-11 px-6 text-body has-[>svg]:px-5',
+        icon: 'size-10',
       },
     },
     defaultVariants: {

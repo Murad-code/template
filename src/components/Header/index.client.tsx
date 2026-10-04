@@ -10,7 +10,7 @@ import { MobileMenu } from './MobileMenu'
 import { LogoIcon } from '@/components/icons/logo'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/utilities/cn'
-import { Button } from '@/components/ui/button'
+import { navLinkClassName } from './navLinkClassName'
 import { useAuth } from '@/providers/Auth'
 
 type NavItem = NonNullable<Header['navItems']>[number]
@@ -25,7 +25,7 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
   const { user } = useAuth()
 
   return (
-    <div className="relative z-20 bg-card shadow-sm shadow-black/10 dark:shadow-black/40">
+    <div className="border-border bg-surface-header relative z-20 border-b">
       <nav className="flex items-center md:items-end justify-between container pt-2">
         <div className="block flex-none md:hidden">
           <Suspense fallback={null}>
@@ -43,14 +43,13 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
                   <li key={item.id}>
                     <CMSLink
                       {...item.link}
-                      size={'clear'}
-                      className={cn('relative navLink', {
+                      appearance="inline"
+                      className={navLinkClassName({
                         active:
                           item.link.url && item.link.url !== '/'
                             ? pathname.includes(item.link.url)
                             : false,
                       })}
-                      appearance="nav"
                     />
                   </li>
                 ))}
@@ -59,16 +58,15 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
           </div>
 
           <div className="flex justify-end md:w-1/3 gap-4 items-center">
-            <Button
-              asChild
-              variant="nav"
-              size="clear"
-              className={cn('navLink relative items-end hidden md:inline-flex', {
-                active: pathname === '/login',
-              })}
+            <Link
+              className={cn(
+                navLinkClassName({ active: pathname === '/login' }),
+                'hidden md:inline-flex',
+              )}
+              href={user ? '/logout' : '/login'}
             >
-              <Link href={user ? '/logout' : '/login'}>{user ? 'Log out' : 'Log in'}</Link>
-            </Button>
+              {user ? 'Log out' : 'Log in'}
+            </Link>
             {ecommerceEnabled ? (
               <Suspense fallback={<OpenCartButton />}>
                 <Cart />
