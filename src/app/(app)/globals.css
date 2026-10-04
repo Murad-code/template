@@ -2,30 +2,12 @@
 @import 'tw-animate-css';
 @import './motion.css';
 
-@config '../../../tailwind.config.mjs';
-
-@custom-variant dark (&:is([data-theme='dark'] *));
-@custom-variant sm (@media (width >= theme(--breakpoint-sm)));
-@custom-variant md (@media (width >= theme(--breakpoint-md)));
-@custom-variant lg (@media (width >= theme(--breakpoint-lg)));
-@custom-variant xl (@media (width >= theme(--breakpoint-xl)));
-@custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
-
-@layer base {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--site-font-heading, var(--font-sans));
-    font-weight: unset;
-    font-size: unset;
-  }
-}
-
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:is([data-theme='dark'] *));
+
+/* Block appearance and column spans come from CMS fields, so these class names
+   never appear literally in the source for Tailwind to find. */
 @source inline("lg:col-span-4");
 @source inline("lg:col-span-6");
 @source inline("lg:col-span-8");
@@ -45,51 +27,137 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
+
   --font-mono: var(--site-font-mono, var(--font-geist-mono));
   --font-sans: var(--site-font-sans, var(--font-geist-sans));
+  --font-heading: var(--site-font-heading, var(--site-font-sans, var(--font-geist-sans)));
+
+  /* ---------------------------------------------------------------------
+     Type scale
+
+     Sizes are fluid so there is one scale rather than a desktop scale and a
+     separate set of mobile overrides per component. Tracking tightens as
+     size grows, which is what keeps a large heading from looking loose, and
+     it has to be part of the token because the heading face is chosen by the
+     editor: a serif display and a geometric sans need the same correction
+     applied at the same sizes.
+     --------------------------------------------------------------------- */
+  --text-display: clamp(2.75rem, 1.6rem + 4.2vw, 4.5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.032em;
+  --text-display--font-weight: 600;
+
+  --text-h1: clamp(2.25rem, 1.5rem + 2.6vw, 3.25rem);
+  --text-h1--line-height: 1.06;
+  --text-h1--letter-spacing: -0.026em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: clamp(1.75rem, 1.3rem + 1.6vw, 2.375rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: clamp(1.35rem, 1.15rem + 0.7vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.014em;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.3;
+  --text-h4--letter-spacing: -0.008em;
+  --text-h4--font-weight: 600;
+
+  --text-body-lg: 1.0625rem;
+  --text-body-lg--line-height: 1.65;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.6;
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+
+  /* The specification voice: origin, duration, weight, capacity. Set in the
+     mono face so figures line up column to column. */
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.08em;
+  --text-label--font-weight: 500;
+
+  /* ---------------------------------------------------------------------
+     Measure
+
+     Named by the job rather than by size, so a section does not have to pick
+     between `max-w-2xl` and `max-w-3xl` on feel alone.
+     --------------------------------------------------------------------- */
+  --container-prose: 68ch;
+  --container-narrow: 44rem;
+  --container-content: 72rem;
+  --container-wide: 86rem;
+
+  /* ---------------------------------------------------------------------
+     Radius
+
+     One step either side of the palette's `--radius`. Buttons and inputs sit
+     a step below cards so controls read as crisper than the surfaces holding
+     them, and nothing becomes a pill unless it is genuinely round.
+     --------------------------------------------------------------------- */
+  --radius-xs: calc(var(--radius) - 6px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 14px);
+
+  /* ---------------------------------------------------------------------
+     Elevation
+
+     Deliberately short. Static surfaces separate by a hairline and a tonal
+     step, not by a shadow; a shadow means the thing is genuinely floating
+     above the page. Tinted with the foreground colour rather than black so
+     it survives a dark palette.
+     --------------------------------------------------------------------- */
+  --shadow-raised: 0 1px 2px color-mix(in srgb, var(--foreground) 6%, transparent);
+  --shadow-overlay:
+    0 10px 30px -12px color-mix(in srgb, var(--foreground) 22%, transparent),
+    0 2px 6px color-mix(in srgb, var(--foreground) 8%, transparent);
+
+  --animate-carousel: marquee 60s linear infinite;
+  --animate-accordion-down: accordion-down 0.2s var(--ease-smooth);
+  --animate-accordion-up: accordion-up 0.2s var(--ease-smooth);
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
 
-@layer utilities {
-  .container {
-    width: 100%;
-    margin-inline: auto;
-    padding-inline: 1rem;
-  }
-
-  @variant sm {
-    .container {
-      max-width: var(--breakpoint-sm);
-    }
-  }
-
-  @variant md {
-    .container {
-      max-width: var(--breakpoint-md);
-      padding-inline: 2rem;
-    }
-  }
-
-  @variant lg {
-    .container {
-      max-width: var(--breakpoint-lg);
-    }
-  }
-
-  @variant xl {
-    .container {
-      max-width: var(--breakpoint-xl);
-    }
-  }
-
-  @variant 2xl {
-    .container {
-      max-width: var(--breakpoint-2xl);
-    }
-  }
-}
-
-/* Theme variables are injected by ThemeStyles from src/config/theme.ts */
-
+/* Theme variables are injected by ThemeStyles from src/config/theme.ts and
+   src/config/siteTheme.ts, so these aliases resolve at runtime per palette. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -115,10 +183,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -146,7 +210,103 @@
 @layer base {
   body {
     font-family: var(--font-sans);
-    @apply bg-background text-foreground min-h-screen flex flex-col;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    @apply bg-background text-foreground flex min-h-screen flex-col;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    text-wrap: balance;
+  }
+
+  /* Headings get their size from the scale at the call site. Resetting here
+     stops the browser defaults showing through on CMS rich text, which has no
+     classes of its own to apply. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: unset;
+    font-weight: unset;
+  }
+
+  button,
+  [role='button'],
+  a[href],
+  input[type='button'],
+  input[type='submit'],
+  input[type='reset'],
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role='button'][aria-disabled='true'],
+  input:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* Rich text from the CMS arrives without classes, so the prose plugin is where
+   it picks up the type scale. */
+@utility prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-links: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--border-strong);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--border-strong);
+  --tw-prose-captions: var(--muted-foreground);
+
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+
+  h1 {
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+    letter-spacing: var(--text-h1--letter-spacing);
+    font-weight: var(--text-h1--font-weight);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    font-weight: var(--text-h2--font-weight);
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    letter-spacing: var(--text-h3--letter-spacing);
+    font-weight: var(--text-h3--font-weight);
+  }
+
+  h4 {
+    font-size: var(--text-h4);
+    line-height: var(--text-h4--line-height);
+    font-weight: var(--text-h4--font-weight);
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: currentColor;
   }
 }
 
@@ -181,6 +341,7 @@
     --border-strong: color-mix(in srgb, var(--tone-fg) 38%, transparent);
     --input: color-mix(in srgb, var(--tone-fg) 22%, transparent);
     --ring: color-mix(in srgb, var(--tone-fg) 60%, transparent);
+    --focus-ring: color-mix(in srgb, var(--tone-fg) 60%, transparent);
     --text-primary: var(--tone-fg);
     --text-secondary: color-mix(in srgb, var(--tone-fg) 72%, transparent);
     --surface-base: transparent;
@@ -190,63 +351,20 @@
     --primary-foreground: var(--tone-bg);
     --secondary: color-mix(in srgb, var(--tone-fg) 16%, transparent);
     --secondary-foreground: var(--tone-fg);
-    --accent-foreground: var(--tone-bg);
+    --accent: color-mix(in srgb, var(--tone-fg) 22%, transparent);
+    --accent-foreground: var(--tone-fg);
   }
+}
 
-  .interactive-focus {
-    outline: none;
-    transition: box-shadow 0.18s ease;
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: var(--container-wide);
+
+  @variant md {
+    padding-inline: 2rem;
   }
-
-  .interactive-focus:focus-visible {
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--ring) 50%, transparent),
-      0 0 0 4px var(--background);
-  }
-
-  .booking-slot-button {
-    background: var(--background);
-    color: var(--foreground);
-    font-weight: 500;
-    border-radius: 9999px;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.24),
-      0 2px 6px rgba(0, 0, 0, 0.1),
-      0 1px 2px rgba(0, 0, 0, 0.06);
-    transition:
-      background-color 0.18s ease,
-      color 0.18s ease,
-      box-shadow 0.18s ease,
-      transform 0.18s ease;
-  }
-
-  .booking-slot-button:hover:not(.booking-slot-button--selected) {
-    background: color-mix(in srgb, var(--muted) 16%, var(--background));
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      0 3px 8px rgba(0, 0, 0, 0.12),
-      0 1px 2px rgba(0, 0, 0, 0.07);
-    transform: translateY(0);
-  }
-
-  .booking-slot-button--selected {
-    background: color-mix(in srgb, var(--border) 16%, var(--card));
-    color: var(--foreground);
-    font-weight: 600;
-    box-shadow:
-      inset 0 2px 5px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      0 1px 2px rgba(0, 0, 0, 0.06);
-    transform: translateY(1px);
-  }
-
-  .booking-slot-button:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--ring) 50%, transparent),
-      0 0 0 4px var(--background);
-  }
-
 }
 
 html {
@@ -258,21 +376,52 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
-@layer base {
-  button,
-  [role='button'],
-  a[href],
-  input[type='button'],
-  input[type='submit'],
-  input[type='reset'],
-  summary {
-    cursor: pointer;
-  }
+/* One definition of what focus looks like, shared by primitives and by the
+   handful of native controls that are not wrapped in one. Two rings so the
+   state stays visible on a surface of any tone: the halo, then a gap in the
+   page colour. */
+@utility interactive-focus {
+  outline: none;
+  transition: box-shadow 0.18s var(--ease-smooth);
 
-  button:disabled,
-  [role='button'][aria-disabled='true'],
-  input:disabled {
-    cursor: not-allowed;
+  &:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--focus-ring);
   }
 }
 
+/* Booking slots are a dense grid of times, so they need to read as a set of
+   choices rather than a row of buttons: tonal fill, hairline edge, and the
+   brand colour reserved for the one that is chosen. */
+@utility booking-slot-button {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  transition:
+    background-color 0.18s var(--ease-smooth),
+    border-color 0.18s var(--ease-smooth),
+    color 0.18s var(--ease-smooth);
+
+  &:hover:not(.booking-slot-button--selected) {
+    background: var(--muted);
+    border-color: var(--border-strong);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--focus-ring);
+  }
+}
+
+@utility booking-slot-button--selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
