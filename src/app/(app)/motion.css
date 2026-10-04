@@ -1,0 +1,418 @@
+/* ---------------------------------------------------------------------------
+   Motion
+   ---------------------------------------------------------------------------
+   Two mechanisms, chosen per effect:
+
+   - `[data-motion='on']` gates everything that starts hidden and is revealed
+     by `Motion`. The attribute is set by `InitMotion` before first paint, and
+     only when scripting is available and the visitor has not asked for
+     reduced motion. Without it every one of these elements renders in its
+     final state, so no-JS and reduced-motion visitors see a complete page
+     rather than an empty one.
+
+   - Scroll-linked effects use CSS scroll-driven animations. They run on the
+     compositor with no scroll listener, and they sit behind `@supports` so an
+     older browser renders the element statically instead of oddly.
+
+   Everything eases on `--ease-smooth`. Do not introduce a second curve for
+   ordinary work; one curve across unrelated components is most of the reason
+   a page feels like one machine.
+
+   Colours come from the theme tokens in globals.css, which SiteTheme injects,
+   so every effect follows the palette chosen in the admin panel.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scroll reveals
+
+   One-shot rather than scroll-scrubbed. A scrubbed reveal fades content back
+   out when you scroll up past it, which reads as a glitch; content should
+   arrive once and stay. Scrubbing is for parallax, further down.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* One direction, deliberately. Adding another is four lines: a starting
+     `transform` here and the class alongside `.reveal` in the selectors. */
+  [data-motion='on'] .reveal {
+    opacity: 0;
+    transform: translateY(2.125rem);
+    transition:
+      opacity 900ms var(--ease-smooth),
+      transform 900ms var(--ease-smooth);
+  }
+
+  [data-motion='on'] .reveal.revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* A grid reads better assembling than arriving at once. `Motion` writes an
+     incrementing `transition-delay` onto each child, because the delay
+     depends on how many children there are. */
+  [data-motion='on'] .reveal-group > * {
+    opacity: 0;
+    transform: translateY(1.875rem);
+    transition:
+      opacity 800ms var(--ease-smooth),
+      transform 800ms var(--ease-smooth);
+  }
+
+  [data-motion='on'] .reveal-group.revealed > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The flag is read once, before the first paint, so it cannot know about a
+   preference that changes afterwards. This makes the media query the final
+   word either way. Belt and braces against the one failure that actually
+   matters here, which is text nobody can read. */
+@media (prefers-reduced-motion: reduce) {
+  @layer components {
+    [data-motion='on'] .reveal,
+    [data-motion='on'] .reveal-group > * {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Entrances
+
+   A hero is already on screen when the page loads, so it animates on a clock
+   rather than on scroll. `--rise-delay` staggers the parts.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  [data-motion='on'] .rise {
+    animation: rise-in 900ms var(--ease-smooth) var(--rise-delay, 0ms) both;
+  }
+
+  /* The masked line reveal: the text slides up from behind its own box, which
+     is why the wrapper needs `overflow: hidden` and the child needs to be a
+     block. The padding/margin pair buys room for descenders, which a tight
+     display line-height would otherwise let the mask clip. */
+  [data-motion='on'] .rise-mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
+  }
+
+  [data-motion='on'] .rise-mask > span {
+    display: block;
+    animation: line-up 1s var(--ease-smooth) var(--rise-delay, 250ms) both;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 1.625rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes line-up {
+  from {
+    translate: 0 110%;
+  }
+
+  to {
+    translate: 0 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hover mechanics
+
+   Hovering a card should move more than one thing. The lift, the image zoom
+   and the gradient wash all run on the same curve and the same duration
+   tier, so several changes read as one gesture.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* Owns `transform` for the whole card so the lift and the pointer tilt
+     compose in one declaration instead of fighting each other. `CardTilt`
+     writes the two tilt angles; both default to zero, so a card with no
+     pointer over it is an identity transform. */
+  .lift-card {
+    --lift: 0rem;
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))
+      translateY(var(--lift));
+    transition:
+      transform 400ms var(--ease-smooth),
+      box-shadow 400ms var(--ease-smooth),
+      border-color 400ms var(--ease-smooth);
+  }
+
+  .lift-card:hover,
+  .lift-card:focus-within {
+    --lift: -0.5rem;
+  }
+
+  /* The sheen sweep. `--sheen` is set per variant, because a white gradient
+     is invisible on a white button. */
+  .sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .sheen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, var(--sheen, transparent), transparent);
+    transform: skewX(-20deg);
+    transition: left 600ms var(--ease-smooth);
+    pointer-events: none;
+  }
+
+  .sheen:hover::after {
+    left: 130%;
+  }
+
+  /* Only a trailing icon nudges. A leading icon moving right would drift away
+     from the label it belongs to. */
+  .sheen > svg:last-child {
+    transition: transform 300ms var(--ease-smooth);
+  }
+
+  .sheen:hover > svg:last-child {
+    transform: translateX(0.25rem);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Continuous
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* A seamless loop needs the track duplicated in the markup and translated
+     by exactly half its width. */
+  .marquee {
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 32s linear infinite;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Slow enough that you never catch the photo moving. It only stops a large
+     still from feeling like a screenshot. */
+  .ken-burns {
+    animation: ken-burns 24s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes marquee-scroll {
+  to {
+    translate: -50% 0;
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    scale: 1;
+    translate: 0 0;
+  }
+
+  to {
+    scale: 1.09;
+    translate: 0 -1.5%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scroll-linked
+
+   `scroll(root)` tracks the page; `view()` tracks one element across the
+   viewport. Both need the reduced-motion gate as well as the blanket rule in
+   the base layer: a scroll timeline takes its progress from scroll position
+   rather than from a clock, so clamping `animation-duration` does nothing to
+   it. Forgetting this is the easiest mistake to make in this file.
+--------------------------------------------------------------------------- */
+
+/* Informational rather than decorative, so these two are not motion-gated —
+   a progress bar and a back-to-top button should still work for someone who
+   asked for less movement. Neither animates a layout property. */
+@layer components {
+  /* The resting state of both is "not shown", and the scroll-driven
+     animations below are the only thing that reveals them. That way a browser
+     without support shows neither, rather than showing a permanently full
+     progress bar and a floating button with no idea when to hide. */
+  .scroll-progress {
+    transform-origin: 0 50%;
+    scale: 0 1;
+  }
+
+  .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@supports (animation-timeline: scroll(root)) {
+  @layer components {
+    .scroll-progress {
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+
+    .back-to-top {
+      animation: back-to-top linear both;
+      animation-timeline: scroll(root);
+      /* Far enough down that it never competes with the hero. */
+      animation-range: 700px 820px;
+    }
+  }
+}
+
+@keyframes scroll-progress {
+  from {
+    scale: 0 1;
+  }
+
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes back-to-top {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    @layer components {
+      /* A hero dissolves into the page instead of sliding off it: the photo
+         pushes in while the words drift up and fade. Split across two
+         elements because each needs its own range. */
+      .hero-scrub-bg {
+        animation: hero-bg linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+
+      .hero-scrub-content {
+        animation: hero-content linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 75vh;
+      }
+
+      /* The quiet workhorse. An oversized image drifting inside a fixed frame
+         is what keeps a page of static cards feeling alive while you scroll;
+         the zoom exists so the drift never exposes an edge. */
+      .drift-media {
+        --drift-zoom: 1.14;
+        animation: drift-media linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+      }
+
+      .group:hover .drift-media,
+      .group:focus-within .drift-media {
+        --drift-zoom: 1.2;
+      }
+
+      /* Scrubbed rather than one-shot, which is the point: the heading tracks
+         the wheel, so it feels connected to your hand. `cover` rather than
+         `entry`, because the entry phase of a two-line heading is only as long
+         as the heading is tall and the whole move would be over in a flick.
+
+         Translate only. The enclosing section already fades its contents in,
+         and two rules animating one element's opacity from different triggers
+         is how a page ends up looking broken. */
+      .drift-title {
+        animation: drift-title linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 35%;
+      }
+    }
+  }
+}
+
+@keyframes hero-bg {
+  to {
+    scale: 1.18;
+    translate: 0 6%;
+  }
+}
+
+@keyframes hero-content {
+  to {
+    translate: 0 -16%;
+    opacity: 0;
+    /* Discrete, and only lands on `hidden` at the very end of the range, so
+       the faded-out hero stops catching clicks the instant it disappears
+       rather than leaving invisible links over the section below. */
+    visibility: hidden;
+  }
+}
+
+@keyframes drift-media {
+  from {
+    translate: 0 -5%;
+  }
+
+  to {
+    translate: 0 5%;
+  }
+}
+
+@keyframes drift-title {
+  from {
+    translate: 0 10%;
+  }
+
+  to {
+    translate: 0 0;
+  }
+}
