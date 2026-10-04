@@ -7,7 +7,10 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { iconField } from '@/fields/icon'
 import { link } from '@/fields/link'
+import { sectionHeaderFields } from '@/fields/sectionHeader'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const Features: Block = {
   slug: 'features',
@@ -17,11 +20,8 @@ export const Features: Block = {
     plural: 'Features grids',
   },
   fields: [
-    {
-      name: 'title',
-      type: 'text',
-      label: 'Section title',
-    },
+    ...sectionStyleFields,
+    ...sectionHeaderFields,
     {
       name: 'layout',
       type: 'select',
@@ -38,11 +38,15 @@ export const Features: Block = {
       required: true,
       fields: [
         { name: 'title', type: 'text', required: true },
+        iconField({ label: 'Icon' }),
         {
           name: 'icon',
           type: 'upload',
           relationTo: 'media',
-          label: 'Optional icon',
+          label: 'Icon image',
+          admin: {
+            description: 'Overrides the icon above. Use for a logo or a custom mark.',
+          },
         },
         {
           name: 'description',

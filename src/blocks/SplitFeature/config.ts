@@ -9,6 +9,7 @@ import {
 
 import { link } from '@/fields/link'
 import { sectionHeaderFields } from '@/fields/sectionHeader'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const SplitFeature: Block = {
   slug: 'splitFeature',
@@ -18,6 +19,7 @@ export const SplitFeature: Block = {
     singular: 'Split feature / brand story',
   },
   fields: [
+    ...sectionStyleFields,
     ...sectionHeaderFields,
     {
       name: 'richText',
@@ -32,9 +34,29 @@ export const SplitFeature: Block = {
       }),
     },
     {
+      name: 'points',
+      type: 'array',
+      label: 'Checklist',
+      labels: { plural: 'Points', singular: 'Point' },
+      admin: {
+        description: 'Short ticked points under the text. Leave empty to omit.',
+      },
+      fields: [{ name: 'text', type: 'text', required: true }],
+    },
+    {
       name: 'media',
       type: 'upload',
       relationTo: 'media',
+    },
+    {
+      name: 'kenBurns',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Slowly drift the image',
+      admin: {
+        description:
+          'A very slow zoom that stops a large still from feeling like a screenshot. Ignored for visitors who have asked for reduced motion.',
+      },
     },
     {
       name: 'imagePosition',
