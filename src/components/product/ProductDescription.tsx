@@ -77,7 +77,7 @@ export function ProductDescription({
         <h1 className="text-h1">{product.title}</h1>
         {/* The price is a specification, so it is set in the same mono voice
             as every other figure on the site rather than as a coloured badge. */}
-        <div className="text-h3 font-mono">
+        <div className="text-h3 tabular-figures">
           {hasVariants ? (
             <Price highestAmount={highestAmount} lowestAmount={lowestAmount} />
           ) : (

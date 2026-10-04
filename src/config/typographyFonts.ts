@@ -87,52 +87,55 @@ export type TypographyPairing = {
 /**
  * Known-good combinations for the three font roles.
  *
- * The admin exposes the roles as three independent pickers, which is right —
- * but three dropdowns of eighteen faces is a lot of rope. These are the
- * pairings the design system was drawn against; `DEFAULT_TYPOGRAPHY_PAIRING`
- * is what a fresh install gets.
+ * All of them set heading and body to the same family. Mixing a display face
+ * with a separate body face only works when the two were drawn to go
+ * together, and across eighteen options in three dropdowns it mostly does
+ * not: a page ends up with a geometric heading, a neutral paragraph and a
+ * monospace price, which reads as three websites at once.
  *
- * The rule behind all of them: one face with enough character to carry a
- * display heading, one quiet face that stays readable at 16px over long
- * paragraphs, and a mono with a clear figure set for the specification line,
- * where prices and durations have to line up.
+ * Hierarchy here comes from size, weight and spacing — the type scale in
+ * globals.css — so one family is enough to carry a page.
+ *
+ * The mono role is now only reachable by the code block. Prices, durations
+ * and the specification line use the body face with `tabular-figures`, which
+ * lines figures up without changing typeface.
  */
 export const TYPOGRAPHY_PAIRINGS: TypographyPairing[] = [
   {
-    key: 'studio',
-    label: 'Studio',
+    key: 'inter',
+    label: 'Inter',
     description:
-      'Geometric headings over a neutral UI face. Reads modern without reading like a software product.',
-    headingFont: 'space-grotesk',
+      'The default. Neutral, contemporary and highly legible from captions to display sizes. Suits any business and never competes with a logo.',
+    headingFont: 'inter',
     bodyFont: 'inter',
-    monoFont: 'jetbrains-mono',
+    monoFont: 'geist-mono',
   },
   {
-    key: 'editorial',
-    label: 'Editorial',
+    key: 'geist',
+    label: 'Geist',
     description:
-      'High-contrast serif headlines over a humanist sans. For businesses selling provenance: food, wine, craft.',
-    headingFont: 'playfair-display',
+      'A touch more character than Inter in the figures and the lowercase g. Loaded locally, so it costs no extra network request.',
+    headingFont: 'geist-sans',
+    bodyFont: 'geist-sans',
+    monoFont: 'geist-mono',
+  },
+  {
+    key: 'source',
+    label: 'Source Sans',
+    description:
+      'Humanist rather than geometric: a little warmer, and comfortable over long paragraphs. For businesses that do a lot of writing.',
+    headingFont: 'source-sans-3',
     bodyFont: 'source-sans-3',
     monoFont: 'ibm-plex-mono',
   },
   {
-    key: 'grounded',
-    label: 'Grounded',
+    key: 'lora',
+    label: 'Lora',
     description:
-      'A serif that works at both heading and body size. Warm and unhurried; suits wellbeing and clinics.',
+      'A serif throughout. The one option that reads traditional rather than contemporary; suits provenance, law and wellbeing.',
     headingFont: 'lora',
     bodyFont: 'lora',
     monoFont: 'ibm-plex-mono',
-  },
-  {
-    key: 'direct',
-    label: 'Direct',
-    description:
-      'One sans throughout, separated by weight and size alone. The quietest option, and the safest with a busy logo.',
-    headingFont: 'geist-sans',
-    bodyFont: 'geist-sans',
-    monoFont: 'geist-mono',
   },
 ]
 

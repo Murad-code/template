@@ -42,7 +42,7 @@ export const ProductItem: React.FC<Props> = ({
             <p className="text-sm font-medium text-muted-foreground">Subtotal</p>
             <Price
               amount={itemPrice * quantity}
-              className="text-sm font-mono text-muted-foreground"
+              className="text-body-sm tabular-figures text-muted-foreground"
               currencyCode={currencyCode}
             />
           </div>

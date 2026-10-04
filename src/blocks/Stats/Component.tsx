@@ -60,7 +60,7 @@ export const StatsBlock: React.FC<StatsBlockProps> = (props) => {
                     script runs and correct for anyone who has asked for less
                     motion. `Motion` counts it up only when it scrolls in. */}
                 <dd
-                  className="text-h1 font-mono"
+                  className="text-h1 tabular-figures"
                   {...(counter
                     ? {
                         'data-count-prefix': counter.prefix,

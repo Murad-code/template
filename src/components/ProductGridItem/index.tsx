@@ -68,7 +68,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
             <Price
               amount={price}
               as="span"
-              className="text-body-sm shrink-0 font-mono text-foreground"
+              className="text-body-sm tabular-figures shrink-0 text-foreground"
             />
           )}
         </div>

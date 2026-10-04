@@ -55,11 +55,7 @@ export const LineItemRow: React.FC<LineItemRowProps> = ({
       <div className="flex grow items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
           <p className="text-lg font-medium leading-tight">{title}</p>
-          {variantLabel ? (
-            <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-              {variantLabel}
-            </p>
-          ) : null}
+          {variantLabel ? <p className="spec-list">{variantLabel}</p> : null}
           {typeof quantity === 'number' ? (
             <div className="text-sm text-muted-foreground">x{quantity}</div>
           ) : null}

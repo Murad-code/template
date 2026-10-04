@@ -125,23 +125,27 @@ should be capped with `max-w-prose`.
 
 ### Font pairings
 
-The three roles — heading, body, mono — are picked independently in the admin.
-`TYPOGRAPHY_PAIRINGS` in `src/config/typographyFonts.ts` holds the combinations the
-system was drawn against:
+**One family per site.** Every pairing sets heading and body to the same face.
+Mixing a display face with a separate body face only works when the two were drawn
+to go together, and across eighteen options in three dropdowns it mostly is not: a
+page ends up with a geometric heading, a neutral paragraph and a monospace price,
+which reads as three websites at once.
 
-| Pairing | Heading / body / mono | For |
+Hierarchy comes from the scale above — size, weight, spacing — which is enough.
+
+`TYPOGRAPHY_PAIRINGS` in `src/config/typographyFonts.ts`:
+
+| Pairing | Face | For |
 |---|---|---|
-| **Studio** (default) | Space Grotesk · Inter · JetBrains Mono | Modern without reading like a software product |
-| Editorial | Playfair Display · Source Sans 3 · IBM Plex Mono | Businesses selling provenance: food, wine, craft |
-| Grounded | Lora · Lora · IBM Plex Mono | Warm and unhurried; wellbeing, clinics |
-| Direct | Geist Sans throughout · Geist Mono | The quietest option, and the safest with a busy logo |
+| **Inter** (default) | Inter | Neutral, contemporary, legible from caption to display. Suits any business and never competes with a logo |
+| Geist | Geist Sans | A little more character in the figures. Loaded locally, so no extra network request |
+| Source Sans | Source Sans 3 | Humanist rather than geometric; warmer over long paragraphs |
+| Lora | Lora | A serif throughout. Traditional rather than contemporary: provenance, law, wellbeing |
 
-The rule behind them: one face with character at display size, one quiet face that
-holds up at 16px over paragraphs, and a mono with a clear figure set — the
-specification line and every price depends on that last one.
-
-The scale is weight- and size-driven rather than family-driven, so a serif heading
-face and a geometric sans both work without per-font overrides.
+The mono role is only reachable by the code block. **Prices, durations, stat figures
+and the specification line use the body face with `tabular-figures`**, which lines
+figures up column to column without changing typeface. Do not reach for `font-mono`
+in customer-facing UI.
 
 **Do not** use the built-in `text-sm`/`text-lg`/`text-3xl` scale in client UI. The
 custom scale and the colour utilities share the `text-` prefix, which is why
@@ -215,8 +219,8 @@ section is on `default` will look like a stack of components whatever else you d
 ## 7. The specification line
 
 `src/components/ui/spec-list.tsx`. A run of concrete facts — origin, duration,
-weight, capacity, price — set in the mono face, small, wide-tracked, separated by
-hairlines.
+weight, capacity, price — set small, uppercase, wide-tracked and separated by
+hairlines, in the site's one typeface.
 
 ```tsx
 <SpecList>
@@ -233,8 +237,8 @@ Use it wherever the content already carries specifics. Use it instead of: badges
 pills, chips, icons in coloured circles, and "eyebrow" labels above headings.
 `SectionHeader`'s eyebrow already speaks in this voice.
 
-Figures elsewhere — prices, stat values — use `font-mono`, which carries
-`tabular-nums` so columns line up.
+Figures elsewhere — prices, stat values — take `tabular-figures`, which turns on
+tabular numerals so columns line up.
 
 ---
 

@@ -359,7 +359,7 @@ export const CheckoutPage: React.FC = () => {
             <hr />
             <div className="flex justify-between items-center gap-2">
               <span className="spec-list">Total</span>{' '}
-              <Price amount={cart.subtotal || 0} className="text-h3 font-mono" />
+              <Price amount={cart.subtotal || 0} className="text-h3 tabular-figures" />
             </div>
           </Card>
         )}

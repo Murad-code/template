@@ -31,7 +31,7 @@ export const AccountDetailPanel: React.FC<AccountDetailPanelProps> = ({
         ) : (
           <div />
         )}
-        <h1 className="rounded bg-primary/10 px-2 text-sm font-mono uppercase tracking-[0.07em]">
+        <h1 className="spec-list bg-muted rounded-xs px-2 py-1">
           <span>{badgeLabel}</span>
         </h1>
       </div>
@@ -44,9 +44,4 @@ export const AccountDetailPanel: React.FC<AccountDetailPanelProps> = ({
 export const AccountDetailMetaLabel: React.FC<React.ComponentProps<'p'>> = ({
   className,
   ...props
-}) => (
-  <p
-    className={cn('mb-1 text-sm font-mono uppercase text-muted-foreground', className)}
-    {...props}
-  />
-)
+}) => <p className={cn('spec-list mb-1', className)} {...props} />

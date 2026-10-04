@@ -28,7 +28,7 @@ export const Label: React.FC<Props> = ({ amount, position = 'bottom', title }) =
 
         <Price
           amount={amount}
-          className="text-body-sm shrink-0 font-mono"
+          className="text-body-sm tabular-figures shrink-0"
           currencyCodeClassName="hidden @[275px]/label:inline"
         />
       </div>

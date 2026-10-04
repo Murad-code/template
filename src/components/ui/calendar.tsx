@@ -37,7 +37,7 @@ export function Calendar({
           'interactive-focus text-muted-foreground hover:bg-muted hover:text-foreground pointer-events-auto grid size-9 place-items-center rounded-sm transition-colors disabled:pointer-events-none disabled:opacity-40',
         month_grid: 'border-collapse',
         weekdays: 'flex',
-        weekday: 'text-label text-muted-foreground w-10 font-mono font-normal uppercase',
+        weekday: 'text-label text-muted-foreground w-10 font-normal uppercase',
         weeks: '',
         week: 'flex w-full',
         day: 'size-10 p-0.5 text-center',
