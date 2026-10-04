@@ -151,6 +151,48 @@
 }
 
 @layer components {
+  /* An inverse band remaps the theme tokens for its subtree, so a block
+     written against `bg-card` / `text-muted-foreground` sits correctly on a
+     dark band without knowing it is on one.
+
+     Split across two elements on purpose. The band itself only publishes the
+     two source colours; the remap happens on the inner scope, which reads
+     them by inheritance. Redefining `--primary` on the same element that
+     paints `bg-primary` would be a cycle, and would repaint the band. */
+  [data-tone='inverse'] {
+    --tone-fg: var(--primary-foreground);
+    --tone-bg: var(--primary);
+  }
+
+  [data-tone='inverse'] > [data-tone-scope] {
+    color: var(--tone-fg);
+    --foreground: var(--tone-fg);
+    /* Surfaces painted with `bg-background`, such as the outline button,
+       would otherwise stay page-white and lose their now-pale text. */
+    --background: var(--tone-bg);
+    --muted-foreground: color-mix(in srgb, var(--tone-fg) 72%, transparent);
+    --muted: color-mix(in srgb, var(--tone-fg) 12%, transparent);
+    --card: color-mix(in srgb, var(--tone-fg) 10%, transparent);
+    --card-foreground: var(--tone-fg);
+    --popover: var(--tone-bg);
+    --popover-foreground: var(--tone-fg);
+    --border: color-mix(in srgb, var(--tone-fg) 22%, transparent);
+    --border-subtle: color-mix(in srgb, var(--tone-fg) 15%, transparent);
+    --border-strong: color-mix(in srgb, var(--tone-fg) 38%, transparent);
+    --input: color-mix(in srgb, var(--tone-fg) 22%, transparent);
+    --ring: color-mix(in srgb, var(--tone-fg) 60%, transparent);
+    --text-primary: var(--tone-fg);
+    --text-secondary: color-mix(in srgb, var(--tone-fg) 72%, transparent);
+    --surface-base: transparent;
+    --surface-raised: color-mix(in srgb, var(--tone-fg) 10%, transparent);
+    /* A primary button would otherwise be the same colour as the band. */
+    --primary: var(--tone-fg);
+    --primary-foreground: var(--tone-bg);
+    --secondary: color-mix(in srgb, var(--tone-fg) 16%, transparent);
+    --secondary-foreground: var(--tone-fg);
+    --accent-foreground: var(--tone-bg);
+  }
+
   .interactive-focus {
     outline: none;
     transition: box-shadow 0.18s ease;
