@@ -3134,7 +3134,7 @@ export interface Footer {
 export interface SiteTheme {
   id: number;
   /**
-   * Choose brand font roles. Body controls default text, heading controls H1-H6, and mono controls labels/prices using font-mono.
+   * Body controls default text, heading controls H1-H6, and mono carries labels, prices and durations. Pairings that work well together are listed in docs/frontend-ui-system.md.
    */
   typography: {
     bodyFont:

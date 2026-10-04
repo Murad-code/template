@@ -69,6 +69,21 @@ the derivation enforces contrast rather than assuming it.
 `tests/int/theme-token-derivation.int.spec.ts` holds this contract. If you change the
 mapping, that spec should fail.
 
+### The seeded palettes
+
+Ten, in `src/utilities/themePalettes.ts`, each with a note on the kind of business it
+suits. `Neutral Studio` is the system default and the only one flagged `isSystem`;
+the collection refuses to delete it.
+
+All ten share a shape — light page, tinted panel, hued mid-tone, deep brand tone,
+near-black page — because the derivation depends on it. In particular `color4` has to
+stay dark enough to serve as the dark-mode panel, which is why no palette offers a
+saturated light-mode button. The brand's colour shows up through `color3`: accents,
+hairlines and the dark-mode call to action.
+
+Re-running `pnpm seed:theme-palettes` upserts the library by `key` and never
+overwrites a palette or typography a site has already chosen.
+
 ### Inverse bands
 
 `data-tone="inverse"` on a `Section` remaps the whole token set for its subtree
@@ -107,6 +122,26 @@ the same size.
 
 Headings get `text-wrap: balance` from the base layer. Body copy that runs wide
 should be capped with `max-w-prose`.
+
+### Font pairings
+
+The three roles — heading, body, mono — are picked independently in the admin.
+`TYPOGRAPHY_PAIRINGS` in `src/config/typographyFonts.ts` holds the combinations the
+system was drawn against:
+
+| Pairing | Heading / body / mono | For |
+|---|---|---|
+| **Studio** (default) | Space Grotesk · Inter · JetBrains Mono | Modern without reading like a software product |
+| Editorial | Playfair Display · Source Sans 3 · IBM Plex Mono | Businesses selling provenance: food, wine, craft |
+| Grounded | Lora · Lora · IBM Plex Mono | Warm and unhurried; wellbeing, clinics |
+| Direct | Geist Sans throughout · Geist Mono | The quietest option, and the safest with a busy logo |
+
+The rule behind them: one face with character at display size, one quiet face that
+holds up at 16px over paragraphs, and a mono with a clear figure set — the
+specification line and every price depends on that last one.
+
+The scale is weight- and size-driven rather than family-driven, so a serif heading
+face and a geometric sans both work without per-font overrides.
 
 **Do not** use the built-in `text-sm`/`text-lg`/`text-3xl` scale in client UI. The
 custom scale and the colour utilities share the `text-` prefix, which is why

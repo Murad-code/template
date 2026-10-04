@@ -57,16 +57,21 @@ export function mix(color: string, base: string, amount: number): string {
 }
 
 /**
- * Whichever of the candidates reads best on `background`. Used instead of
- * assuming black or white, so a button derived from a mid-tone brand colour
- * still takes the palette's own text colours where they work.
+ * The first candidate that reads clearly on `background`, falling back to
+ * whichever reads best.
+ *
+ * Order matters: pass the palette's own colours first. Taking the maximum
+ * instead would mean a button label is always pure black or pure white, which
+ * throws away the considered near-black an editor chose and makes every
+ * palette's controls look the same.
  */
-export function pickReadable(background: string, candidates: string[]): string {
+export function pickReadable(background: string, candidates: string[], target = 4.5): string {
   let best = candidates[0] ?? '#000000'
   let bestRatio = -1
 
   for (const candidate of candidates) {
     const ratio = getContrastRatio(candidate, background) ?? 0
+    if (ratio >= target) return candidate
     if (ratio > bestRatio) {
       bestRatio = ratio
       best = candidate

@@ -74,3 +74,66 @@ export const TYPOGRAPHY_FONT_OPTIONS = TYPOGRAPHY_FONT_DEFINITIONS.map((font) =>
   label: font.label,
   value: font.value,
 }))
+
+export type TypographyPairing = {
+  key: string
+  label: string
+  description: string
+  bodyFont: TypographyFontValue
+  headingFont: TypographyFontValue
+  monoFont: TypographyFontValue
+}
+
+/**
+ * Known-good combinations for the three font roles.
+ *
+ * The admin exposes the roles as three independent pickers, which is right —
+ * but three dropdowns of eighteen faces is a lot of rope. These are the
+ * pairings the design system was drawn against; `DEFAULT_TYPOGRAPHY_PAIRING`
+ * is what a fresh install gets.
+ *
+ * The rule behind all of them: one face with enough character to carry a
+ * display heading, one quiet face that stays readable at 16px over long
+ * paragraphs, and a mono with a clear figure set for the specification line,
+ * where prices and durations have to line up.
+ */
+export const TYPOGRAPHY_PAIRINGS: TypographyPairing[] = [
+  {
+    key: 'studio',
+    label: 'Studio',
+    description:
+      'Geometric headings over a neutral UI face. Reads modern without reading like a software product.',
+    headingFont: 'space-grotesk',
+    bodyFont: 'inter',
+    monoFont: 'jetbrains-mono',
+  },
+  {
+    key: 'editorial',
+    label: 'Editorial',
+    description:
+      'High-contrast serif headlines over a humanist sans. For businesses selling provenance: food, wine, craft.',
+    headingFont: 'playfair-display',
+    bodyFont: 'source-sans-3',
+    monoFont: 'ibm-plex-mono',
+  },
+  {
+    key: 'grounded',
+    label: 'Grounded',
+    description:
+      'A serif that works at both heading and body size. Warm and unhurried; suits wellbeing and clinics.',
+    headingFont: 'lora',
+    bodyFont: 'lora',
+    monoFont: 'ibm-plex-mono',
+  },
+  {
+    key: 'direct',
+    label: 'Direct',
+    description:
+      'One sans throughout, separated by weight and size alone. The quietest option, and the safest with a busy logo.',
+    headingFont: 'geist-sans',
+    bodyFont: 'geist-sans',
+    monoFont: 'geist-mono',
+  },
+]
+
+export const DEFAULT_TYPOGRAPHY_PAIRING = TYPOGRAPHY_PAIRINGS[0]!

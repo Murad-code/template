@@ -13,6 +13,7 @@ import { discoverSeedDir } from './discover'
 import { readLocalFile } from './localFile'
 import { slugify } from './slugify'
 import { upsertThemePalettes } from '@/utilities/themePalettes'
+import { DEFAULT_TYPOGRAPHY_PAIRING } from '@/config/typographyFonts'
 import { Address, Transaction } from '@/payload-types'
 import { getDefaultSiteSettingsData } from '@/utilities/getEnquiryRecipient'
 import type { Header, Footer, Media, Product, SiteTheme } from '@/payload-types'
@@ -107,7 +108,9 @@ function lexicalHeading(text: string, tag: 'h1' | 'h2' | 'h3' = 'h2'): any {
   }
 }
 
-function richTextFrom(...children: Array<ReturnType<typeof lexicalParagraph> | ReturnType<typeof lexicalHeading>>): any {
+function richTextFrom(
+  ...children: Array<ReturnType<typeof lexicalParagraph> | ReturnType<typeof lexicalHeading>>
+): any {
   return {
     root: {
       type: 'root',
@@ -154,7 +157,9 @@ const productSeeds: CoffeeProductSeed[] = [
       'Black Bart: dark and smoky with full-bodied sweetness, designed for black coffee or milk-based drinks.',
       'Pro-Tip: this bundle qualifies for free shipping.',
     ],
-    brewNotes: ['Use our brew guides as a starting point and adjust ratio to taste for your preferred brewer.'],
+    brewNotes: [
+      'Use our brew guides as a starting point and adjust ratio to taste for your preferred brewer.',
+    ],
     inventory: 80,
     lowStockThreshold: 10,
   },
@@ -365,7 +370,8 @@ const serviceSeeds: ServiceSeed[] = [
     slug: 'introduction-to-espresso',
     durationMinutes: 150,
     priceInGBP: 6500,
-    description: 'Master espresso preparation, shot dialing and milk steaming on professional equipment.',
+    description:
+      'Master espresso preparation, shot dialing and milk steaming on professional equipment.',
     category: 'espresso',
     imageFileName: 'introduction-to-espresso.jpg',
   },
@@ -383,7 +389,8 @@ const serviceSeeds: ServiceSeed[] = [
     slug: 'coffee-roasting-fundamentals',
     durationMinutes: 180,
     priceInGBP: 8500,
-    description: 'Understand roast development through guided live roasting demonstrations and cupping.',
+    description:
+      'Understand roast development through guided live roasting demonstrations and cupping.',
     category: 'advanced',
     imageFileName: 'coffee-roasting-fundamentals.jpg',
   },
@@ -401,7 +408,8 @@ const serviceSeeds: ServiceSeed[] = [
     slug: 'home-barista-masterclass',
     durationMinutes: 240,
     priceInGBP: 12000,
-    description: 'A complete workshop covering espresso workflow, milk texturing and equipment care.',
+    description:
+      'A complete workshop covering espresso workflow, milk texturing and equipment care.',
     category: 'advanced',
     imageFileName: 'home-barista-masterclass.jpg',
   },
@@ -476,7 +484,8 @@ const marketingPages = [
 const blogGuideTitles = [
   {
     title: 'How to Brew Better Coffee at Home',
-    teaser: 'Build a repeatable daily brew routine with simple adjustments to water, grind and timing.',
+    teaser:
+      'Build a repeatable daily brew routine with simple adjustments to water, grind and timing.',
     readTime: '6 min read',
     sections: [
       {
@@ -756,7 +765,9 @@ export const seed = async ({
   }
 
   const requiredFolderNames = new Set(productSeeds.map((seedProduct) => seedProduct.folderName))
-  const selectedProductFolders = productFolders.filter((folder) => requiredFolderNames.has(folder.title))
+  const selectedProductFolders = productFolders.filter((folder) =>
+    requiredFolderNames.has(folder.title),
+  )
   const missingFolders = productSeeds
     .map((seedProduct) => seedProduct.folderName)
     .filter((folderName) => !selectedProductFolders.some((folder) => folder.title === folderName))
@@ -863,10 +874,15 @@ export const seed = async ({
       description: richTextFrom(
         ...(productSeed.subtitle ? [lexicalParagraph(productSeed.subtitle)] : []),
         lexicalParagraph(productSeed.shortDescription),
-        ...(productSeed.tastingNotes ? [lexicalParagraph(`Tasting notes: ${productSeed.tastingNotes}.`)] : []),
+        ...(productSeed.tastingNotes
+          ? [lexicalParagraph(`Tasting notes: ${productSeed.tastingNotes}.`)]
+          : []),
         ...(productSeed.sections?.map((section) => lexicalParagraph(section)) ?? []),
         ...(productSeed.brewNotes?.length
-          ? [lexicalHeading('Brew Notes', 'h3'), ...productSeed.brewNotes.map((note) => lexicalParagraph(note))]
+          ? [
+              lexicalHeading('Brew Notes', 'h3'),
+              ...productSeed.brewNotes.map((note) => lexicalParagraph(note)),
+            ]
           : []),
       ),
       gallery: [{ image: imageA }, { image: imageB }],
@@ -1019,19 +1035,25 @@ export const seed = async ({
             {
               title: 'Quality First',
               description: richTextFrom(
-                lexicalParagraph('Every coffee is carefully sourced, roasted and tested before reaching customers.'),
+                lexicalParagraph(
+                  'Every coffee is carefully sourced, roasted and tested before reaching customers.',
+                ),
               ),
             },
             {
               title: 'Sustainable Sourcing',
               description: richTextFrom(
-                lexicalParagraph('We work with partners who prioritize ethical and transparent supply chains.'),
+                lexicalParagraph(
+                  'We work with partners who prioritize ethical and transparent supply chains.',
+                ),
               ),
             },
             {
               title: 'Education and Community',
               description: richTextFrom(
-                lexicalParagraph('Workshops and brew guides make specialty coffee accessible for all experience levels.'),
+                lexicalParagraph(
+                  'Workshops and brew guides make specialty coffee accessible for all experience levels.',
+                ),
               ),
             },
           ],
@@ -1067,8 +1089,12 @@ export const seed = async ({
         type: 'lowImpact',
         richText: richTextFrom(
           lexicalHeading('Brew Better Coffee', 'h1'),
-          lexicalParagraph('Guides, tutorials and practical tips from the Black Oak roasting team.'),
-          lexicalParagraph('Explore beginner-friendly how-tos, brew method comparisons and origin deep dives.'),
+          lexicalParagraph(
+            'Guides, tutorials and practical tips from the Black Oak roasting team.',
+          ),
+          lexicalParagraph(
+            'Explore beginner-friendly how-tos, brew method comparisons and origin deep dives.',
+          ),
         ),
         links: [
           {
@@ -1098,7 +1124,9 @@ export const seed = async ({
                 lexicalHeading('Popular Guides', 'h3'),
                 ...blogGuideTitles
                   .slice(0, 4)
-                  .map((guide) => lexicalParagraph(`${guide.title} - ${guide.teaser} (${guide.readTime})`)),
+                  .map((guide) =>
+                    lexicalParagraph(`${guide.title} - ${guide.teaser} (${guide.readTime})`),
+                  ),
               ),
             },
           ],
@@ -1106,7 +1134,8 @@ export const seed = async ({
       ],
       meta: {
         title: 'Brew Guides | Black Oak Coffee Co.',
-        description: 'Coffee brewing guides, tutorials and origin explainers from Black Oak Coffee Co.',
+        description:
+          'Coffee brewing guides, tutorials and origin explainers from Black Oak Coffee Co.',
         image: homeImage,
       },
     },
@@ -1125,7 +1154,10 @@ export const seed = async ({
         _status: 'published',
         hero: {
           type: 'lowImpact',
-          richText: richTextFrom(lexicalHeading(pageSeed.heroHeading, 'h1'), lexicalParagraph(pageSeed.heroText)),
+          richText: richTextFrom(
+            lexicalHeading(pageSeed.heroHeading, 'h1'),
+            lexicalParagraph(pageSeed.heroText),
+          ),
           links: [
             {
               link: {
@@ -1144,15 +1176,27 @@ export const seed = async ({
             items: [
               {
                 title: 'Quality First',
-                description: richTextFrom(lexicalParagraph('Everything is planned to feel like a polished, real-world coffee business.')),
+                description: richTextFrom(
+                  lexicalParagraph(
+                    'Everything is planned to feel like a polished, real-world coffee business.',
+                  ),
+                ),
               },
               {
                 title: 'Designed for Conversion',
-                description: richTextFrom(lexicalParagraph('Each section is seeded to showcase ecommerce and booking journeys in one site.')),
+                description: richTextFrom(
+                  lexicalParagraph(
+                    'Each section is seeded to showcase ecommerce and booking journeys in one site.',
+                  ),
+                ),
               },
               {
                 title: 'Easy to Replace',
-                description: richTextFrom(lexicalParagraph('You can quickly swap text and media while keeping structure and relationships intact.')),
+                description: richTextFrom(
+                  lexicalParagraph(
+                    'You can quickly swap text and media while keeping structure and relationships intact.',
+                  ),
+                ),
               },
             ],
           },
@@ -1207,14 +1251,14 @@ export const seed = async ({
                 size: 'full',
                 enableLink: false,
                 richText: richTextFrom(
-                lexicalParagraph(
-                  `This guide gives practical, beginner-friendly advice for ${guide.title.toLowerCase()}.`,
+                  lexicalParagraph(
+                    `This guide gives practical, beginner-friendly advice for ${guide.title.toLowerCase()}.`,
+                  ),
+                  ...articleBodyNodes,
+                  lexicalParagraph(
+                    'Use this seeded post as a foundation and replace sections with your own workflow, photos and product recommendations.',
+                  ),
                 ),
-                ...articleBodyNodes,
-                lexicalParagraph(
-                  'Use this seeded post as a foundation and replace sections with your own workflow, photos and product recommendations.',
-                ),
-              ),
               },
             ],
           },
@@ -1256,6 +1300,11 @@ export const seed = async ({
     data: {
       paletteMode: 'palette',
       palette: defaultPalette?.id,
+      typography: {
+        bodyFont: DEFAULT_TYPOGRAPHY_PAIRING.bodyFont,
+        headingFont: DEFAULT_TYPOGRAPHY_PAIRING.headingFont,
+        monoFont: DEFAULT_TYPOGRAPHY_PAIRING.monoFont,
+      },
     } as Partial<SiteTheme>,
     depth: 0,
     req,

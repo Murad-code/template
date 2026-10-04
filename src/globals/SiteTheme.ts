@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 import { revalidateTag } from 'next/cache'
 
 import { adminOnly } from '@/access/adminOnly'
-import { TYPOGRAPHY_FONT_OPTIONS } from '@/config/typographyFonts'
+import { DEFAULT_TYPOGRAPHY_PAIRING, TYPOGRAPHY_FONT_OPTIONS } from '@/config/typographyFonts'
 import { APIError } from 'payload'
 import {
   normalizeAndValidatePalette,
@@ -67,14 +67,14 @@ export const SiteTheme: GlobalConfig = {
       type: 'group',
       admin: {
         description:
-          'Choose brand font roles. Body controls default text, heading controls H1-H6, and mono controls labels/prices using font-mono.',
+          'Body controls default text, heading controls H1-H6, and mono carries labels, prices and durations. Pairings that work well together are listed in docs/frontend-ui-system.md.',
       },
       fields: [
         {
           name: 'bodyFont',
           type: 'select',
           required: true,
-          defaultValue: 'geist-sans',
+          defaultValue: DEFAULT_TYPOGRAPHY_PAIRING.bodyFont,
           options: TYPOGRAPHY_FONT_OPTIONS,
           label: 'Body font',
           admin: {
@@ -88,7 +88,7 @@ export const SiteTheme: GlobalConfig = {
           name: 'headingFont',
           type: 'select',
           required: true,
-          defaultValue: 'geist-sans',
+          defaultValue: DEFAULT_TYPOGRAPHY_PAIRING.headingFont,
           options: TYPOGRAPHY_FONT_OPTIONS,
           label: 'Heading font',
           admin: {
@@ -102,7 +102,7 @@ export const SiteTheme: GlobalConfig = {
           name: 'monoFont',
           type: 'select',
           required: true,
-          defaultValue: 'geist-mono',
+          defaultValue: DEFAULT_TYPOGRAPHY_PAIRING.monoFont,
           options: TYPOGRAPHY_FONT_OPTIONS,
           label: 'Mono / utility font',
           admin: {
@@ -143,8 +143,10 @@ export const SiteTheme: GlobalConfig = {
       maxDepth: 1,
       label: 'Palette',
       admin: {
-        condition: (_, siblingData) => !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
-        description: "Select a palette. Create or remove palettes in the 'Theme Palettes' collection.",
+        condition: (_, siblingData) =>
+          !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
+        description:
+          "Select a palette. Create or remove palettes in the 'Theme Palettes' collection.",
         components: {
           Field: '@/components/admin/PaletteRelationshipField#PaletteRelationshipField',
         },
@@ -168,7 +170,8 @@ export const SiteTheme: GlobalConfig = {
       name: 'palettePreview',
       type: 'ui',
       admin: {
-        condition: (_, siblingData) => !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
+        condition: (_, siblingData) =>
+          !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
         components: {
           Field: '@/components/admin/PaletteSelectionPreview#PaletteSelectionPreview',
         },
@@ -178,7 +181,8 @@ export const SiteTheme: GlobalConfig = {
       name: 'paletteHelp',
       type: 'ui',
       admin: {
-        condition: (_, siblingData) => !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
+        condition: (_, siblingData) =>
+          !siblingData?.paletteMode || siblingData?.paletteMode === 'palette',
         components: {
           Field: '@/components/admin/PaletteHelp#PaletteHelp',
         },
@@ -243,7 +247,10 @@ export const SiteTheme: GlobalConfig = {
         if (paletteMode === 'palette') {
           if (skipPaletteValidation) return incomingData
           if (!incomingData.palette) {
-            throw new APIError('A main palette must be selected when palette mode is set to "Palette".', 400)
+            throw new APIError(
+              'A main palette must be selected when palette mode is set to "Palette".',
+              400,
+            )
           }
           return incomingData
         }
@@ -253,7 +260,8 @@ export const SiteTheme: GlobalConfig = {
         try {
           normalized = normalizeAndValidatePalette(custom, 'Custom palette')
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Invalid custom palette configuration.'
+          const message =
+            error instanceof Error ? error.message : 'Invalid custom palette configuration.'
           throw new APIError(message, 400)
         }
         incomingData.customPalette = normalized
