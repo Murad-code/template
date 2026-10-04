@@ -39,13 +39,17 @@ describe('theme token derivation', () => {
 
   it('keeps button labels readable on the derived primary', () => {
     for (const mode of [light, dark]) {
-      expect(getContrastRatio(mode['--primary-foreground'], mode['--primary'])!).toBeGreaterThanOrEqual(4.5)
+      expect(
+        getContrastRatio(mode['--primary-foreground'], mode['--primary'])!,
+      ).toBeGreaterThanOrEqual(4.5)
     }
   })
 
   it('keeps secondary text at AA against its own background', () => {
     for (const mode of [light, dark]) {
-      expect(getContrastRatio(mode['--muted-foreground'], mode['--background'])!).toBeGreaterThanOrEqual(4.5)
+      expect(
+        getContrastRatio(mode['--muted-foreground'], mode['--background'])!,
+      ).toBeGreaterThanOrEqual(4.5)
     }
   })
 
@@ -63,8 +67,13 @@ describe('theme token derivation', () => {
   })
 
   it('still produces a usable set when a custom palette is left empty', () => {
-    const fallback = tokensFor(getLandingThemeCss({ paletteMode: 'custom', customPalette: {} }), ':root')
+    const fallback = tokensFor(
+      getLandingThemeCss({ paletteMode: 'custom', customPalette: {} }),
+      ':root',
+    )
     expect(fallback['--primary']).toMatch(/^#[0-9a-fA-F]{6}$/)
-    expect(getContrastRatio(fallback['--primary-foreground'], fallback['--primary'])!).toBeGreaterThanOrEqual(4.5)
+    expect(
+      getContrastRatio(fallback['--primary-foreground'], fallback['--primary'])!,
+    ).toBeGreaterThanOrEqual(4.5)
   })
 })
