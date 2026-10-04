@@ -25,11 +25,19 @@ export const HighImpactHero: React.FC<Page['hero']> = ({
   }, [setHeaderTheme])
 
   return (
+    /* The copy sits on a photograph, so it takes the media tone: the deep
+       brand tone and light copy, identical in both themes, because the
+       picture underneath does not change when the page around it does.
+       `data-theme="dark"` used to do this, borrowing the whole dark palette
+       to say one thing. */
     <div
-      className="text-foreground relative -mt-[10.4rem] flex items-center justify-center"
-      data-theme="dark"
+      className="relative -mt-[10.4rem] flex items-center justify-center"
+      data-tone="media"
     >
-      <div className="container relative z-10 mb-8 flex items-center justify-center">
+      <div
+        className="container relative z-10 mb-8 flex items-center justify-center"
+        data-tone-scope=""
+      >
         <div className="max-w-146 md:text-center">
           {richText && (
             <RichText

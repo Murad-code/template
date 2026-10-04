@@ -100,10 +100,10 @@ export const HeroCarouselClient: React.FC<{
       aria-label={many ? 'Highlights' : undefined}
       aria-roledescription={many ? 'carousel' : undefined}
       className={cn(
-        'bg-primary relative isolate flex flex-col justify-center overflow-hidden',
+        'bg-media-surface relative isolate flex flex-col justify-center overflow-hidden',
         height,
       )}
-      data-tone="inverse"
+      data-tone="media"
       onBlur={() => setHeld(false)}
       onFocus={() => setHeld(true)}
       onKeyDown={(event) => {
@@ -162,16 +162,20 @@ export const HeroCarouselClient: React.FC<{
           page on narrow screens where the text is full width, and across to
           the right on wide ones, where it clears before the photograph's
           subject. A hero whose image is evenly dimmed may as well not have
-          one. */}
+          one.
+
+          `media-surface` rather than a themed token, so the wash is the same
+          weight in dark mode. Darkening a photograph is not a thing the page
+          theme has an opinion about. */}
       <div
         aria-hidden="true"
-        className="from-primary/80 to-primary/45 lg:from-primary/88 lg:via-primary/45 lg:to-primary/5 absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r"
+        className="from-media-surface/80 to-media-surface/45 lg:from-media-surface/88 lg:via-media-surface/45 lg:to-media-surface/5 absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r"
       />
 
       {many && (
         <>
           <button
-            className="hero-scrub-content bg-primary/45 text-primary-foreground hover:bg-primary/75 absolute top-1/2 left-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
+            className="hero-scrub-content bg-media-surface/45 text-media-foreground hover:bg-media-surface/75 absolute top-1/2 left-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
             onClick={() => go(-1)}
             type="button"
           >
@@ -179,7 +183,7 @@ export const HeroCarouselClient: React.FC<{
             <span className="sr-only">Previous slide</span>
           </button>
           <button
-            className="hero-scrub-content bg-primary/45 text-primary-foreground hover:bg-primary/75 absolute top-1/2 right-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
+            className="hero-scrub-content bg-media-surface/45 text-media-foreground hover:bg-media-surface/75 absolute top-1/2 right-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
             onClick={() => go(1)}
             type="button"
           >

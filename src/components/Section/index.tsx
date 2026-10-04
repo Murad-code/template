@@ -9,7 +9,7 @@ const BACKGROUNDS: Record<SectionBackground, string> = {
   default: '',
   muted: 'bg-muted',
   soft: 'bg-surface-soft-panel',
-  inverse: 'bg-primary',
+  inverse: 'bg-surface-contrast',
 }
 
 const SPACING: Record<SectionSpacing, string> = {
