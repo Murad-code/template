@@ -77,7 +77,7 @@ export function MobileMenu({ menu, ecommerceEnabled }: Props) {
 
         {user ? (
           <div className="mt-4">
-            <h2 className="text-xl mb-4">My account</h2>
+            <h2 className="text-h4 mb-4">My account</h2>
             <hr className="my-2" />
             <ul className="flex flex-col gap-2">
               {ecommerceEnabled ? (
@@ -100,12 +100,12 @@ export function MobileMenu({ menu, ecommerceEnabled }: Props) {
           </div>
         ) : (
           <div>
-            <h2 className="text-xl mb-4">My account</h2>
+            <h2 className="text-h4 mb-4">My account</h2>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
               <Button asChild className="w-full sm:flex-1" variant="outline">
                 <Link href="/login">Log in</Link>
               </Button>
-              <span className="text-center text-sm text-muted-foreground sm:text-base">or</span>
+              <span className="text-body-sm text-muted-foreground text-center">or</span>
               <Button asChild className="w-full sm:flex-1">
                 <Link href="/create-account">Create an account</Link>
               </Button>

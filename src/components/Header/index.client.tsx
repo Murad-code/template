@@ -44,7 +44,7 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
               <span className="sr-only">Home</span>
             </Link>
             {menu.length ? (
-              <ul className="hidden gap-4 text-sm md:flex md:items-center">
+              <ul className="hidden gap-5 md:flex md:items-center">
                 {menu.map((item) => (
                   <li key={item.id}>
                     <CMSLink

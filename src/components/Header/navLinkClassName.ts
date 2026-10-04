@@ -12,6 +12,6 @@ import { cn } from '@/utilities/cn'
  */
 export const navLinkClassName = ({ active }: { active?: boolean } = {}) =>
   cn(
-    'navLink interactive-focus relative inline-flex items-end rounded-none pt-2 pb-6 text-body-sm text-muted-foreground transition-colors hover:text-foreground',
+    'navLink interactive-focus text-body-sm text-muted-foreground hover:text-foreground relative inline-flex items-end rounded-none pt-2 pb-6 transition-colors duration-[0.32s] ease-[var(--ease-smooth)]',
     active && 'active text-foreground',
   )

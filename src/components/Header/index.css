@@ -1,29 +1,35 @@
+/**
+ * The current-page indicator under a nav item.
+ *
+ * It wipes horizontally rather than sliding into view. The previous version
+ * parked a 2px bar just below the link and translated it up by its own
+ * height through an `overflow: hidden` edge, so almost the whole animation
+ * was a sub-pixel sliver being rounded to whole pixels — which is what made
+ * it look stepped.
+ *
+ * Scaling along one axis stays on the compositor and has no clipping edge to
+ * round against. Swapping the origin between the resting and hovered state
+ * is what makes it leave the way it arrived, travelling left to right both
+ * times instead of reversing.
+ */
 .navLink {
-  overflow: hidden;
   border-radius: unset;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
+    inset-inline: 0;
+    bottom: 0;
     height: 2px;
     background-color: var(--primary);
-    transition: transform 0.3s;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.32s var(--ease-smooth);
   }
 
-  &:not(.active) {
-    &:hover {
-      &::after {
-        transform: translateY(-2px);
-      }
-    }
-  }
-
-  &.active {
-    &::after {
-      transform: translateY(-2px);
-    }
+  &:hover::after,
+  &.active::after {
+    transform: scaleX(1);
+    transform-origin: left center;
   }
 }

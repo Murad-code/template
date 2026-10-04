@@ -55,7 +55,7 @@ export function CartModal() {
         {!cart || cart?.items?.length === 0 ? (
           <div className="text-center flex flex-col items-center gap-2">
             <ShoppingCart className="h-16" />
-            <p className="text-center text-2xl font-bold">Your cart is empty.</p>
+            <p className="text-h3 text-center">Your cart is empty.</p>
           </div>
         ) : (
           <div className="grow flex px-4">
@@ -93,7 +93,7 @@ export function CartModal() {
                           <div className="ml-auto flex h-9 flex-row items-center rounded-lg bg-muted/60 shadow-sm">
                             <EditItemQuantityButton item={item} type="minus" />
                             <p className="w-6 text-center">
-                              <span className="w-full text-sm">{item.quantity}</span>
+                              <span className="text-body-sm w-full">{item.quantity}</span>
                             </p>
                             <EditItemQuantityButton item={item} type="plus" />
                           </div>
@@ -106,13 +106,13 @@ export function CartModal() {
               </ul>
 
               <div className="px-4">
-                <div className="py-4 text-sm text-muted-foreground">
+                <div className="text-body-sm text-muted-foreground py-4">
                   {typeof cart?.subtotal === 'number' && (
                     <div className="mb-3 flex items-center justify-between rounded-md bg-muted/40 px-2 pb-1 pt-1">
                       <p>Total</p>
                       <Price
                         amount={cart?.subtotal}
-                        className="text-right text-base text-foreground"
+                        className="text-body tabular-figures text-right text-foreground"
                       />
                     </div>
                   )}
