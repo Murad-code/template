@@ -53,7 +53,8 @@ const FONT_STACKS = {
   'nunito-sans': 'var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif',
   montserrat: 'var(--font-montserrat), ui-sans-serif, system-ui, sans-serif',
   'space-grotesk': 'var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif',
-  'playfair-display': 'var(--font-playfair-display), ui-serif, Georgia, Cambria, "Times New Roman", serif',
+  'playfair-display':
+    'var(--font-playfair-display), ui-serif, Georgia, Cambria, "Times New Roman", serif',
   lora: 'var(--font-lora), ui-serif, Georgia, Cambria, "Times New Roman", serif',
   merriweather: 'var(--font-merriweather), ui-serif, Georgia, Cambria, "Times New Roman", serif',
   'dm-serif-display':
@@ -196,7 +197,13 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
   const { background, body, brand, cardBackground, cardBorder } = mode
 
   const primary = ensureContrast(brand, background, 3)
-  const primaryForeground = pickReadable(primary, [background, cardBackground, opposite.body, '#FFFFFF', '#000000'])
+  const primaryForeground = pickReadable(primary, [
+    background,
+    cardBackground,
+    opposite.body,
+    '#FFFFFF',
+    '#000000',
+  ])
 
   const secondary = mix(cardBorder, background, 0.28)
   const accent = cardBorder

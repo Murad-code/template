@@ -88,7 +88,8 @@ export function pickReadable(background: string, candidates: string[]): string {
 export function ensureContrast(color: string, against: string, target: number): string {
   if ((getContrastRatio(color, against) ?? 0) >= target) return color
 
-  const againstLuminanceIsLow = (getContrastRatio('#FFFFFF', against) ?? 0) > (getContrastRatio('#000000', against) ?? 0)
+  const againstLuminanceIsLow =
+    (getContrastRatio('#FFFFFF', against) ?? 0) > (getContrastRatio('#000000', against) ?? 0)
   const towards = againstLuminanceIsLow ? '#FFFFFF' : '#000000'
 
   let candidate = color
