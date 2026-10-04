@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { getLandingThemeCss } from '@/config/siteTheme'
 import { getContrastRatio } from '@/utilities/colorContrast'
+import { mix } from '@/utilities/colorMix'
 
 const charcoalCopper = {
   color1: '#FBF9F7',
@@ -111,6 +112,97 @@ describe('theme token derivation', () => {
   it('lifts a dark-mode overlay above the panel beneath it', () => {
     expect(getContrastRatio(dark['--popover'], dark['--background'])!).toBeGreaterThan(1.08)
     expect(getContrastRatio(dark['--popover'], dark['--card'])!).toBeGreaterThan(1.02)
+  })
+
+  // Regression: the contrast band was painted with `--primary`, which is the
+  // palette's deep tone in light mode and its light mid tone in dark mode, so
+  // a statistics band that was deliberately dark on a white page came back as
+  // a near-white slab on a near-black one.
+  it('keeps the contrast band dark in both modes rather than inverting it', () => {
+    // Light mode still departs hard from the page; that rhythm is the point.
+    expect(getContrastRatio(light['--surface-contrast'], light['--background'])!).toBeGreaterThan(8)
+
+    // Dark mode steps up from the page instead of flipping to the light side
+    // of it. Both of these fail if the band goes back to tracking `--primary`.
+    expect(getContrastRatio(dark['--surface-contrast'], dark['--foreground'])!).toBeGreaterThan(4.5)
+    expect(getContrastRatio(dark['--surface-contrast'], dark['--background'])!).toBeLessThan(3)
+  })
+
+  it('puts the contrast band at the top of the dark surface ladder', () => {
+    const above = (token: string) =>
+      getContrastRatio(dark['--surface-contrast'], dark['--background'])! >
+      getContrastRatio(dark[token], dark['--background'])!
+
+    for (const token of ['--card', '--surface-raised', '--popover', '--surface-soft-panel']) {
+      expect(above(token), `${token} is not below the contrast band`).toBe(true)
+    }
+    // Still a step away from the panel sitting on the page, or the band would
+    // not read as a band at all.
+    expect(getContrastRatio(dark['--surface-contrast'], dark['--card'])!).toBeGreaterThan(1.3)
+    expect(getContrastRatio(dark['--surface-contrast'], dark['--background'])!).toBeGreaterThan(1.7)
+  })
+
+  // Regression: the hero's scrim was a themed token, so dark mode replaced a
+  // dark wash over the photograph with a pale one and bleached the image.
+  // Darkening a picture is not a thing the page theme has an opinion about.
+  it('keeps the media scrim identical in both themes', () => {
+    for (const token of [
+      '--media-surface',
+      '--media-foreground',
+      '--media-primary',
+      '--media-primary-foreground',
+    ]) {
+      expect(dark[token], token).toBe(light[token])
+    }
+    expect(light['--media-surface']).toBe(charcoalCopper.color4)
+  })
+
+  it('leaves the media scrim dark enough to read copy over a bright photograph', () => {
+    const scrimmed = mix(light['--media-surface'], '#E8E8E8', 0.8)
+    expect(getContrastRatio(light['--media-foreground'], scrimmed)!).toBeGreaterThanOrEqual(4.5)
+  })
+
+  // The band should read as the brand asserting itself, not as a lighter
+  // grey. Deriving it from the panel tone produced something close to
+  // achromatic even on a strongly hued palette.
+  it('carries the brand hue into the dark contrast band', () => {
+    const channels = (hex: string) =>
+      [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
+    const spread = (hex: string) => Math.max(...channels(hex)) - Math.min(...channels(hex))
+
+    // charcoal-copper's accent is a warm copper, so the band has to be warm.
+    expect(spread(dark['--surface-contrast'])).toBeGreaterThan(spread(dark['--card']))
+  })
+
+  it('keeps copy and a call to action readable on the contrast band', () => {
+    for (const [name, mode] of [
+      ['light', light],
+      ['dark', dark],
+    ] as const) {
+      expect(
+        getContrastRatio(mode['--surface-contrast-foreground'], mode['--surface-contrast'])!,
+        `${name} body copy on the band`,
+      ).toBeGreaterThanOrEqual(4.5)
+      expect(
+        getContrastRatio(mode['--surface-contrast-primary'], mode['--surface-contrast'])!,
+        `${name} button fill on the band`,
+      ).toBeGreaterThanOrEqual(3)
+      expect(
+        getContrastRatio(
+          mode['--surface-contrast-primary-foreground'],
+          mode['--surface-contrast-primary'],
+        )!,
+        `${name} button label`,
+      ).toBeGreaterThanOrEqual(4.5)
+    }
+  })
+
+  // The band is a surface and the button is a call to action, so on a dark
+  // page the brand colour can stay on the button instead of being swapped out
+  // for the band's own text colour the way it has to be in light mode.
+  it('keeps the dark-mode call to action on brand over the contrast band', () => {
+    expect(dark['--surface-contrast-primary']).toBe(dark['--primary'])
+    expect(light['--surface-contrast-primary']).not.toBe(light['--primary'])
   })
 
   it('still produces a usable set when a custom palette is left empty', () => {

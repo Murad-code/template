@@ -248,6 +248,71 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
 
   const ring = ensureContrast(brand, background, 3)
 
+  /**
+   * The contrast band, and the one place light and dark part company.
+   *
+   * `--primary` used to paint this, which is why a statistics band that was
+   * deliberately dark on a white page came back as a near-white slab on a
+   * near-black one: the brand colour is the palette's deep tone in light mode
+   * and its light mid tone in dark mode, so any band painted with it changed
+   * sides along with the theme.
+   *
+   * A band is a surface; a button is a call to action. Light mode keeps the
+   * deep brand tone, because departing from a white page is what gives the
+   * page its rhythm.
+   *
+   * Dark mode has nowhere darker to go, so it takes the palette's accent and
+   * brings it down to a surface weight instead. Deriving it from the panel
+   * tone made a band that was merely a lighter grey, which read as an absence
+   * of colour rather than a decision; starting from the accent means the band
+   * carries the brand's own hue — amber on graphite, copper on near-black —
+   * so it contrasts the way the light-mode band does, through the brand,
+   * rather than through brightness.
+   */
+  const surfaceContrast = dark ? mix(accent, background, 0.4) : brand
+  const surfaceContrastForeground = pickReadable(surfaceContrast, [
+    dark ? body : opposite.body,
+    body,
+    '#FFFFFF',
+    '#000000',
+  ])
+
+  /**
+   * A call to action sitting on that band.
+   *
+   * In light mode the band *is* the brand colour, so the button has to step
+   * away from it and borrows the band's text colour. In dark mode the band is
+   * a darkened accent and the brand's mid tone still reads on it, so the
+   * button stays on brand. This is also what caps how far the band can be
+   * brought up: past roughly 0.4 the accent and its own darkened form stop
+   * clearing 3:1 and the button falls back to plain light-on-dark.
+   */
+  const contrastPrimary =
+    (getContrastRatio(primary, surfaceContrast) ?? 1) >= 3 ? primary : surfaceContrastForeground
+  const contrastPrimaryForeground = pickReadable(contrastPrimary, [
+    surfaceContrast,
+    background,
+    '#FFFFFF',
+    '#000000',
+  ])
+
+  /**
+   * Surfaces that sit over a photograph, and the only tokens here that are
+   * identical in both themes.
+   *
+   * A scrim's job is to darken a picture so the copy on it stays legible, and
+   * a picture does not get lighter because the page around it did. Theming
+   * this alongside everything else is what turned the hero into a pale wash
+   * in dark mode; the fix is not a better dark value but no dark value at all.
+   *
+   * `lightSide` is whichever half of the palette is the light one, so both
+   * calls to `deriveTokens` land on the same pair of colours.
+   */
+  const lightSide = dark ? opposite : mode
+  const darkSide = dark ? mode : opposite
+  const mediaSurface = lightSide.brand
+  const mediaForeground = pickReadable(mediaSurface, [darkSide.body, '#FFFFFF', '#000000'])
+
   return {
     '--background': background,
     '--foreground': body,
@@ -272,6 +337,20 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
     '--surface-base': background,
     '--surface-raised': surfaceRaised,
     '--surface-soft-panel': dark ? mix(body, background, 0.04) : mix(cardBorder, background, 0.1),
+    /* Dialogs and sheets dim the page behind them. Taking the palette's own
+       darkest tone rather than pure black keeps the wash faintly hued and
+       stops a near-black page being covered in a flat, deader black. */
+    '--scrim': dark ? background : opposite.background,
+    '--media-surface': mediaSurface,
+    '--media-foreground': mediaForeground,
+    /* The band is already the deep tone, so a button on it steps to the
+       copy colour. Fixed across themes like the rest of the media pair. */
+    '--media-primary': mediaForeground,
+    '--media-primary-foreground': mediaSurface,
+    '--surface-contrast': surfaceContrast,
+    '--surface-contrast-foreground': surfaceContrastForeground,
+    '--surface-contrast-primary': contrastPrimary,
+    '--surface-contrast-primary-foreground': contrastPrimaryForeground,
     '--surface-header': background,
     '--surface-footer': dark ? mix(body, background, 0.04) : mix(cardBorder, background, 0.1),
     '--text-primary': body,

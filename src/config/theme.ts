@@ -135,7 +135,49 @@ function paletteToCssVars(palette: ThemePalette): string {
     .join('\n  ')
 }
 
-function semanticSurfaceVars(): string {
+/**
+ * The contrast band and its call to action, which are the one set that cannot
+ * be written once for both modes.
+ *
+ * `--primary` is the deep tone on a light page and a near-white on a dark one,
+ * so a band painted with it would be dark in light mode and a white slab in
+ * dark mode. Dark mode steps up from the panel tone instead and keeps the
+ * brand colour for the button, where a bright fill is the point.
+ */
+function contrastSurfaceVars(mode: 'dark' | 'light'): string[] {
+  // Fixed in both modes: a scrim darkens a photograph, and the photograph is
+  // the same picture whichever theme the page around it is using.
+  const media = [
+    '--media-surface: oklch(20.5% 0 0deg);',
+    '--media-foreground: oklch(98.5% 0 0deg);',
+    '--media-primary: oklch(98.5% 0 0deg);',
+    '--media-primary-foreground: oklch(20.5% 0 0deg);',
+  ]
+
+  if (mode === 'dark') {
+    return [
+      ...media,
+      '--scrim: var(--background);',
+      // The accent brought down to a surface weight, so the band carries the
+      // brand's hue rather than being a lighter grey.
+      '--surface-contrast: color-mix(in oklab, var(--background) 60%, var(--accent));',
+      '--surface-contrast-foreground: var(--foreground);',
+      '--surface-contrast-primary: var(--primary);',
+      '--surface-contrast-primary-foreground: var(--primary-foreground);',
+    ]
+  }
+
+  return [
+    ...media,
+    '--scrim: oklch(14.5% 0 0deg);',
+    '--surface-contrast: var(--primary);',
+    '--surface-contrast-foreground: var(--primary-foreground);',
+    '--surface-contrast-primary: var(--primary-foreground);',
+    '--surface-contrast-primary-foreground: var(--primary);',
+  ]
+}
+
+function semanticSurfaceVars(mode: 'dark' | 'light'): string {
   return [
     '--surface-base: var(--background);',
     '--surface-raised: var(--card);',
@@ -148,6 +190,7 @@ function semanticSurfaceVars(): string {
     '--border-subtle: var(--border);',
     '--border-strong: color-mix(in srgb, var(--border) 70%, var(--foreground));',
     '--focus-ring: var(--ring);',
+    ...contrastSurfaceVars(mode),
   ].join('\n  ')
 }
 
@@ -165,11 +208,11 @@ export function getThemeCss(): string {
   const { light, dark } = getThemeConfig()
   return `:root {
   ${paletteToCssVars(light)}
-  ${semanticSurfaceVars()}
+  ${semanticSurfaceVars('light')}
 }
 
 [data-theme='dark'] {
   ${paletteToCssVars(dark)}
-  ${semanticSurfaceVars()}
+  ${semanticSurfaceVars('dark')}
 }`
 }

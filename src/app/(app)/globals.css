@@ -194,7 +194,12 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
+  --color-media-surface: var(--media-surface);
+  --color-media-foreground: var(--media-foreground);
+  --color-scrim: var(--scrim);
   --color-surface-base: var(--surface-base);
+  --color-surface-contrast: var(--surface-contrast);
+  --color-surface-contrast-foreground: var(--surface-contrast-foreground);
   --color-surface-raised: var(--surface-raised);
   --color-surface-soft-panel: var(--surface-soft-panel);
   --color-surface-header: var(--surface-header);
@@ -345,18 +350,36 @@
 @layer components {
   /* An inverse band remaps the theme tokens for its subtree, so a block
      written against `bg-card` / `text-muted-foreground` sits correctly on a
-     dark band without knowing it is on one.
+     contrast band without knowing it is on one.
+
+     The band's colour is `--surface-contrast`, which is derived separately
+     for each theme (see `src/config/siteTheme.ts`). It used to be `--primary`,
+     and because the brand colour is a deep tone on a light page but a light
+     mid tone on a dark one, every inverse band flipped to a near-white slab
+     in dark mode. A band is a surface, not a call to action.
 
      Split across two elements on purpose. The band itself only publishes the
      two source colours; the remap happens on the inner scope, which reads
-     them by inheritance. Redefining `--primary` on the same element that
-     paints `bg-primary` would be a cycle, and would repaint the band. */
+     them by inheritance. Redefining a token on the same element that paints
+     with it would be a cycle, and would repaint the band. */
   [data-tone='inverse'] {
-    --tone-fg: var(--primary-foreground);
-    --tone-bg: var(--primary);
+    --tone-fg: var(--surface-contrast-foreground);
+    --tone-bg: var(--surface-contrast);
+    --tone-primary: var(--surface-contrast-primary);
+    --tone-primary-fg: var(--surface-contrast-primary-foreground);
   }
 
-  [data-tone='inverse'] > [data-tone-scope] {
+  /* A band laid over a photograph. The same tone in both themes on purpose:
+     a scrim exists to darken the picture, and the picture does not change
+     when the page around it does. Theming it is what washed the hero out. */
+  [data-tone='media'] {
+    --tone-fg: var(--media-foreground);
+    --tone-bg: var(--media-surface);
+    --tone-primary: var(--media-primary);
+    --tone-primary-fg: var(--media-primary-foreground);
+  }
+
+  :is([data-tone='inverse'], [data-tone='media']) > [data-tone-scope] {
     color: var(--tone-fg);
     --foreground: var(--tone-fg);
     /* Surfaces painted with `bg-background`, such as the outline button,
@@ -378,9 +401,13 @@
     --text-secondary: color-mix(in srgb, var(--tone-fg) 72%, transparent);
     --surface-base: transparent;
     --surface-raised: color-mix(in srgb, var(--tone-fg) 10%, transparent);
-    /* A primary button would otherwise be the same colour as the band. */
-    --primary: var(--tone-fg);
-    --primary-foreground: var(--tone-bg);
+    /* On a light page the band is itself the brand colour, so a primary
+       button has to step away from it; on a dark page the band is a darkened
+       accent and the brand's mid tone reads on it, so the button stays on
+       brand. That decision needs the hex values, so it is made in
+       `deriveTokens` and only applied here. */
+    --primary: var(--tone-primary);
+    --primary-foreground: var(--tone-primary-fg);
     --secondary: color-mix(in srgb, var(--tone-fg) 16%, transparent);
     --secondary-foreground: var(--tone-fg);
     --accent: color-mix(in srgb, var(--tone-fg) 22%, transparent);
