@@ -1,9 +1,18 @@
 import type { SiteTheme } from '@/payload-types'
 import type { TypographyFontValue } from '@/config/typographyFonts'
 
+import { ensureContrast, mix, pickReadable } from '@/utilities/colorMix'
+
 type PaletteColors = {
   background: string
   body: string
+  /**
+   * The colour calls to action are built from: the palette's darkest tone in
+   * light mode, its mid tone in dark mode. Both are the most saturated thing
+   * the palette can put against its own background, which is what makes a
+   * button look like it belongs to the brand rather than to the framework.
+   */
+  brand: string
   cardBackground: string
   cardBorder: string
   heading: string
@@ -71,6 +80,7 @@ const fallbackPalette: PaletteMode = {
   // Neutral defaults that preserve the original clean admin/frontend baseline.
   light: {
     background: '#FFFFFF',
+    brand: '#1F2937',
     cardBackground: '#F6F7F9',
     cardBorder: '#E5E7EB',
     heading: '#111827',
@@ -78,6 +88,7 @@ const fallbackPalette: PaletteMode = {
   },
   dark: {
     background: '#111827',
+    brand: '#E5E7EB',
     cardBackground: '#1F2937',
     cardBorder: '#374151',
     heading: '#F9FAFB',
@@ -109,6 +120,7 @@ function mapCustomPaletteToMode(input: {
   return {
     light: {
       background: c1,
+      brand: c4,
       cardBackground: c2,
       cardBorder: c3,
       heading: lightText,
@@ -116,6 +128,7 @@ function mapCustomPaletteToMode(input: {
     },
     dark: {
       background: c5,
+      brand: c3,
       cardBackground: c4,
       cardBorder: c3,
       heading: darkText,
@@ -165,63 +178,100 @@ function resolveTypography(theme: SiteThemePreviewInput) {
   }
 }
 
+/**
+ * Turn one mode of a palette into the complete semantic token set.
+ *
+ * Previously only the surface and text tokens came from the palette, and
+ * `--primary`, `--accent`, `--muted` and `--ring` kept the achromatic
+ * defaults in `theme.ts`. That is why a site could be themed deep green and
+ * still have black buttons: the brand colour had nowhere to land. Everything
+ * a component can reach for is derived here instead, so one palette choice
+ * moves the whole interface together.
+ *
+ * Contrast is enforced rather than assumed. `assertPaletteContrast` already
+ * holds saved palettes to AA, but the one-off custom palette lets an editor
+ * put any two colours together, so each derived pair is checked and nudged.
+ */
+function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<string, string> {
+  const { background, body, brand, cardBackground, cardBorder } = mode
+
+  const primary = ensureContrast(brand, background, 3)
+  const primaryForeground = pickReadable(primary, [background, cardBackground, opposite.body, '#FFFFFF', '#000000'])
+
+  const secondary = mix(cardBorder, background, 0.28)
+  const accent = cardBorder
+  const muted = mix(cardBorder, background, 0.16)
+
+  // Hairlines read as a hard edge at full strength, which is most of why the
+  // current cards look boxed in. Three weights instead, all from the same hue.
+  const border = mix(cardBorder, background, 0.62)
+  const borderSubtle = mix(cardBorder, background, 0.38)
+  const borderStrong = cardBorder
+
+  const ring = ensureContrast(brand, background, 3)
+
+  return {
+    '--background': background,
+    '--foreground': body,
+    '--card': cardBackground,
+    '--card-foreground': body,
+    '--popover': background,
+    '--popover-foreground': body,
+    '--primary': primary,
+    '--primary-foreground': primaryForeground,
+    '--secondary': secondary,
+    '--secondary-foreground': ensureContrast(body, secondary, 4.5),
+    '--accent': accent,
+    '--accent-foreground': ensureContrast(body, accent, 4.5),
+    '--muted': muted,
+    '--muted-foreground': ensureContrast(mix(body, background, 0.72), background, 4.5),
+    '--border': border,
+    '--border-subtle': borderSubtle,
+    '--border-strong': borderStrong,
+    '--input': border,
+    '--ring': ring,
+    '--focus-ring': ring,
+    '--surface-base': background,
+    '--surface-raised': cardBackground,
+    '--surface-soft-panel': mix(cardBackground, background, 0.82),
+    '--surface-header': background,
+    '--surface-footer': cardBackground,
+    '--text-primary': body,
+    '--text-secondary': ensureContrast(mix(body, background, 0.72), background, 4.5),
+    '--text-inverse': opposite.body,
+    '--landing-background': background,
+    '--landing-card-background': cardBackground,
+    '--landing-card-border': cardBorder,
+    '--landing-heading': mode.heading,
+    '--landing-body': body,
+  }
+}
+
+function tokensToCss(tokens: Record<string, string>): string {
+  return Object.entries(tokens)
+    .map(([name, value]) => `  ${name}: ${value};`)
+    .join('\n')
+}
+
 export function getLandingThemeCss(theme: SiteThemePreviewInput): string {
   const palette = resolvePalette(theme)
   const typography = resolveTypography(theme)
 
+  const fonts = [
+    `  --site-font-sans: ${typography.body};`,
+    `  --site-font-heading: ${typography.heading};`,
+    `  --site-font-mono: ${typography.mono};`,
+  ].join('\n')
+
   return `
 :root {
-  --background: ${palette.light.background};
-  --foreground: ${palette.light.body};
-  --card: ${palette.light.cardBackground};
-  --card-foreground: ${palette.light.body};
-  --border: ${palette.light.cardBorder};
-  --surface-base: ${palette.light.background};
-  --surface-raised: ${palette.light.cardBackground};
-  --surface-soft-panel: color-mix(in srgb, ${palette.light.cardBackground} 82%, ${palette.light.background});
-  --surface-header: ${palette.light.cardBackground};
-  --surface-footer: ${palette.light.cardBackground};
-  --text-primary: ${palette.light.body};
-  --text-secondary: color-mix(in srgb, ${palette.light.body} 74%, ${palette.light.background});
-  --text-inverse: ${palette.dark.body};
-  --border-subtle: ${palette.light.cardBorder};
-  --border-strong: color-mix(in srgb, ${palette.light.cardBorder} 66%, ${palette.light.body});
-  --focus-ring: ${palette.light.cardBorder};
-  --landing-background: ${palette.light.background};
-  --landing-card-background: ${palette.light.cardBackground};
-  --landing-card-border: ${palette.light.cardBorder};
-  --landing-heading: ${palette.light.heading};
-  --landing-body: ${palette.light.body};
-  --site-font-sans: ${typography.body};
-  --site-font-heading: ${typography.heading};
-  --site-font-mono: ${typography.mono};
+${tokensToCss(deriveTokens(palette.light, palette.dark))}
+${fonts}
 }
 
 [data-theme='dark'] {
-  --background: ${palette.dark.background};
-  --foreground: ${palette.dark.body};
-  --card: ${palette.dark.cardBackground};
-  --card-foreground: ${palette.dark.body};
-  --border: ${palette.dark.cardBorder};
-  --surface-base: ${palette.dark.background};
-  --surface-raised: ${palette.dark.cardBackground};
-  --surface-soft-panel: color-mix(in srgb, ${palette.dark.cardBackground} 82%, ${palette.dark.background});
-  --surface-header: ${palette.dark.cardBackground};
-  --surface-footer: ${palette.dark.cardBackground};
-  --text-primary: ${palette.dark.body};
-  --text-secondary: color-mix(in srgb, ${palette.dark.body} 74%, ${palette.dark.background});
-  --text-inverse: ${palette.light.body};
-  --border-subtle: ${palette.dark.cardBorder};
-  --border-strong: color-mix(in srgb, ${palette.dark.cardBorder} 66%, ${palette.dark.body});
-  --focus-ring: ${palette.dark.cardBorder};
-  --landing-background: ${palette.dark.background};
-  --landing-card-background: ${palette.dark.cardBackground};
-  --landing-card-border: ${palette.dark.cardBorder};
-  --landing-heading: ${palette.dark.heading};
-  --landing-body: ${palette.dark.body};
-  --site-font-sans: ${typography.body};
-  --site-font-heading: ${typography.heading};
-  --site-font-mono: ${typography.mono};
+${tokensToCss(deriveTokens(palette.dark, palette.light))}
+${fonts}
 }
 `
 }
