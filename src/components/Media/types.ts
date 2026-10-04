@@ -10,8 +10,8 @@ export interface Props {
   height?: number
   htmlElement?: ElementType | null
   imgClassName?: string
+  /** Video only: images render on the server and take no handlers. */
   onClick?: () => void
-  onLoad?: () => void
   priority?: boolean // for NextImage only
   ref?: Ref<HTMLImageElement | HTMLVideoElement | null>
   resource?: MediaType | string | number // for Payload media

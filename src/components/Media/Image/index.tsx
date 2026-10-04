@@ -1,5 +1,3 @@
-'use client'
-
 import type { StaticImageData } from 'next/image'
 
 import { cn } from '@/utilities/cn'
@@ -8,9 +6,16 @@ import React from 'react'
 
 import type { Props as MediaProps } from '../types'
 
-import { cssVariables } from '@/cssVariables'
-
-const { breakpoints } = cssVariables
+/**
+ * Widest slot an image is ever asked to fill. Without a final candidate the
+ * browser falls back to `100vw` above the last breakpoint and downloads the
+ * largest rendition it can find — which is how product thumbnails ended up
+ * fetching 3840px files for a 300px box.
+ *
+ * Pass `size` wherever the real slot is known; this is only the fallback for
+ * full-bleed media.
+ */
+const DEFAULT_SIZES = '(max-width: 48rem) 100vw, (max-width: 80rem) 80vw, 1600px'
 
 export const Image: React.FC<MediaProps> = (props) => {
   const {
@@ -18,16 +23,12 @@ export const Image: React.FC<MediaProps> = (props) => {
     fill,
     height: heightFromProps,
     imgClassName,
-    onClick,
-    onLoad: onLoadFromProps,
     priority,
     resource,
     size: sizeFromProps,
     src: srcFromProps,
     width: widthFromProps,
   } = props
-
-  const [isLoading, setIsLoading] = React.useState(true)
 
   let width: number | undefined | null
   let height: number | undefined | null
@@ -47,22 +48,13 @@ export const Image: React.FC<MediaProps> = (props) => {
     height = heightFromProps ?? fullHeight
     alt = altFromResource
 
-    const filename = fullFilename
-
     // Prefer relative media URLs so local/dev doesn't proxy to a production domain.
     if (typeof url === 'string' && url.length > 0) {
       src = url
-    } else if (filename) {
-      src = `/api/media/file/${encodeURIComponent(filename)}`
+    } else if (fullFilename) {
+      src = `/api/media/file/${encodeURIComponent(fullFilename)}`
     }
   }
-
-  // NOTE: this is used by the browser to determine which image to download at different screen sizes
-  const sizes = sizeFromProps
-    ? sizeFromProps
-    : Object.entries(breakpoints)
-        .map(([, value]) => `(max-width: ${value}px) ${value}px`)
-        .join(', ')
 
   return (
     <NextImage
@@ -70,16 +62,8 @@ export const Image: React.FC<MediaProps> = (props) => {
       className={cn(imgClassName)}
       fill={fill}
       height={!fill ? height || heightFromProps : undefined}
-      onClick={onClick}
-      onLoad={() => {
-        setIsLoading(false)
-        if (typeof onLoadFromProps === 'function') {
-          onLoadFromProps()
-        }
-      }}
       priority={priority}
-      quality={90}
-      sizes={sizes}
+      sizes={sizeFromProps || DEFAULT_SIZES}
       src={src}
       width={!fill ? width || widthFromProps : undefined}
     />
