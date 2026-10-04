@@ -1133,6 +1133,12 @@ For deeper exploration of specific topics, refer to the context files located in
     - Performance best practices
     - Styling components
 
+14. **`reusability-and-theme-consistency.mdc`** - Reusability and Theme Consistency
+
+    - Prefer semantic theme variables over hardcoded color values
+    - Keep shared behavior and base styling in root UI components
+    - Build modular, reusable components to minimize one-off styling
+
 ## Frontend design system
 
 Before changing anything the visitor sees, read [`docs/frontend-ui-system.md`](docs/frontend-ui-system.md).
@@ -1142,12 +1148,6 @@ runtime, so never hardcode a hex or a `neutral-*` class in client UI; use the ty
 scale (`text-h2`, `text-body-sm`) rather than `text-lg`/`text-3xl`; take radius from
 the scale; a shadow means the element floats, so static panels use a hairline; and
 `Section` owns the vertical rhythm, not the block inside it.
-
-14. **`reusability-and-theme-consistency.mdc`** - Reusability and Theme Consistency
-
-    - Prefer semantic theme variables over hardcoded color values
-    - Keep shared behavior and base styling in root UI components
-    - Build modular, reusable components to minimize one-off styling
 
 ## Resources
 
