@@ -72,7 +72,7 @@ function CancelContent() {
   if (done) {
     return (
       <div className="space-y-4">
-        <p className="text-green-600 dark:text-green-400">Your booking has been cancelled.</p>
+        <p className="text-success">Your booking has been cancelled.</p>
         <Button asChild variant="outline">
           <Link href="/">Home</Link>
         </Button>

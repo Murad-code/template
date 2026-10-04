@@ -16,12 +16,12 @@ export function Item({ href, title }: Props) {
   const DynamicTag = active ? 'p' : Link
 
   return (
-    <li className="mt-2 flex text-sm text-black dark:text-white">
+    <li className="text-body-sm mt-2 flex">
       <DynamicTag
         className={clsx(
-          'w-full font-mono uppercase text-primary/50 px-2 text-sm py-1 rounded-md hover:bg-white/5 hover:text-primary',
+          'text-body-sm text-muted-foreground hover:bg-muted hover:text-foreground w-full rounded-sm px-2 py-1',
           {
-            'bg-white/5 text-primary': active,
+            'bg-muted text-foreground': active,
           },
         )}
         href={href}

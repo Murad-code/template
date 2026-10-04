@@ -70,7 +70,7 @@ export const AccountNav: React.FC<Props> = ({ className, bookingEnabled }) => {
         )}
       </ul>
 
-      <hr className="w-full border-white/5" />
+      <hr className="border-border w-full" />
 
       <Button
         asChild

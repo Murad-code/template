@@ -21,10 +21,10 @@ function PathFilterItem({ item }: { item: PathFilterItemType }) {
   newParams.delete('q')
 
   return (
-    <li className="mt-2 flex text-black dark:text-white" key={item.title}>
+    <li className="mt-2 flex" key={item.title}>
       <DynamicTag
         className={clsx(
-          'w-full text-sm underline-offset-4 hover:underline dark:hover:text-neutral-100',
+          'text-body-sm text-muted-foreground hover:text-foreground w-full underline-offset-4 hover:underline',
           {
             'underline underline-offset-4': active,
           },
@@ -52,7 +52,7 @@ function SortFilterItem({ item }: { item: SortFilterItemType }) {
   const DynamicTag = active ? 'p' : Link
 
   return (
-    <li className="mt-2 flex text-sm text-black dark:text-white" key={item.title}>
+    <li className="text-body-sm mt-2 flex" key={item.title}>
       <DynamicTag
         className={clsx('w-full hover:underline hover:underline-offset-4', {
           'underline underline-offset-4': active,
@@ -88,7 +88,7 @@ export function ResetFiltersItem() {
   }
 
   return (
-    <li className="mt-4 flex text-sm text-black dark:text-white">
+    <li className="text-body-sm mt-4 flex">
       <button
         className="w-full text-left underline underline-offset-4 hover:cursor-pointer"
         onClick={resetFilters}
