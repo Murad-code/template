@@ -89,8 +89,17 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
               'Small-batch specialty coffee, brewing equipment and hands-on workshops designed to help you enjoy better coffee at home.',
             image: contentImage,
             links: [
-              { link: { type: 'custom', appearance: 'default', label: 'Shop Coffee', url: '/shop' } },
-              { link: { type: 'custom', appearance: 'outline', label: 'Book a Workshop', url: '/book' } },
+              {
+                link: { type: 'custom', appearance: 'default', label: 'Shop Coffee', url: '/shop' },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  appearance: 'outline',
+                  label: 'Book a Workshop',
+                  url: '/book',
+                },
+              },
             ],
           },
           {
@@ -99,7 +108,14 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
               'Seasonal single origins and espresso blends, roasted to order and dispatched within 48 hours.',
             image: contentImage,
             links: [
-              { link: { type: 'custom', appearance: 'default', label: 'Browse this season', url: coffeeHref } },
+              {
+                link: {
+                  type: 'custom',
+                  appearance: 'default',
+                  label: 'Browse this season',
+                  url: coffeeHref,
+                },
+              },
             ],
           },
           {
@@ -108,7 +124,14 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
               'Practical workshops for beginners and home baristas, led by the people who roast the coffee.',
             image: contentImage,
             links: [
-              { link: { type: 'custom', appearance: 'default', label: 'See upcoming sessions', url: '/book' } },
+              {
+                link: {
+                  type: 'custom',
+                  appearance: 'default',
+                  label: 'See upcoming sessions',
+                  url: '/book',
+                },
+              },
             ],
           },
         ],
@@ -194,14 +217,20 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
         kenBurns: true,
         imagePosition: 'left',
         enableLink: true,
-        link: { type: 'custom', appearance: 'default', label: 'Explore subscriptions', url: bundlesHref },
+        link: {
+          type: 'custom',
+          appearance: 'default',
+          label: 'Explore subscriptions',
+          url: bundlesHref,
+        },
       },
       {
         blockType: 'serviceShowcase',
         background: 'default',
         eyebrow: 'Learn with us',
         title: 'Popular workshops',
-        description: 'Practical sessions covering brew fundamentals, espresso setup and sensory skills.',
+        description:
+          'Practical sessions covering brew fundamentals, espresso setup and sensory skills.',
         populateBy: 'collection',
         limit: 3,
         enableViewAllLink: true,
@@ -210,42 +239,57 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
       {
         blockType: 'features',
         background: 'muted',
-        align: 'center',
+        align: 'left',
         eyebrow: 'Why people choose us',
         title: 'Good coffee, explained properly',
         description:
           'Everything we sell comes with the context you need to get the best out of it.',
-        layout: 'cards',
+        // Six statements, nothing to click: a ruled list rather than six
+        // identical cards, which is the layout that makes a page look
+        // generated.
+        layout: 'minimal',
         items: [
           {
             title: 'Roasted to order',
             iconName: 'timer',
-            description: richText(paragraph('Nothing sits in a warehouse. We roast weekly and ship immediately.')),
+            description: richText(
+              paragraph('Nothing sits in a warehouse. We roast weekly and ship immediately.'),
+            ),
           },
           {
             title: 'Traceable sourcing',
             iconName: 'compass',
-            description: richText(paragraph('Farm, varietal and process on every bag, not just a country name.')),
+            description: richText(
+              paragraph('Farm, varietal and process on every bag, not just a country name.'),
+            ),
           },
           {
             title: 'Brewing support',
             iconName: 'lifeBuoy',
-            description: richText(paragraph('Practical guides and a team who will happily talk you through a recipe.')),
+            description: richText(
+              paragraph('Practical guides and a team who will happily talk you through a recipe.'),
+            ),
           },
           {
             title: 'Equipment that lasts',
             iconName: 'wrench',
-            description: richText(paragraph('Gear we use ourselves, chosen to be repairable rather than replaceable.')),
+            description: richText(
+              paragraph('Gear we use ourselves, chosen to be repairable rather than replaceable.'),
+            ),
           },
           {
             title: 'Taught by roasters',
             iconName: 'graduationCap',
-            description: richText(paragraph('Workshops run by the people who actually roast the coffee.')),
+            description: richText(
+              paragraph('Workshops run by the people who actually roast the coffee.'),
+            ),
           },
           {
             title: 'Satisfaction guarantee',
             iconName: 'badgeCheck',
-            description: richText(paragraph('If a bag is not right for you, tell us and we will put it right.')),
+            description: richText(
+              paragraph('If a bag is not right for you, tell us and we will put it right.'),
+            ),
           },
         ],
       },
@@ -271,25 +315,33 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
           {
             title: 'Brewing Equipment',
             iconName: 'wrench',
-            description: richText(paragraph('Tools to improve consistency and extraction at home.')),
+            description: richText(
+              paragraph('Tools to improve consistency and extraction at home.'),
+            ),
             ...categoryLink('Shop equipment', '/shop'),
           },
           {
             title: 'Gift Sets',
             iconName: 'gift',
-            description: richText(paragraph('Curated bundles ideal for gifting and first-time exploration.')),
+            description: richText(
+              paragraph('Curated bundles ideal for gifting and first-time exploration.'),
+            ),
             ...categoryLink('Shop gift sets', bundlesHref),
           },
           {
             title: 'Coffee Subscriptions',
             iconName: 'package',
-            description: richText(paragraph('Recurring monthly deliveries tailored to brew preferences.')),
+            description: richText(
+              paragraph('Recurring monthly deliveries tailored to brew preferences.'),
+            ),
             ...categoryLink('Explore subscriptions', bundlesHref),
           },
           {
             title: 'Workshops',
             iconName: 'graduationCap',
-            description: richText(paragraph('Hands-on sessions for brewing, espresso and sensory skills.')),
+            description: richText(
+              paragraph('Hands-on sessions for brewing, espresso and sensory skills.'),
+            ),
             ...categoryLink('Book a workshop', '/book'),
           },
         ],
@@ -332,15 +384,27 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
         items: [
           {
             question: 'Can I book workshops as a group?',
-            answer: richText(paragraph('Yes. Corporate workshops and private group sessions can be arranged on request.')),
+            answer: richText(
+              paragraph(
+                'Yes. Corporate workshops and private group sessions can be arranged on request.',
+              ),
+            ),
           },
           {
             question: 'Do subscriptions renew automatically?',
-            answer: richText(paragraph('Yes, subscriptions are recurring monthly and can be adjusted or cancelled in your account.')),
+            answer: richText(
+              paragraph(
+                'Yes, subscriptions are recurring monthly and can be adjusted or cancelled in your account.',
+              ),
+            ),
           },
           {
             question: 'Do you offer beginner-friendly classes?',
-            answer: richText(paragraph('Absolutely. Several workshops are designed specifically for home brewing beginners.')),
+            answer: richText(
+              paragraph(
+                'Absolutely. Several workshops are designed specifically for home brewing beginners.',
+              ),
+            ),
           },
         ],
       },
@@ -350,7 +414,9 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
         spacing: 'tight',
         layout: 'splitPanel',
         links: [
-          { link: { type: 'custom', appearance: 'default', label: 'Book a Session', url: '/book' } },
+          {
+            link: { type: 'custom', appearance: 'default', label: 'Book a Session', url: '/book' },
+          },
         ],
         richText: richText(
           heading('Learn From Our Roasters', 'h3'),
@@ -373,7 +439,8 @@ export const homePageData: (args: ProductArgs) => RequiredDataFromCollectionSlug
       },
     ],
     meta: {
-      description: 'Small-batch specialty coffee, brew gear and practical workshops from Black Oak Coffee Co.',
+      description:
+        'Small-batch specialty coffee, brew gear and practical workshops from Black Oak Coffee Co.',
       // @ts-ignore
       image: metaImage,
       title: defaultSiteName,

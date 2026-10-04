@@ -2,6 +2,7 @@ import React from 'react'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
+import { Spec, SpecList } from '@/components/ui/spec-list'
 import { Price } from '@/components/Price'
 import { SectionHeader } from '@/components/SectionHeader'
 import { getSiteConfig } from '@/config/site'
@@ -76,11 +77,9 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
                   <p className="text-body-sm text-muted-foreground">
                     {service.description || 'A guided session tailored to your needs.'}
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="rounded-full border px-2.5 py-1">
-                      {service.durationMinutes ?? 30} min
-                    </span>
-                    <span className="rounded-full border px-2.5 py-1">
+                  <SpecList>
+                    <Spec label="Duration">{service.durationMinutes ?? 30} min</Spec>
+                    <Spec label="Price">
                       {hasPrice && typeof service.priceInGBP === 'number' ? (
                         <>
                           <Price amount={service.priceInGBP} as="span" /> upfront
@@ -88,8 +87,8 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
                       ) : (
                         'Pay later / free'
                       )}
-                    </span>
-                  </div>
+                    </Spec>
+                  </SpecList>
                 </div>
                 <span className="border-border text-body-sm group-hover:bg-muted inline-flex h-10 items-center justify-center rounded-sm border px-4 font-medium">
                   View details and book

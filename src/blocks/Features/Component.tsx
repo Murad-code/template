@@ -8,70 +8,126 @@ import type { FeaturesBlock as FeaturesBlockProps } from '@/payload-types'
 import { cn } from '@/utilities/cn'
 import { resolveLinkHref } from '@/utilities/resolveLinkHref'
 
+type FeatureItem = NonNullable<FeaturesBlockProps['items']>[number]
+
+/**
+ * Icons are drawn plain, at text weight, rather than dropped into a filled
+ * chip. A grid of coloured icon tiles is the fastest way to make six unrelated
+ * sentences look like a pricing table.
+ */
+function FeatureIcon({ item }: { item: FeatureItem }) {
+  if (item.icon && typeof item.icon === 'object') {
+    return (
+      <Media
+        className="size-6 shrink-0"
+        imgClassName="h-full w-full object-contain"
+        resource={item.icon}
+        size="24px"
+      />
+    )
+  }
+
+  if (item.iconName) {
+    return (
+      <span className="text-muted-foreground shrink-0">
+        <Icon name={item.iconName} />
+      </span>
+    )
+  }
+
+  return null
+}
+
+function FeatureBody({ item, href }: { item: FeatureItem; href: string | null }) {
+  return (
+    <>
+      <h3 className="text-h4">{item.title}</h3>
+      {item.description && (
+        <div className="text-muted-foreground text-body-sm mt-2 [&_p]:text-muted-foreground">
+          <RichText data={item.description} enableGutter={false} />
+        </div>
+      )}
+      {href ? (
+        <span className="text-body-sm text-foreground decoration-border-strong group-hover:decoration-current mt-4 inline-block font-medium underline underline-offset-4">
+          {item.link?.label || 'Explore'}
+        </span>
+      ) : null}
+    </>
+  )
+}
+
 export const FeaturesBlock: React.FC<FeaturesBlockProps> = (props) => {
   const { align, description, eyebrow, layout, title, items } = props
-  const isMinimal = layout === 'minimal'
-  const isLinked = layout === 'linkedCards'
 
   if (!items?.length) return null
+
+  const isMinimal = layout === 'minimal'
+  const isLinked = layout === 'linkedCards'
 
   return (
     <div className="container">
       <SectionHeader align={align} description={description} eyebrow={eyebrow} title={title} />
-      <div className="reveal-group grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      {/* The three layouts are genuinely different structures rather than the
+          same card with different padding. `minimal` is a ruled list, which is
+          what most of these sections actually are: a set of statements, not a
+          set of destinations. Cards are for items worth clicking. */}
+      <div
+        className={cn(
+          'reveal-group',
+          isMinimal
+            ? 'grid sm:grid-cols-2 sm:gap-x-12'
+            : 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3',
+        )}
+      >
         {items.map((item, i) => {
           const href = item.enableLink ? resolveLinkHref(item.link) : null
-          const className = cn(
-            'h-full transition-colors duration-200',
-            isMinimal
-              ? 'border-l-2 border-primary/50 pl-5 pr-3 py-2 hover:border-primary'
-              : 'lift-card rounded-lg border border-border bg-card p-6 shadow-xs hover:border-primary/40',
-            (href || isLinked) && 'group focus-visible:outline-none',
+          const linkProps = item.link?.newTab
+            ? { rel: 'noopener noreferrer', target: '_blank' }
+            : {}
+
+          if (isMinimal) {
+            return (
+              <div className="border-border flex gap-4 border-t py-6" key={i}>
+                <FeatureIcon item={item} />
+                <div className="min-w-0">
+                  {href ? (
+                    <Link className="group interactive-focus block" href={href} {...linkProps}>
+                      <FeatureBody href={href} item={item} />
+                    </Link>
+                  ) : (
+                    <FeatureBody href={null} item={item} />
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          const cardClassName = cn(
+            'border-border bg-card flex h-full flex-col rounded-lg border p-6 transition-colors',
+            (href || isLinked) && 'group interactive-focus hover:border-border-strong',
           )
 
-          const content = (
+          const card = (
             <>
-              {item.icon && typeof item.icon === 'object' ? (
-                <div className="border-border bg-background mb-4 size-10 overflow-hidden rounded-md border p-1.5">
-                  <Media className="h-full w-full object-contain" resource={item.icon} />
-                </div>
-              ) : item.iconName ? (
-                <span className="bg-muted text-primary mb-4 grid size-11 place-items-center rounded-lg">
-                  <Icon name={item.iconName} />
-                </span>
-              ) : null}
-              <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
-                {item.title}
-              </h3>
-              {item.description && (
-                <div className="text-muted-foreground [&_p]:text-muted-foreground">
-                  <RichText data={item.description} enableGutter={false} />
-                </div>
-              )}
-              {href ? (
-                <span className="text-body-sm text-foreground decoration-border-strong group-hover:decoration-current mt-4 inline-block font-medium underline underline-offset-4">
-                  {item.link?.label || 'Explore'} →
-                </span>
-              ) : null}
+              <FeatureIcon item={item} />
+              <div className={cn(item.icon || item.iconName ? 'mt-4' : undefined)}>
+                <FeatureBody href={href} item={item} />
+              </div>
             </>
           )
 
           if (href) {
             return (
-              <Link
-                className={className}
-                href={href}
-                key={i}
-                {...(item.link?.newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {})}
-              >
-                {content}
+              <Link className={cardClassName} href={href} key={i} {...linkProps}>
+                {card}
               </Link>
             )
           }
 
           return (
-            <div className={className} key={i}>
-              {content}
+            <div className={cardClassName} key={i}>
+              {card}
             </div>
           )
         })}

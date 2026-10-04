@@ -5,7 +5,7 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { MetaChip } from '@/components/ui/meta-chip'
+import { Spec, SpecList } from '@/components/ui/spec-list'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
 import Link from 'next/link'
@@ -218,7 +218,10 @@ export default async function BookPage({ searchParams }: BookPageProps) {
         {sp.product ? <input name="product" type="hidden" value={sp.product} /> : null}
 
         <div className="xl:col-span-5 flex items-center gap-3">
-          <Button type="submit" className="h-10 border-transparent bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button
+            type="submit"
+            className="h-10 border-transparent bg-primary text-primary-foreground hover:bg-primary/90"
+          >
             Apply filters
           </Button>
           <Button asChild variant="link" size="clear" className="text-sm">
@@ -260,13 +263,13 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                 )}
                 <article className="p-5 h-full flex flex-col justify-between gap-4">
                   <div className="space-y-3">
-                    <h2 className="text-lg font-medium">{service.name}</h2>
-                    <p className="text-sm text-muted-foreground">
+                    <h2 className="text-h4">{service.name}</h2>
+                    <p className="text-body-sm text-muted-foreground">
                       {service.description || 'A guided session tailored to your needs.'}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <MetaChip>{service.durationMinutes ?? 30} min</MetaChip>
-                      <MetaChip>
+                    <SpecList>
+                      <Spec label="Duration">{service.durationMinutes ?? 30} min</Spec>
+                      <Spec label="Price">
                         {hasPrice && typeof service.priceInGBP === 'number' ? (
                           <span>
                             <Price amount={service.priceInGBP} as="span" /> upfront
@@ -274,8 +277,8 @@ export default async function BookPage({ searchParams }: BookPageProps) {
                         ) : (
                           'Pay later / free'
                         )}
-                      </MetaChip>
-                    </div>
+                      </Spec>
+                    </SpecList>
                   </div>
 
                   <Button asChild variant="outline" className="w-full">
@@ -291,7 +294,6 @@ export default async function BookPage({ searchParams }: BookPageProps) {
           No services matched your filters. Try broadening your search or resetting filters.
         </p>
       )}
-
     </div>
   )
 }

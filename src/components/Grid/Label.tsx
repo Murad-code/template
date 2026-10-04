@@ -9,21 +9,26 @@ type Props = {
   title: string
 }
 
+/**
+ * The caption on a full-bleed product tile.
+ *
+ * One bar rather than the two floating pills this used to be: a title pill and
+ * a price pill side by side read as two unrelated chips stuck on a photo, and
+ * were the main reason the carousel did not look like the rest of the shop.
+ */
 export const Label: React.FC<Props> = ({ amount, position = 'bottom', title }) => {
   return (
     <div
-      className={clsx('absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label', {
+      className={clsx('@container/label absolute inset-x-0 bottom-0 p-3', {
         '': position === 'center',
       })}
     >
-      <div className="flex items-end justify-between text-sm grow font-semibold ">
-        <h3 className="mr-4 font-mono line-clamp-2 rounded-full border border-border bg-card/80 p-2 px-3 leading-none tracking-tight text-card-foreground shadow-sm backdrop-blur-md">
-          {title}
-        </h3>
+      <div className="border-border/60 bg-card/85 text-card-foreground flex items-center justify-between gap-3 rounded-sm border px-3 py-2 backdrop-blur-md">
+        <h3 className="text-body-sm line-clamp-1 font-medium">{title}</h3>
 
         <Price
           amount={amount}
-          className="flex-none rounded-full bg-primary p-2 text-primary-foreground"
+          className="text-body-sm shrink-0 font-mono"
           currencyCodeClassName="hidden @[275px]/label:inline"
         />
       </div>

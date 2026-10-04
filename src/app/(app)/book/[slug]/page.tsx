@@ -2,7 +2,7 @@ import { BookingForm } from '@/components/BookingForm'
 import { Media } from '@/components/Media'
 import { Price } from '@/components/Price'
 import { SurfaceCard } from '@/components/ui/surface-card'
-import { MetaChip } from '@/components/ui/meta-chip'
+import { Spec, SpecList } from '@/components/ui/spec-list'
 import { getSiteConfig } from '@/config/site'
 import configPromise from '@payload-config'
 import Link from 'next/link'
@@ -14,7 +14,10 @@ type ServiceBookingPageProps = {
   searchParams: Promise<{ product?: string }>
 }
 
-export default async function ServiceBookingPage({ params, searchParams }: ServiceBookingPageProps) {
+export default async function ServiceBookingPage({
+  params,
+  searchParams,
+}: ServiceBookingPageProps) {
   const { bookingEnabled } = getSiteConfig()
   if (!bookingEnabled) {
     redirect('/')
@@ -72,7 +75,10 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
 
   return (
     <div className="container py-12 space-y-8">
-      <Link className="inline-block text-sm underline underline-offset-2 hover:no-underline" href="/book">
+      <Link
+        className="inline-block text-sm underline underline-offset-2 hover:no-underline"
+        href="/book"
+      >
         Back to all services
       </Link>
 
@@ -90,13 +96,13 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
             )}
           </SurfaceCard>
           <div className="space-y-3">
-            <h1 className="text-3xl font-medium">{service.name}</h1>
+            <h1 className="text-h1">{service.name}</h1>
             <p className="text-muted-foreground">
               {service.description || 'Book your preferred date and time for this service.'}
             </p>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <MetaChip>{service.durationMinutes ?? 30} min</MetaChip>
-              <MetaChip>
+            <SpecList>
+              <Spec label="Duration">{service.durationMinutes ?? 30} min</Spec>
+              <Spec label="Price">
                 {hasPrice && typeof service.priceInGBP === 'number' ? (
                   <span>
                     <Price amount={service.priceInGBP} as="span" /> upfront
@@ -104,14 +110,17 @@ export default async function ServiceBookingPage({ params, searchParams }: Servi
                 ) : (
                   'Pay later / free'
                 )}
-              </MetaChip>
-            </div>
+              </Spec>
+            </SpecList>
           </div>
         </div>
 
-        <SurfaceCard className="w-full rounded-2xl border-0 p-6 shadow-sm shadow-black/10 md:p-8 lg:mx-auto lg:max-w-136 dark:shadow-black/40">
+        <SurfaceCard className="w-full p-6 md:p-8 lg:mx-auto lg:max-w-136">
           <h2 className="text-xl font-medium mb-6">Book this service</h2>
-          <BookingForm initialServiceSlugOrId={service.slug} initialProductId={initialProductId ?? null} />
+          <BookingForm
+            initialServiceSlugOrId={service.slug}
+            initialProductId={initialProductId ?? null}
+          />
         </SurfaceCard>
       </section>
     </div>
