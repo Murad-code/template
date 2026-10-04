@@ -58,7 +58,7 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div key={index}>
+                <div className="reveal" key={index}>
                   {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                   {/* @ts-ignore - weird type mismatch here */}
                   <Block id={toKebabCase(blockName!)} {...block} />

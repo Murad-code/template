@@ -1,11 +1,18 @@
 import type { ReactNode } from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
+import { BackToTop } from '@/components/BackToTop'
+import { CardTilt } from '@/components/CardTilt'
+import { CookieConsent } from '@/components/CookieConsent'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { Motion } from '@/components/Motion'
+import { ScrollProgress } from '@/components/ScrollProgress'
+import { SmoothScroll } from '@/components/SmoothScroll'
 import { ensureStartsWith } from '@/utilities/ensureStartsWith'
 import { Providers } from '@/providers'
+import { InitMotion } from '@/providers/Theme/InitMotion'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { getSiteConfig } from '@/config/site'
 import { ThemeStyles } from '@/components/ThemeStyles'
@@ -137,6 +144,9 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const isPlaywright = process.env.PLAYWRIGHT === 'true'
+  // Opt-in: a base template should not show every site built from it a
+  // cookie banner, and nothing here sets non-essential storage by default.
+  const cookieConsentEnabled = process.env.NEXT_PUBLIC_COOKIE_CONSENT === 'true'
 
   return (
     <html
@@ -160,24 +170,45 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       ]
         .filter(Boolean)
         .join(' ')}
+      // Suspends the smooth scroll-behaviour for the duration of a route
+      // change. Without it Next 16's scroll reset is swallowed and the new
+      // page opens at the previous page's scroll offset.
+      data-scroll-behavior="smooth"
       lang="en"
       suppressHydrationWarning
     >
       <head>
         <InitTheme />
+        <InitMotion />
         <ThemeStyles />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
+        {/* What the back-to-top link anchors to. Anchoring to `main` instead
+            lands a little way down, because the header sits above it in
+            normal flow. */}
+        <div id="top" />
+
         <Providers>
           {!isPlaywright && <AdminBar />}
           <LivePreviewListener />
           <ThemePreviewLiveSync />
 
+          <ScrollProgress />
           <Header />
           <main className="flex-1 bg-background">{children}</main>
           <Footer />
+          <BackToTop />
+
+          {/* The whole client-side motion layer: smoothed scrolling, one
+              IntersectionObserver for reveals and counters, and the card
+              tilt. Nothing else needs `'use client'` for any of it. */}
+          <SmoothScroll />
+          <Motion />
+          <CardTilt />
+
+          {cookieConsentEnabled && <CookieConsent />}
         </Providers>
       </body>
     </html>
