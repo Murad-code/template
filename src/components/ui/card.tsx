@@ -5,25 +5,33 @@ import { cn } from '@/utilities/cn'
 /**
  * The one panel surface.
  *
- * `elevation` is the only axis, and it is deliberately short. A static panel
- * separates from the page by a hairline and a tonal step; a shadow is reserved
- * for things genuinely floating above the page, which on this site means
- * dialogs, sheets and menus. Giving every card a drop shadow is most of what
- * makes a page look assembled rather than designed.
+ * A card is a tonal step away from the page, not a rectangle with a stroke
+ * around it. Outlining every panel is what makes an interface read as a
+ * wireframe, and it is worst on a dark page, where any visible grey edge
+ * competes with the text inside it.
+ *
+ * `bordered` exists for the cases where a hairline genuinely earns its place:
+ * a panel sitting on a surface of its own tone, or one that has to read as a
+ * discrete control. It is opt-in so that using it is a decision.
  *
  * Padding is left to `CardHeader` / `CardContent` / `CardFooter` so a dense
  * context (a cart line, an account row) can compose the parts it needs instead
  * of overriding a fixed inset.
  */
 function Card({
+  bordered = false,
   className,
   elevation = 'flat',
   ...props
-}: React.ComponentProps<'div'> & { elevation?: 'flat' | 'raised' | 'overlay' }) {
+}: React.ComponentProps<'div'> & {
+  bordered?: boolean
+  elevation?: 'flat' | 'raised' | 'overlay'
+}) {
   return (
     <div
       className={cn(
-        'bg-card text-card-foreground flex flex-col rounded-lg border border-border',
+        'bg-card text-card-foreground flex flex-col rounded-lg',
+        bordered && 'border-border border',
         elevation === 'raised' && 'shadow-raised',
         elevation === 'overlay' && 'shadow-overlay',
         className,
@@ -32,14 +40,6 @@ function Card({
       {...props}
     />
   )
-}
-
-/**
- * A card with no edge of its own, for panels that are already separated by
- * the band they sit on. Same shape and spacing, one less line.
- */
-function CardPlain({ className, ...props }: React.ComponentProps<typeof Card>) {
-  return <Card className={cn('border-transparent bg-card', className)} {...props} />
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
@@ -80,4 +80,4 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-export { Card, CardPlain, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

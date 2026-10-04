@@ -1,6 +1,7 @@
 import type { SiteTheme } from '@/payload-types'
 import type { TypographyFontValue } from '@/config/typographyFonts'
 
+import { getContrastRatio } from '@/utilities/colorContrast'
 import { ensureContrast, mix, pickReadable } from '@/utilities/colorMix'
 
 type PaletteColors = {
@@ -188,8 +189,15 @@ function resolveTypography(theme: SiteThemePreviewInput) {
  * holds saved palettes to AA, but the one-off custom palette lets an editor
  * put any two colours together, so each derived pair is checked and nudged.
  */
+function isDarkSurface(background: string): boolean {
+  return (
+    (getContrastRatio(background, '#FFFFFF') ?? 1) > (getContrastRatio(background, '#000000') ?? 1)
+  )
+}
+
 function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<string, string> {
   const { background, body, brand, cardBackground, cardBorder } = mode
+  const dark = isDarkSurface(background)
 
   const primary = ensureContrast(brand, background, 3)
   const primaryForeground = pickReadable(primary, [
@@ -200,24 +208,52 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
     '#000000',
   ])
 
-  const secondary = mix(cardBorder, background, 0.28)
-  const accent = cardBorder
-  const muted = mix(cardBorder, background, 0.16)
+  /**
+   * Surfaces carry the hierarchy, not strokes.
+   *
+   * Elevation moves towards the text colour in dark mode and towards the page
+   * in light mode, which is the direction each one reads as "closer". A panel
+   * is therefore a tonal step rather than a rectangle with an outline, and a
+   * dialog lifts off the page without needing an edge drawn round it.
+   *
+   * The light-mode card is nudged a little further from the page than the
+   * palette's own `color2`, because two near-whites a couple of percent apart
+   * only separate if something draws a line between them — which is exactly
+   * what we are removing.
+   */
+  const card = dark ? cardBackground : mix(cardBorder, cardBackground, 0.14)
+  const surfaceRaised = dark ? mix(body, cardBackground, 0.05) : background
+  const popover = dark ? mix(body, cardBackground, 0.08) : background
 
-  // Hairlines read as a hard edge at full strength, which is most of why the
-  // current cards look boxed in. Three weights instead, all from the same hue.
-  const border = mix(cardBorder, background, 0.62)
-  const borderSubtle = mix(cardBorder, background, 0.38)
-  const borderStrong = cardBorder
+  const secondary = dark ? mix(body, cardBackground, 0.1) : mix(cardBorder, background, 0.26)
+  const accent = cardBorder
+  const muted = dark ? mix(body, background, 0.08) : mix(cardBorder, background, 0.16)
+
+  /**
+   * Hairlines are a low-percentage wash of the text colour over the surface,
+   * only faintly hued by the brand.
+   *
+   * Deriving them from `color3` instead, as this used to, meant a palette
+   * whose mid-tone is light — which is most of them — drew pale grey outlines
+   * on a near-black page. A border should sit far below text and well below
+   * an interactive state in contrast; `strong` and `input` are the two that
+   * are allowed to be seen, because a form control and a selected item have
+   * to show their own shape.
+   */
+  const hairline = mix(cardBorder, body, 0.3)
+  const border = mix(hairline, card, dark ? 0.1 : 0.13)
+  const borderSubtle = mix(hairline, card, dark ? 0.06 : 0.08)
+  const borderStrong = mix(hairline, card, dark ? 0.26 : 0.3)
+  const input = mix(hairline, background, dark ? 0.2 : 0.24)
 
   const ring = ensureContrast(brand, background, 3)
 
   return {
     '--background': background,
     '--foreground': body,
-    '--card': cardBackground,
+    '--card': card,
     '--card-foreground': body,
-    '--popover': background,
+    '--popover': popover,
     '--popover-foreground': body,
     '--primary': primary,
     '--primary-foreground': primaryForeground,
@@ -230,14 +266,14 @@ function deriveTokens(mode: PaletteColors, opposite: PaletteColors): Record<stri
     '--border': border,
     '--border-subtle': borderSubtle,
     '--border-strong': borderStrong,
-    '--input': border,
+    '--input': input,
     '--ring': ring,
     '--focus-ring': ring,
     '--surface-base': background,
-    '--surface-raised': cardBackground,
-    '--surface-soft-panel': mix(cardBackground, background, 0.82),
+    '--surface-raised': surfaceRaised,
+    '--surface-soft-panel': dark ? mix(body, background, 0.04) : mix(cardBorder, background, 0.1),
     '--surface-header': background,
-    '--surface-footer': cardBackground,
+    '--surface-footer': dark ? mix(body, background, 0.04) : mix(cardBorder, background, 0.1),
     '--text-primary': body,
     '--text-secondary': ensureContrast(mix(body, background, 0.72), background, 4.5),
     '--text-inverse': opposite.body,

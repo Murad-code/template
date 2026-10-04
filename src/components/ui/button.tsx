@@ -9,15 +9,18 @@ const buttonVariants = cva(
   // button inside a panel reads as the crisper of the two shapes. Focus comes
   // from the shared `interactive-focus` utility rather than a per-variant ring,
   // which is how it stays visible on a dark band as well as on the page.
+  //
+  // No variant draws an outline. A secondary action steps down by surface tone
+  // — filled, then muted, then bare — so a row of buttons reads as a hierarchy
+  // rather than as a filled box beside an empty one.
   'interactive-focus relative inline-flex shrink-0 items-center justify-center gap-2 rounded-sm border border-transparent text-body-sm font-medium whitespace-nowrap text-foreground transition-[background-color,border-color,color] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/88',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/88',
-        outline:
-          'border-border bg-background text-foreground hover:border-border-strong hover:bg-muted',
-        subtle: 'bg-card text-card-foreground hover:bg-muted',
+        outline: 'bg-secondary text-secondary-foreground hover:bg-accent/60',
+        subtle: 'bg-muted text-foreground hover:bg-secondary',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
           'bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground [&.active]:text-foreground',

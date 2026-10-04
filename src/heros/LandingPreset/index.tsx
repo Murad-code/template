@@ -21,7 +21,7 @@ export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({
     return (
       <section className="bg-background -mt-10 md:-mt-14">
         <div className="container py-16 md:py-24">
-          <div className="border-border bg-card rounded-xl border p-8 md:p-14 lg:p-16">
+          <div className="bg-card rounded-xl p-8 md:p-14 lg:p-16">
             <div className="mx-auto max-w-4xl text-center">
               {richText && (
                 <RichText
@@ -50,7 +50,7 @@ export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({
     <section className="bg-background">
       <div className="container py-16 md:py-24">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <div className="border-border bg-card rounded-xl border p-8 md:p-10">
+          <div className="bg-card rounded-xl p-8 md:p-10">
             {richText && (
               <RichText
                 className="mb-8 [&_h1]:text-h1 [&_p]:text-body-lg [&_p]:text-muted-foreground"

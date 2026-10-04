@@ -1146,8 +1146,11 @@ Before changing anything the visitor sees, read [`docs/frontend-ui-system.md`](d
 The short version: colour, radius and fonts are chosen by an editor and injected at
 runtime, so never hardcode a hex or a `neutral-*` class in client UI; use the type
 scale (`text-h2`, `text-body-sm`) rather than `text-lg`/`text-3xl`; take radius from
-the scale; a shadow means the element floats, so static panels use a hairline; and
-`Section` owns the vertical rhythm, not the block inside it.
+the scale; one typeface across the site, with `tabular-figures` for prices rather
+than a monospace; components separate by **surface tone, not outlines**, so do not
+add a border to a card, section, button, header or footer by reflex, and step the
+tone again when nesting a surface inside another; a shadow means the element
+actually floats; and `Section` owns the vertical rhythm, not the block inside it.
 
 ## Resources
 

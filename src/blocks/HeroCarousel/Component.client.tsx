@@ -171,7 +171,7 @@ export const HeroCarouselClient: React.FC<{
       {many && (
         <>
           <button
-            className="hero-scrub-content border-border bg-primary/40 text-primary-foreground hover:bg-primary/75 absolute top-1/2 left-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full border backdrop-blur-sm transition-colors lg:grid"
+            className="hero-scrub-content bg-primary/45 text-primary-foreground hover:bg-primary/75 absolute top-1/2 left-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
             onClick={() => go(-1)}
             type="button"
           >
@@ -179,7 +179,7 @@ export const HeroCarouselClient: React.FC<{
             <span className="sr-only">Previous slide</span>
           </button>
           <button
-            className="hero-scrub-content border-border bg-primary/40 text-primary-foreground hover:bg-primary/75 absolute top-1/2 right-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full border backdrop-blur-sm transition-colors lg:grid"
+            className="hero-scrub-content bg-primary/45 text-primary-foreground hover:bg-primary/75 absolute top-1/2 right-4 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full backdrop-blur-sm transition-colors lg:grid"
             onClick={() => go(1)}
             type="button"
           >
@@ -267,7 +267,7 @@ export const HeroCarouselClient: React.FC<{
 
               {autoplay && (
                 <button
-                  className="border-border text-muted-foreground hover:bg-muted hover:text-foreground ml-2 grid size-9 place-items-center rounded-full border transition-colors"
+                  className="bg-muted text-muted-foreground hover:bg-secondary hover:text-foreground ml-2 grid size-9 place-items-center rounded-full transition-colors"
                   onClick={() => setPlaying((current) => !current)}
                   type="button"
                 >
@@ -295,7 +295,7 @@ export const HeroCarouselClient: React.FC<{
                 // dark band and `foreground` the light text, which is what
                 // keeps them legible over a bright frame as well as a dark one.
                 <li
-                  className="border-border bg-background/60 text-foreground rounded-lg border p-5 backdrop-blur-md"
+                  className="bg-background/60 text-foreground rounded-lg p-5 backdrop-blur-md"
                   key={item.id}
                 >
                   <p className="text-body font-medium">{item.title}</p>

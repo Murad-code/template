@@ -88,7 +88,7 @@ export const FeaturesBlock: React.FC<FeaturesBlockProps> = (props) => {
 
           if (isMinimal) {
             return (
-              <div className="border-border flex gap-4 border-t py-6" key={i}>
+              <div className="border-border-subtle flex gap-4 border-t py-6" key={i}>
                 <FeatureIcon item={item} />
                 <div className="min-w-0">
                   {href ? (
@@ -104,8 +104,8 @@ export const FeaturesBlock: React.FC<FeaturesBlockProps> = (props) => {
           }
 
           const cardClassName = cn(
-            'border-border bg-card flex h-full flex-col rounded-lg border p-6 transition-colors',
-            (href || isLinked) && 'group interactive-focus hover:border-border-strong',
+            'bg-card flex h-full flex-col rounded-lg p-6 transition-colors',
+            (href || isLinked) && 'group interactive-focus hover:bg-secondary',
           )
 
           const card = (

@@ -23,7 +23,7 @@ export const CookieConsent: React.FC<{ policyHref?: string }> = ({
     <div
       role="region"
       aria-label="Cookie choices"
-      className="border-border bg-card fixed inset-x-3 bottom-3 z-50 rounded-xl border p-4 shadow-lg sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-md sm:p-5"
+      className="bg-popover shadow-overlay fixed inset-x-3 bottom-3 z-50 rounded-xl p-4 sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-md sm:p-5"
     >
       <p className="text-muted-foreground text-sm">
         We would like to use anonymous analytics to see which pages are useful. Nothing is used to
@@ -43,7 +43,7 @@ export const CookieConsent: React.FC<{ policyHref?: string }> = ({
         <button
           type="button"
           onClick={() => setConsent('rejected')}
-          className="border-border text-foreground hover:bg-muted rounded-lg border px-4 py-2.5 text-sm font-semibold"
+          className="bg-muted text-foreground hover:bg-secondary text-body-sm rounded-sm px-4 py-2.5 font-medium transition-colors"
         >
           Reject non-essential
         </button>

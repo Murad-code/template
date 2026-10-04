@@ -25,7 +25,7 @@ export function HeaderClient({ menu, ecommerceEnabled }: Props) {
   const { user } = useAuth()
 
   return (
-    <div className="border-border bg-surface-header relative z-20 border-b">
+    <div className="bg-surface-header relative z-20">
       <nav className="flex items-center md:items-end justify-between container pt-2">
         <div className="block flex-none md:hidden">
           <Suspense fallback={null}>

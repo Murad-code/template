@@ -42,7 +42,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
 
   return (
     <Link
-      className="group border-border hover:border-border-strong interactive-focus relative flex h-full w-full flex-col overflow-hidden rounded-lg border bg-card transition-colors"
+      className="group interactive-focus bg-card hover:bg-secondary relative flex h-full w-full flex-col overflow-hidden rounded-lg transition-colors"
       href={`/products/${product.slug}`}
     >
       {image ? (
@@ -54,7 +54,7 @@ export const ProductGridItem: React.FC<Props> = ({ product }) => {
         />
       ) : null}
 
-      <div className="border-border flex flex-1 flex-col gap-2 border-t p-4">
+      <div className="flex flex-1 flex-col gap-2 p-4">
         {category ? (
           <SpecList>
             <Spec label="Category">{category}</Spec>

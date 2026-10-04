@@ -4,7 +4,7 @@
  * that directly in new code.
  */
 export {
-  CardPlain as SurfaceCard,
-  CardHeader as SurfaceCardHeader,
+  Card as SurfaceCard,
   CardContent as SurfaceCardBody,
+  CardHeader as SurfaceCardHeader,
 } from '@/components/ui/card'

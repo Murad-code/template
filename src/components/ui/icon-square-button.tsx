@@ -10,7 +10,7 @@ export const IconSquareButton = React.forwardRef<HTMLButtonElement, IconSquareBu
         ref={ref}
         type={type}
         className={cn(
-          'relative inline-flex h-11 w-11 items-center justify-center rounded-md border border-border bg-card text-card-foreground shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          'interactive-focus bg-muted text-foreground hover:bg-secondary relative inline-flex size-10 items-center justify-center rounded-sm transition-colors',
           className,
         )}
         {...props}

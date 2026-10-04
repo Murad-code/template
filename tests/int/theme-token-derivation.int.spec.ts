@@ -66,6 +66,53 @@ describe('theme token derivation', () => {
     expect(getContrastRatio(dark['--border'], dark['--card'])!).toBeLessThan(4.5)
   })
 
+  // The design system leads with tonal surfaces, not outlines. A default
+  // hairline that competes with text is what made the old UI look like a
+  // wireframe, and it was worst in dark mode, where a light brand mid-tone
+  // drew pale grey rectangles on a near-black page.
+  it('keeps default borders far below text contrast', () => {
+    for (const [name, mode] of [
+      ['light', light],
+      ['dark', dark],
+    ] as const) {
+      const onCard = getContrastRatio(mode['--border'], mode['--card'])!
+      const textOnCard = getContrastRatio(mode['--foreground'], mode['--card'])!
+
+      expect(onCard, `${name} border is an outline`).toBeLessThan(1.6)
+      expect(onCard, `${name} border is invisible`).toBeGreaterThan(1.02)
+      expect(textOnCard / onCard, `${name} border competes with text`).toBeGreaterThan(8)
+    }
+  })
+
+  it('reserves visible edges for controls and selected states', () => {
+    for (const mode of [light, dark]) {
+      const border = getContrastRatio(mode['--border'], mode['--card'])!
+      expect(getContrastRatio(mode['--input'], mode['--background'])!).toBeGreaterThan(border)
+      expect(getContrastRatio(mode['--border-strong'], mode['--card'])!).toBeGreaterThan(border)
+      expect(getContrastRatio(mode['--border-subtle'], mode['--card'])!).toBeLessThan(border)
+    }
+  })
+
+  // With no stroke to define them, panels have to separate from the page by
+  // tone alone.
+  it('separates a card from the page without a border', () => {
+    for (const [name, mode] of [
+      ['light', light],
+      ['dark', dark],
+    ] as const) {
+      const step = getContrastRatio(mode['--card'], mode['--background'])!
+      expect(step, `${name} card is flush with the page`).toBeGreaterThan(1.045)
+    }
+  })
+
+  // A light page is usually pure white, so an overlay cannot be lighter than
+  // it and leans on `shadow-overlay` instead. On a dark page there is no such
+  // fallback: the surface itself has to lift.
+  it('lifts a dark-mode overlay above the panel beneath it', () => {
+    expect(getContrastRatio(dark['--popover'], dark['--background'])!).toBeGreaterThan(1.08)
+    expect(getContrastRatio(dark['--popover'], dark['--card'])!).toBeGreaterThan(1.02)
+  })
+
   it('still produces a usable set when a custom palette is left empty', () => {
     const fallback = tokensFor(
       getLandingThemeCss({ paletteMode: 'custom', customPalette: {} }),

@@ -14,7 +14,7 @@ export const Marquee: React.FC<{ items: string[] }> = ({ items }) => {
   if (items.length < 3) return null
 
   return (
-    <div className="marquee border-border bg-muted border-y py-4">
+    <div className="marquee bg-muted py-4">
       {/* Rendered twice, and the track slides by exactly half its own width:
           that is what makes the seam invisible. The second copy is hidden
           from assistive technology so the strip is announced once. */}

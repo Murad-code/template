@@ -58,7 +58,7 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
 
           return (
             <Link
-              className="group border-border hover:border-border-strong interactive-focus bg-card flex h-full flex-col overflow-hidden rounded-lg border transition-colors"
+              className="group interactive-focus bg-card hover:bg-secondary flex h-full flex-col overflow-hidden rounded-lg transition-colors"
               href={`/book/${encodeURIComponent(serviceKey)}`}
               key={service.id}
             >
@@ -90,7 +90,7 @@ export const ServiceShowcaseBlock: React.FC<ServiceShowcaseBlockProps> = async (
                     </Spec>
                   </SpecList>
                 </div>
-                <span className="border-border text-body-sm group-hover:bg-muted inline-flex h-10 items-center justify-center rounded-sm border px-4 font-medium">
+                <span className="bg-muted text-body-sm group-hover:bg-background inline-flex h-10 items-center justify-center rounded-sm px-4 font-medium transition-colors">
                   View details and book
                 </span>
               </article>

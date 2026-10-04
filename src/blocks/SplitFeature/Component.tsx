@@ -46,7 +46,7 @@ export const SplitFeatureBlock: React.FC<SplitFeatureBlockProps> = (props) => {
 
   const mediaColumn =
     media && typeof media === 'object' ? (
-      <div className="border-border overflow-hidden rounded-xl border">
+      <div className="bg-muted overflow-hidden rounded-xl">
         <Media className={kenBurns ? 'ken-burns' : undefined} resource={media} />
       </div>
     ) : null

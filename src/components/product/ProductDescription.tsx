@@ -88,14 +88,14 @@ export function ProductDescription({
       {product.description ? (
         <RichText className="max-w-prose" data={product.description} enableGutter={false} />
       ) : null}
-      <hr className="border-border" />
+      <hr className="border-border-subtle" />
       {hasVariants && (
         <>
           <Suspense fallback={null}>
             <VariantSelector product={product} />
           </Suspense>
 
-          <hr className="border-border" />
+          <hr className="border-border-subtle" />
         </>
       )}
       <div className="flex items-center justify-between">

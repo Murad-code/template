@@ -11,11 +11,11 @@ export const LogoCloudMarquee: React.FC<{ logos: Logo[] }> = ({ logos }) => {
   const items = [...logos, ...logos]
 
   return (
-    <div className="overflow-hidden border-y border-border py-6">
+    <div className="overflow-hidden py-6">
       <div className="flex w-max animate-carousel gap-4">
         {items.map((logo, index) => (
           <div
-            className="flex h-16 min-w-[160px] items-center justify-center border-border bg-card rounded-lg border px-6"
+            className="bg-card flex h-16 min-w-[160px] items-center justify-center rounded-lg px-6"
             key={index}
           >
             {logo.image && typeof logo.image === 'object' ? (

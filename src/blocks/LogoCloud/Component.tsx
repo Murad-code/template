@@ -9,7 +9,7 @@ import { LogoCloudMarquee } from './Component.client'
 
 function LogoItem({ image, label, url }: NonNullable<LogoCloudBlockProps['logos']>[number]) {
   const content = (
-    <div className="flex h-16 items-center justify-center border-border bg-card rounded-lg border px-6">
+    <div className="bg-card flex h-16 items-center justify-center rounded-lg px-6">
       {image && typeof image === 'object' ? (
         <Media
           className="max-h-8 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0"

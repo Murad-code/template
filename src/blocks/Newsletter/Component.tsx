@@ -49,7 +49,7 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
 
   return (
     <section className="container">
-      <div className="border-border bg-card rounded-lg border p-8 md:p-12">
+      <div className="bg-card rounded-lg p-8 md:p-12">
         <SectionHeader align={align} description={description} eyebrow={eyebrow} title={title} />
         {status === 'success' ? (
           <p className="text-base font-medium">{successMessage || 'Thanks for subscribing.'}</p>

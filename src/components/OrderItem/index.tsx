@@ -13,7 +13,7 @@ export const OrderItem: React.FC<Props> = ({ order }) => {
   const itemsLabel = order.items?.length === 1 ? 'Item' : 'Items'
 
   return (
-    <div className="flex flex-col gap-12 rounded-lg border border-border bg-card px-4 py-2 shadow-sm sm:flex-row sm:items-center sm:justify-between md:px-6 md:py-4">
+    <div className="bg-card flex flex-col gap-12 rounded-lg px-4 py-2 sm:flex-row sm:items-center sm:justify-between md:px-6 md:py-4">
       <div className="flex flex-col gap-4">
         <h3 className="spec-list max-w-32 truncate sm:max-w-none">{`#${order.id}`}</h3>
 

@@ -32,7 +32,7 @@ export const StatsBlock: React.FC<StatsBlockProps> = (props) => {
         className={cn(
           'reveal-group',
           isBar
-            ? 'border-border bg-card grid gap-6 rounded-lg border p-6 md:grid-cols-3 lg:grid-cols-4'
+            ? 'bg-card grid gap-6 rounded-lg p-6 md:grid-cols-3 lg:grid-cols-4'
             : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4',
         )}
       >
@@ -40,13 +40,7 @@ export const StatsBlock: React.FC<StatsBlockProps> = (props) => {
           const counter = countUp ? countable(item.value) : null
 
           return (
-            <div
-              className={cn(
-                !isBar &&
-                  'border-border bg-card hover:border-border-strong rounded-lg border p-6 transition-colors',
-              )}
-              key={index}
-            >
+            <div className={cn(!isBar && 'bg-card rounded-lg p-6')} key={index}>
               {item.iconName && (
                 <span className="text-muted-foreground mb-4 block">
                   <Icon name={item.iconName} />

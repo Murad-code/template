@@ -113,7 +113,7 @@ export const FormBlockClient: React.FC<FormBlockClientProps> = (props) => {
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
-      <div className="border-border bg-card rounded-lg border p-6 lg:p-8">
+      <div className="bg-card rounded-lg p-6 lg:p-8">
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage} />

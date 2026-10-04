@@ -23,7 +23,7 @@ export function MyBookingsList({ bookings }: { bookings: Row[] }) {
   }
 
   return (
-    <ul className="divide-border border-border bg-card divide-y rounded-lg border">
+    <ul className="divide-border-subtle bg-card divide-y rounded-lg">
       {bookings.map((b) => (
         <li
           key={b.id}

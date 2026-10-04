@@ -23,7 +23,7 @@ export const Label: React.FC<Props> = ({ amount, position = 'bottom', title }) =
         '': position === 'center',
       })}
     >
-      <div className="border-border/60 bg-card/85 text-card-foreground flex items-center justify-between gap-3 rounded-sm border px-3 py-2 backdrop-blur-md">
+      <div className="bg-card/85 text-card-foreground flex items-center justify-between gap-3 rounded-sm px-3 py-2 backdrop-blur-md">
         <h3 className="text-body-sm line-clamp-1 font-medium">{title}</h3>
 
         <Price

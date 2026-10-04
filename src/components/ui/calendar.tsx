@@ -23,7 +23,7 @@ export function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
-      className={cn('w-fit', className)}
+      className={cn(className)}
       classNames={{
         root: 'w-fit',
         months: 'relative flex flex-col gap-4',

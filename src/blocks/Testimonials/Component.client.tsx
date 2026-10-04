@@ -21,7 +21,7 @@ export const TestimonialsCarousel: React.FC<{ items: Item[] }> = ({ items }) => 
       <CarouselContent>
         {items.map((item, index) => (
           <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={index}>
-            <figure className="border-border bg-card flex h-full flex-col rounded-lg border p-6">
+            <figure className="bg-card flex h-full flex-col rounded-lg p-6">
               {item.rating ? (
                 <div className="mb-3 flex gap-1 text-primary">
                   {Array.from({ length: 5 }).map((_, starIndex) => (

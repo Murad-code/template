@@ -26,8 +26,14 @@ list, not six cards.
 **One ornament.** The specification line (§7) is the only recurring decorative
 device. Everything else is type on a surface.
 
-**Shadows mean floating.** Static surfaces separate by a hairline and a tonal step.
-A drop shadow says the thing is above the page: dialogs, sheets, menus. Nothing else.
+**Surfaces, not outlines.** A component is a tonal step away from the page, not a
+rectangle with a stroke round it. Drawing a border on every card, section, button and
+container is what makes an interface read as a wireframe, and it is worst on a dark
+page where any visible grey edge competes with the text inside it. Reach for tone,
+space and composition first; a border is a decision, not a default.
+
+**Shadows mean floating.** A drop shadow says the thing is above the page: dialogs,
+sheets, menus. Nothing else.
 
 ---
 
@@ -187,10 +193,42 @@ Controls sit one step tighter than the surfaces holding them. `rounded-full` is 
 things that are genuinely round: avatars, dots, round icon buttons. Not for chips,
 badges or labels.
 
-**Elevation** has two steps: `shadow-raised` (something that lifts slightly on
-interaction) and `shadow-overlay` (dialogs, sheets, menus). Both are tinted with the
-foreground colour so they survive a dark palette. There is no third step; if you
-want one, you probably want a border.
+**Elevation** is carried by the surface ladder first and shadow second.
+
+| Layer | Token | Light | Dark |
+|---|---|---|---|
+| Page | `bg-background` | the palette's page colour | the palette's darkest tone |
+| Panel on the page | `bg-card` | a step down from the page | a step up from the page |
+| Panel inside a panel | `bg-surface-raised` | back to the page colour | a further step up |
+| Overlay | `bg-popover` + `shadow-overlay` | page colour, lifted by shadow | the highest step |
+
+Each layer moves toward the text colour in dark mode and toward the page in light
+mode, because that is the direction each reads as "closer". **A surface nested in
+another surface has to step again** — two panels of the same tone with no stroke
+between them simply disappear.
+
+`shadow-raised` is for something that lifts on interaction; `shadow-overlay` for
+things genuinely floating. Both are tinted with the foreground colour so they survive
+a dark palette.
+
+**Borders** are a wash of the text colour over the surface at a very low percentage,
+only faintly hued by the brand — never derived from the palette's mid-tone, which on
+most palettes is light and would draw pale rectangles on a near-black page.
+
+| Token | Use |
+|---|---|
+| `border-subtle` | Dividers inside a composition: list rows, accordion items, ruled lists |
+| `border` | The rare panel that genuinely needs an edge. Opt in with `<Card bordered>` |
+| `border-strong` | Selected states, and separators that must be seen |
+| `input` | Form controls, which have to show their own shape |
+| `ring` / `focus-ring` | Focus. Always the strongest, never overridden per component |
+
+Default borders sit at roughly a tenth of text contrast. `tests/int/theme-token-derivation.int.spec.ts`
+holds that ratio, so a future change that makes them loud will fail.
+
+**Do not** put a border on a card, a section, a button, the header, the footer, a
+dropdown or a container by reflex. Ask what it separates and whether tone or space
+does it better.
 
 **Motion** lives in `src/app/(app)/motion.css`. One easing curve (`--ease-smooth`),
 `prefers-reduced-motion` honoured, reveals that degrade to their final state without
@@ -248,11 +286,11 @@ In `src/components/ui/`:
 
 | Component | Notes |
 |---|---|
-| `Button` | Variants `default` · `destructive` · `outline` · `subtle` · `secondary` · `ghost` · `link`. Sizes `sm` · `default` · `lg` · `icon` · `clear`. Focus comes from `interactive-focus` |
-| `Card` | `elevation` is the only axis: `flat` (default) · `raised` · `overlay`. `CardPlain` drops the border. Padding lives on `CardHeader`/`CardContent`/`CardFooter` |
+| `Button` | No variant draws an outline; secondary actions step down by surface tone — `default` (filled) → `outline`/`secondary` (muted fill) → `subtle` → `ghost` (bare). Sizes `sm` · `default` · `lg` · `icon` · `clear`. Focus comes from `interactive-focus` |
+| `Card` | Borderless surface by default. `elevation`: `flat` · `raised` · `overlay`; `bordered` opts into a hairline. Padding lives on `CardHeader`/`CardContent`/`CardFooter` |
 | `SpecList` / `Spec` | §7 |
 | `Input` · `Textarea` · `Select` · `Checkbox` · `Label` | Radix-backed, on the control radius |
-| `Dialog` · `Sheet` | `popover` surface, `shadow-overlay`, `overscroll-contain` |
+| `Dialog` · `Sheet` | `popover` surface, `shadow-overlay`, `overscroll-contain`. No border: tone and elevation separate them |
 | `Calendar` | react-day-picker, styled from the tokens. Days are round because a date is a single point — the one place a full radius is the honest shape |
 | `Accordion` · `Carousel` · `Pagination` · `IconSquareButton` · `Sonner` | |
 
@@ -300,8 +338,9 @@ isn't there, the layout is wrong.
 5. `pnpm generate:importmap` if you added a component Payload resolves by path.
 
 Checklist before you call it done: semantic tokens only; type scale only; one radius
-from the scale; no shadow unless it floats; heading level correct for its place in
-the page outline; images pass a real `size`; works on `inverse` as well as `default`.
+from the scale; no border and no shadow unless you can say what it separates; nested
+surfaces step tone; heading level correct for its place in the page outline; images
+pass a real `size`; works on `inverse` as well as `default`.
 
 ---
 

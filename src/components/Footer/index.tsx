@@ -21,7 +21,7 @@ export async function Footer() {
   const copyrightName = companyName || siteName || ''
 
   return (
-    <footer className="border-border bg-surface-footer border-t">
+    <footer className="bg-surface-footer mt-24">
       <div className="container">
         <div className="flex w-full flex-col gap-10 py-14 md:flex-row md:gap-16">
           <div>
@@ -52,13 +52,16 @@ export async function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-border border-t py-6">
+      <div className="pb-10">
         <div className="text-body-sm text-muted-foreground container flex w-full flex-col items-center gap-1 md:flex-row md:gap-0">
           <p>
             &copy; {copyrightDate} {copyrightName}
             {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
           </p>
-          <hr className="border-border mx-4 hidden h-4 w-px border-l md:inline-block" />
+          <span
+            aria-hidden="true"
+            className="bg-border-strong mx-4 hidden h-3 w-px md:inline-block"
+          />
           <p>Designed in London</p>
         </div>
       </div>

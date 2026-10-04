@@ -18,7 +18,7 @@ export const CallToActionBlock: React.FC<
     <div className="container">
       <Card
         className={cn(
-          'border-border flex flex-col gap-8 rounded-lg border p-6 md:p-8',
+          'flex flex-col gap-8 rounded-lg p-6 md:p-8',
           !isSplit && 'md:flex-row md:items-center md:justify-between',
         )}
       >

@@ -63,7 +63,7 @@ export function BookingCalendar({
 
   return (
     <Calendar
-      className="border-border bg-background rounded-lg border p-3"
+      className="bg-surface-raised rounded-lg p-3"
       disabled={isDisabled}
       mode="single"
       onSelect={(value) => {
