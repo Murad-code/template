@@ -21,7 +21,7 @@ function PathFilterItem({ item }: { item: PathFilterItemType }) {
   newParams.delete('q')
 
   return (
-    <li className="mt-2 flex" key={item.title}>
+    <li className="mt-2.5 flex" key={item.title}>
       <DynamicTag
         className={clsx(
           'text-body-sm text-muted-foreground hover:text-foreground w-full underline-offset-4 hover:underline',

@@ -290,11 +290,12 @@ export const HeroCarouselClient: React.FC<{
           <div className="relative z-10 container pt-12 pb-20 sm:pb-28 lg:pb-32">
             <ul className="grid gap-4 sm:grid-cols-3">
               {highlights.map((item) => (
-                // These sit on the photograph, not on the page, so they
-                // carry their own surface rather than the page card colour:
-                // over a bright frame a pale panel disappears.
+                // These sit on the photograph, so they take the band's own
+                // colours: inside the hero's inverse tone `background` is the
+                // dark band and `foreground` the light text, which is what
+                // keeps them legible over a bright frame as well as a dark one.
                 <li
-                  className="border-primary-foreground/15 bg-primary/55 text-primary-foreground rounded-lg border p-5 backdrop-blur-md"
+                  className="border-border bg-background/60 text-foreground rounded-lg border p-5 backdrop-blur-md"
                   key={item.id}
                 >
                   <p className="text-body font-medium">{item.title}</p>

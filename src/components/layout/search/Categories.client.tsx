@@ -28,9 +28,10 @@ export const AllCategoriesItem: React.FC = () => {
   return (
     <button
       onClick={clearCategory}
-      className={clsx('hover:cursor-pointer', {
-        ' underline': isActive,
-      })}
+      className={clsx(
+        'text-body-sm text-muted-foreground hover:text-foreground interactive-focus rounded-xs whitespace-nowrap underline-offset-4 transition-colors',
+        { 'text-foreground underline': isActive },
+      )}
     >
       All
     </button>
@@ -63,9 +64,10 @@ export const CategoryItem: React.FC<Props> = ({ category }) => {
   return (
     <button
       onClick={() => setQuery()}
-      className={clsx('hover:cursor-pointer', {
-        ' underline': isActive,
-      })}
+      className={clsx(
+        'text-body-sm text-muted-foreground hover:text-foreground interactive-focus rounded-xs whitespace-nowrap underline-offset-4 transition-colors',
+        { 'text-foreground underline': isActive },
+      )}
     >
       {category.title}
     </button>

@@ -18,13 +18,16 @@ async function CategoryList() {
     <div>
       <h3 className="spec-list mb-3">Category</h3>
 
-      <ul>
-        <li>
+      {/* A rail on desktop, a single swipeable row on a phone. Stacked, five
+          categories plus the sort control pushed the first product most of a
+          screen down. */}
+      <ul className="-mx-4 flex gap-5 overflow-x-auto px-4 md:mx-0 md:flex-col md:gap-2.5 md:overflow-visible md:px-0">
+        <li className="shrink-0">
           <AllCategoriesItem />
         </li>
         {categories.docs.map((category) => {
           return (
-            <li key={category.id}>
+            <li className="shrink-0" key={category.id}>
               <CategoryItem category={category} />
             </li>
           )
