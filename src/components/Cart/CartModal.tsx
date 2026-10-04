@@ -110,7 +110,10 @@ export function CartModal() {
                   {typeof cart?.subtotal === 'number' && (
                     <div className="mb-3 flex items-center justify-between rounded-md bg-muted/40 px-2 pb-1 pt-1">
                       <p>Total</p>
-                      <Price amount={cart?.subtotal} className="text-right text-base text-foreground" />
+                      <Price
+                        amount={cart?.subtotal}
+                        className="text-right text-base text-foreground"
+                      />
                     </div>
                   )}
 

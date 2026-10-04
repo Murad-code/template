@@ -60,11 +60,7 @@ export function EditItemQuantityButton({ type, item }: { item: CartItem; type: '
         }}
         type="button"
       >
-        {type === 'plus' ? (
-          <PlusIcon className="h-4 w-4" />
-        ) : (
-          <MinusIcon className="h-4 w-4" />
-        )}
+        {type === 'plus' ? <PlusIcon className="h-4 w-4" /> : <MinusIcon className="h-4 w-4" />}
       </Button>
     </form>
   )

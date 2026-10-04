@@ -95,13 +95,14 @@ export function AddToCart({ product }: Props) {
 
   return (
     <Button
-      aria-label="Add to cart"
-      variant={'default'}
+      className="w-full sm:w-auto"
       disabled={disabled || isLoading}
       onClick={addToCart}
+      size="lg"
       type="submit"
+      variant="default"
     >
-      Add To Cart
+      Add to cart
     </Button>
   )
 }

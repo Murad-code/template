@@ -16,18 +16,21 @@ export async function Footer() {
   const menu = getEffectiveFooterNavItems(footer, config)
   const currentYear = new Date().getFullYear()
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '')
-  const skeleton = 'w-full h-6 animate-pulse rounded bg-muted'
+  const skeleton = 'h-5 w-full animate-pulse rounded-xs bg-muted'
 
   const copyrightName = companyName || siteName || ''
 
   return (
-    <footer className="bg-card text-sm text-text-secondary">
+    <footer className="border-border bg-surface-footer border-t">
       <div className="container">
-        <div className="flex w-full flex-col gap-6 py-12 text-sm md:flex-row md:gap-12">
+        <div className="flex w-full flex-col gap-10 py-14 md:flex-row md:gap-16">
           <div>
-            <Link className="flex items-center gap-2 text-foreground md:pt-1" href="/">
+            <Link
+              className="text-foreground interactive-focus inline-flex items-center gap-2.5 rounded-xs"
+              href="/"
+            >
               <LogoIcon className="w-6" />
-              <span className="sr-only">{siteName}</span>
+              <span className="text-body font-medium">{siteName}</span>
             </Link>
           </div>
           <Suspense
@@ -44,18 +47,18 @@ export async function Footer() {
           >
             <FooterMenu menu={menu} />
           </Suspense>
-          <div className="md:ml-auto flex flex-col gap-4 items-end">
+          <div className="flex flex-col items-start gap-4 md:ml-auto md:items-end">
             <ThemeSelector />
           </div>
         </div>
       </div>
-      <div className="py-6 text-sm">
-        <div className="container mx-auto flex w-full flex-col items-center gap-1 md:flex-row md:gap-0">
+      <div className="border-border border-t py-6">
+        <div className="text-body-sm text-muted-foreground container flex w-full flex-col items-center gap-1 md:flex-row md:gap-0">
           <p>
             &copy; {copyrightDate} {copyrightName}
             {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
           </p>
-          <hr className="mx-4 hidden h-4 w-px border-l border-muted md:inline-block" />
+          <hr className="border-border mx-4 hidden h-4 w-px border-l md:inline-block" />
           <p>Designed in London</p>
         </div>
       </div>

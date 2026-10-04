@@ -1,5 +1,5 @@
 'use client'
-import type { Product, Variant } from '@/payload-types'
+import type { Category, Product, Variant } from '@/payload-types'
 
 import { RichText } from '@/components/RichText'
 import { AddToCart } from '@/components/Cart/AddToCart'
@@ -11,6 +11,7 @@ import { VariantSelector } from './VariantSelector'
 import { useCurrency } from '@payloadcms/plugin-ecommerce/client/react'
 import { StockIndicator } from '@/components/product/StockIndicator'
 import { Button } from '@/components/ui/button'
+import { Spec, SpecList } from '@/components/ui/spec-list'
 
 export function ProductDescription({
   product,
@@ -25,6 +26,12 @@ export function ProductDescription({
     highestAmount = 0
   const priceField = `priceIn${currency.code}` as keyof Product
   const hasVariants = product.enableVariants && Boolean(product.variants?.docs?.length)
+
+  const firstCategory = product.categories?.[0]
+  const categoryTitle =
+    firstCategory && typeof firstCategory === 'object'
+      ? ((firstCategory as Category).title ?? null)
+      : null
 
   if (hasVariants) {
     const priceField = `priceIn${currency.code}` as keyof Variant
@@ -60,10 +67,17 @@ export function ProductDescription({
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-        <h1 className="text-2xl font-medium">{product.title}</h1>
-        <div className="uppercase font-mono">
+    <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-3">
+        {categoryTitle ? (
+          <SpecList>
+            <Spec label="Category">{categoryTitle}</Spec>
+          </SpecList>
+        ) : null}
+        <h1 className="text-h1">{product.title}</h1>
+        {/* The price is a specification, so it is set in the same mono voice
+            as every other figure on the site rather than as a coloured badge. */}
+        <div className="text-h3 font-mono">
           {hasVariants ? (
             <Price highestAmount={highestAmount} lowestAmount={lowestAmount} />
           ) : (
@@ -72,16 +86,16 @@ export function ProductDescription({
         </div>
       </div>
       {product.description ? (
-        <RichText className="" data={product.description} enableGutter={false} />
+        <RichText className="max-w-prose" data={product.description} enableGutter={false} />
       ) : null}
-      <hr />
+      <hr className="border-border" />
       {hasVariants && (
         <>
           <Suspense fallback={null}>
             <VariantSelector product={product} />
           </Suspense>
 
-          <hr />
+          <hr className="border-border" />
         </>
       )}
       <div className="flex items-center justify-between">
