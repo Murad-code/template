@@ -9,15 +9,23 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
   redirectIfEcommerceDisabled()
   return (
     <Suspense fallback={null}>
-      <div className="container flex flex-col gap-8 my-16 pb-4 ">
-        <Search className="mb-8" />
+      <div className="container my-14 sm:my-20">
+        {/* The page had no heading at all, which broke the document outline
+            before it broke the look of it. */}
+        <header className="border-border mb-10 flex flex-col gap-6 border-b pb-8 md:flex-row md:items-end md:justify-between">
+          <h1 className="text-h1">Shop</h1>
+          <Search className="md:w-80" />
+        </header>
 
-        <div className="flex flex-col md:flex-row items-start justify-between gap-16 md:gap-4">
-          <div className="w-full flex-none flex flex-col gap-4 md:gap-8 basis-1/5">
+        <div className="grid gap-10 md:grid-cols-[11rem_1fr] md:gap-12 lg:grid-cols-[13rem_1fr]">
+          {/* A rail, not a floating column: the rule gives the filters an edge
+              to sit against so the gutter beside them reads as deliberate. */}
+          <aside className="border-border flex flex-col gap-8 md:border-r md:pr-8">
             <Categories />
             <FilterList list={sorting} title="Sort by" />
-          </div>
-          <div className="w-full">{children}</div>
+          </aside>
+
+          <div className="min-w-0">{children}</div>
         </div>
       </div>
     </Suspense>

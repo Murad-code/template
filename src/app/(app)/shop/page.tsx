@@ -94,25 +94,28 @@ export default async function ShopPage({ searchParams }: Props) {
   return (
     <div>
       {searchValue ? (
-        <div className="mb-4 flex items-center gap-3">
+        <div className="text-body-sm text-muted-foreground mb-8 flex flex-wrap items-center gap-3">
           <p>
             {products.docs?.length === 0
               ? 'There are no products that match '
               : `Showing ${products.docs.length} ${resultsText} for `}
-            <span className="font-bold">&quot;{searchValue}&quot;</span>
+            <span className="text-foreground font-medium">&quot;{searchValue}&quot;</span>
           </p>
-          <Link className="underline underline-offset-2 hover:no-underline" href={clearSearchHref}>
+          <Link
+            className="decoration-border-strong hover:decoration-current text-foreground underline underline-offset-4"
+            href={clearSearchHref}
+          >
             Clear search
           </Link>
         </div>
       ) : null}
 
       {!searchValue && products.docs?.length === 0 && (
-        <p className="mb-4">No products found. Please try different filters.</p>
+        <p className="text-body-lg text-muted-foreground">No products match these filters.</p>
       )}
 
       {products?.docs.length > 0 ? (
-        <Grid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Grid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.docs.map((product) => {
             return <ProductGridItem key={product.id} product={product} />
           })}
