@@ -210,14 +210,14 @@ export const HeroCarouselClient: React.FC<{
                   {/* The heading rises from behind its own box rather than
                       fading in. Two elements and one keyframe, and it is the
                       single most effective thing in the motion system. */}
-                  <Heading className="text-4xl leading-[1.12] font-semibold tracking-[-0.015em] text-balance sm:text-5xl lg:text-[3.5rem]">
+                  <Heading className="text-display text-balance">
                     <span className="rise-mask">
                       <span>{slide.heading}</span>
                     </span>
                   </Heading>
                   {slide.subheading && (
                     <p
-                      className="rise text-muted-foreground mt-6 text-lg sm:text-xl"
+                      className="rise text-body-lg text-muted-foreground mt-6 max-w-prose"
                       style={rise(600)}
                     >
                       {slide.subheading}
@@ -290,13 +290,16 @@ export const HeroCarouselClient: React.FC<{
           <div className="relative z-10 container pt-12 pb-20 sm:pb-28 lg:pb-32">
             <ul className="grid gap-4 sm:grid-cols-3">
               {highlights.map((item) => (
+                // These sit on the photograph, not on the page, so they
+                // carry their own surface rather than the page card colour:
+                // over a bright frame a pale panel disappears.
                 <li
-                  className="border-border bg-card rounded-xl border p-5 backdrop-blur-sm"
+                  className="border-primary-foreground/15 bg-primary/55 text-primary-foreground rounded-lg border p-5 backdrop-blur-md"
                   key={item.id}
                 >
-                  <p className="font-semibold">{item.title}</p>
+                  <p className="text-body font-medium">{item.title}</p>
                   {item.description && (
-                    <p className="text-muted-foreground mt-1 text-sm">{item.description}</p>
+                    <p className="text-body-sm mt-1 opacity-80">{item.description}</p>
                   )}
                 </li>
               ))}

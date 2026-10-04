@@ -58,7 +58,9 @@ export const LandingPresetHero: React.FC<LandingPresetHeroProps> = ({
                 enableGutter={false}
               />
             )}
-            {Array.isArray(links) && links.length > 0 && <HeroLinks className="mt-0" links={links} />}
+            {Array.isArray(links) && links.length > 0 && (
+              <HeroLinks className="mt-0" links={links} />
+            )}
             <HeroTrustRow enabled={enableTrustRow} items={trustItems} />
           </div>
           <div>

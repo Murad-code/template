@@ -9,6 +9,14 @@ type SectionHeaderProps = {
   title?: string | null
 }
 
+/**
+ * The standard opening to a section.
+ *
+ * The eyebrow is set in the specification voice rather than as a badge, which
+ * keeps it reading as a category label and not as an award. Width is capped at
+ * the prose measure so a long description never runs the full width of a wide
+ * band.
+ */
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   align = 'left',
   className,
@@ -20,19 +28,11 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div
-      className={cn(
-        'mb-8 max-w-2xl',
-        align === 'center' && 'mx-auto text-center',
-        className,
-      )}
+      className={cn('mb-10 max-w-prose', align === 'center' && 'mx-auto text-center', className)}
     >
-      {eyebrow && (
-        <p className="mb-2 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          {eyebrow}
-        </p>
-      )}
-      {title && <h2 className="text-2xl font-medium md:text-3xl">{title}</h2>}
-      {description && <p className="mt-3 text-muted-foreground">{description}</p>}
+      {eyebrow && <p className="spec-list text-muted-foreground mb-3">{eyebrow}</p>}
+      {title && <h2 className="text-h2">{title}</h2>}
+      {description && <p className="text-body-lg text-muted-foreground mt-4">{description}</p>}
     </div>
   )
 }

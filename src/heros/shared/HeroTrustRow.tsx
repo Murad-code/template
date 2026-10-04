@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Spec, SpecList } from '@/components/ui/spec-list'
+
 type TrustItem = {
   text: string
   id?: string | null
@@ -10,17 +12,20 @@ type HeroTrustRowProps = {
   items?: TrustItem[] | null
 }
 
+/**
+ * The promises a hero makes — delivery, provenance, who teaches — in the same
+ * specification voice the rest of the site uses for concrete facts.
+ */
 export const HeroTrustRow: React.FC<HeroTrustRowProps> = ({ enabled, items }) => {
   if (!enabled || !items?.length) return null
 
   return (
-    <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+    <SpecList className="mt-8">
       {items.map((item, index) => (
-        <li className="flex items-center gap-2" key={item.id ?? index}>
-          <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-primary" />
+        <Spec key={item.id ?? index} label="Included">
           {item.text}
-        </li>
+        </Spec>
       ))}
-    </ul>
+    </SpecList>
   )
 }
