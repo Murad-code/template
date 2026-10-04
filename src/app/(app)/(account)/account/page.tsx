@@ -57,7 +57,7 @@ export default async function AccountPage() {
       <SurfaceCard className="gap-6 p-8">
         <h2 className="text-h1 mb-8">Recent orders</h2>
 
-        <div className="prose dark:prose-invert mb-8">
+        <div className="prose mb-8">
           <p>
             These are the most recent orders you have placed. Each order is associated with an
             payment. As you place more orders, they will appear in your orders list.

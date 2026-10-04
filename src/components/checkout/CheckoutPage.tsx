@@ -110,7 +110,7 @@ export const CheckoutPage: React.FC = () => {
   if (cartIsEmpty && isProcessingPayment) {
     return (
       <div className="py-12 w-full items-center justify-center">
-        <div className="prose dark:prose-invert text-center max-w-none self-center mb-8">
+        <div className="prose text-center max-w-none self-center mb-8">
           <p>Processing your payment…</p>
         </div>
         <LoadingSpinner />
@@ -120,7 +120,7 @@ export const CheckoutPage: React.FC = () => {
 
   if (cartIsEmpty) {
     return (
-      <div className="prose dark:prose-invert py-12 w-full items-center">
+      <div className="prose py-12 w-full items-center">
         <p>Your cart is empty.</p>
         <Link href="/search">Continue shopping?</Link>
       </div>

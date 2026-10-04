@@ -25,7 +25,7 @@ export const LogoutPage: React.FC = (props) => {
   return (
     <Fragment>
       {(error || success) && (
-        <div className="prose dark:prose-invert">
+        <div className="prose">
           <h1>{error || success}</h1>
           <p>
             What would you like to do next?

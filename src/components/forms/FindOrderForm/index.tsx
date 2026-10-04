@@ -61,7 +61,7 @@ export const FindOrderForm: React.FC<Props> = ({ initialEmail }) => {
     return (
       <Fragment>
         <h1 className="text-h2 mb-4">Check your email</h1>
-        <div className="prose dark:prose-invert">
+        <div className="prose">
           <p>
             {`If an order exists with the provided email and order ID, we've sent you an email with a link to view your order details.`}
           </p>
@@ -73,7 +73,7 @@ export const FindOrderForm: React.FC<Props> = ({ initialEmail }) => {
   return (
     <Fragment>
       <h1 className="text-h2 mb-4">Find my order</h1>
-      <div className="prose dark:prose-invert mb-8">
+      <div className="prose mb-8">
         <p>{`Please enter your email and order ID below. We'll send you a link to view your order.`}</p>
       </div>
       <form className="max-w-lg flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
