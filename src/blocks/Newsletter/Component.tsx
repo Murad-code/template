@@ -54,10 +54,13 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
         {status === 'success' ? (
           <p className="text-base font-medium">{successMessage || 'Thanks for subscribing.'}</p>
         ) : (
-          <form className="mx-auto flex max-w-xl flex-col gap-3 sm:flex-row" onSubmit={onSubmit}>
+          <form
+            className="mx-auto grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]"
+            onSubmit={onSubmit}
+          >
             <input
               aria-label="Email address"
-              className="border-input bg-background text-body-sm interactive-focus h-11 flex-1 rounded-sm border px-4"
+              className="border-input bg-background text-body-sm interactive-focus h-11 w-full rounded-sm border px-4"
               onChange={(event) => setEmail(event.target.value)}
               placeholder={placeholder || 'you@example.com'}
               required
@@ -67,12 +70,16 @@ export const NewsletterBlock: React.FC<NewsletterBlockProps> = (props) => {
             <Button disabled={status === 'loading'} size="lg" type="submit">
               {status === 'loading' ? 'Subscribing…' : buttonLabel || 'Subscribe'}
             </Button>
+            {privacyNote && (
+              <p className="text-body-sm text-muted-foreground text-center sm:col-start-1">
+                {privacyNote}
+              </p>
+            )}
+            {errorMessage && (
+              <p className="text-body-sm text-destructive text-center sm:col-span-2">{errorMessage}</p>
+            )}
           </form>
         )}
-        {privacyNote && status !== 'success' && (
-          <p className="text-body-sm text-muted-foreground mt-3">{privacyNote}</p>
-        )}
-        {errorMessage && <p className="text-body-sm text-destructive mt-3">{errorMessage}</p>}
       </div>
     </section>
   )
