@@ -57,6 +57,10 @@ Tailwind in `src/app/(app)/globals.css` under `@theme inline`.
 | `ring` / `focus-ring` | Focus. Never override per component |
 | `destructive`, `success`, `warning`, `error` | Status. Not brand colours, so not palette-derived |
 | `surface-base` · `surface-raised` · `surface-soft-panel` · `surface-header` · `surface-footer` | Named surfaces where a component needs one specifically |
+| `surface-contrast` / `surface-contrast-foreground` | The contrast band. Dark in **both** themes, never `primary` |
+| `media-surface` / `media-foreground` | Surfaces over a photograph. **Identical in both themes** |
+| `surface-contrast-primary` / `-foreground` | A call to action sitting on that band |
+| `scrim` | The wash behind a dialog or sheet |
 
 ### How a palette becomes tokens
 
@@ -92,17 +96,56 @@ overwrites a palette or typography a site has already chosen.
 
 ### Inverse bands
 
-`data-tone="inverse"` on a `Section` remaps the whole token set for its subtree
-(see `globals.css`). A block written against `bg-card` and `text-muted-foreground`
-sits correctly on a dark band without knowing it is on one.
+`data-tone="inverse"` on a `Section` paints `surface-contrast` and remaps the whole
+token set for its subtree (see `globals.css`). A block written against `bg-card` and
+`text-muted-foreground` sits correctly on the band without knowing it is on one.
 
-Two gotchas:
+**A band is a surface, not a call to action.** The band used to be painted with
+`primary`, and because the brand colour is the palette's deep tone in light mode but
+its light mid tone in dark mode, every inverse band — the statistics strip, the hero
+carousel — flipped to a near-white slab on a near-black page. `surface-contrast` is
+derived separately per theme instead:
 
-- Inside an inverse scope `primary` and `primary-foreground` **swap**. For a panel
-  that must sit on the band's own colour, use `bg-background` and `text-foreground`,
-  which follow the tone correctly in both directions.
+- **light**: the palette's deep brand tone (`color4`), as before.
+- **dark**: the palette's **accent** brought down to a surface weight. The band
+  contrasts through the brand's hue rather than through brightness — amber on
+  graphite, copper on near-black — which is what keeps it from reading as a grey
+  slab or as a piece of light mode that wandered in.
+
+Dark mode is not light mode inverted. A component that is dark against a light page
+should be a *different dark* against a dark page, not a light one.
+
+Three gotchas:
+
+- Inside a tone scope `primary` becomes the tone's own call to action. In light mode
+  that steps away from the band, which is itself the brand colour; in dark mode it
+  stays on brand, because a darkened accent still carries it. For a panel that must
+  sit on the band's own colour, use `bg-background` and `text-foreground`, which
+  follow the tone correctly in both directions.
+- `data-tone="media"` is the second tone, for anything over a photograph: both heroes
+  use it. It resolves to the same colours in light and dark on purpose.
 - The remap happens on the inner `[data-tone-scope]` element, not the band itself,
   to avoid a variable cycle. Don't flatten the two elements.
+
+The contract is in `tests/int/theme-token-derivation.int.spec.ts`: the band has to stay
+dark in both modes and stay above `card`, `popover` and `surface-raised` in dark mode.
+
+### Gradients and overlays
+
+Two jobs that look alike in CSS and must not share a colour:
+
+- **A readability scrim** darkens a photograph so text on top of it stays legible.
+  It uses `media-surface`, which is the *same colour in both themes* — the hero
+  carousel's wash is `from-media-surface/80`. Darkening a picture is not a thing the
+  page theme has an opinion about: the photograph does not get lighter because the
+  page around it did. Painting one with `primary` is what turned the hero into a
+  white haze in dark mode, and theming it at all is why it kept drifting.
+- **A blend fade** dissolves a component into the page behind it. It targets
+  `background`, or whichever surface token the component is actually sitting on, so
+  it disappears into it in either theme.
+
+Never `to-white`, `to-black`, or a literal colour. If you cannot name the surface a
+gradient is fading into, the gradient does not know either.
 
 ---
 
@@ -200,12 +243,22 @@ badges or labels.
 | Page | `bg-background` | the palette's page colour | the palette's darkest tone |
 | Panel on the page | `bg-card` | a step down from the page | a step up from the page |
 | Panel inside a panel | `bg-surface-raised` | back to the page colour | a further step up |
-| Overlay | `bg-popover` + `shadow-overlay` | page colour, lifted by shadow | the highest step |
+| Overlay | `bg-popover` + `shadow-overlay` | page colour, lifted by shadow | a further step up |
+| Contrast band | `bg-surface-contrast` | the palette's deep tone | the accent at surface weight, still dark |
+| Over a photo | `bg-media-surface` | the palette's deep tone | the same, unthemed |
 
 Each layer moves toward the text colour in dark mode and toward the page in light
 mode, because that is the direction each reads as "closer". **A surface nested in
 another surface has to step again** — two panels of the same tone with no stroke
 between them simply disappear.
+
+The contrast band is the one rung that behaves differently per theme. In light mode
+it leaves the ladder entirely and goes dark, which is what gives a page its rhythm.
+In dark mode there is nowhere darker to go, so it becomes the lightest rung instead
+of jumping to the other side of the scale, and it takes its colour from the accent so
+the step reads as the brand rather than as grey. Dark mode keeps its hierarchy through the
+distance between dark neutrals, not through bright inserts; a genuinely light surface
+in dark mode should be rare, small and deliberate, which in practice means a button.
 
 `shadow-raised` is for something that lifts on interaction; `shadow-overlay` for
 things genuinely floating. Both are tinted with the foreground colour so they survive
