@@ -1,3 +1,5 @@
+> **Historical. Styling described here was replaced by the October 2026 overhaul; see [`docs/frontend-ui-system.md`](../frontend-ui-system.md).**
+
 # Implementation Status — Blocks & UI Fixes
 
 Completed **2026-08-09** against the audit roadmap in `BLOCKS_AND_COMPONENTS_AUDIT.md`.

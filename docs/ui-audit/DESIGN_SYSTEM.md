@@ -1,3 +1,5 @@
+> **Superseded by [`docs/frontend-ui-system.md`](../frontend-ui-system.md) (October 2026 overhaul). Kept for its per-page contrast measurements.**
+
 # Design System Documentation — Black Oak Coffee Co.
 
 > **Audience:** UI/UX improvement agent  

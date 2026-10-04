@@ -1133,6 +1133,16 @@ For deeper exploration of specific topics, refer to the context files located in
     - Performance best practices
     - Styling components
 
+## Frontend design system
+
+Before changing anything the visitor sees, read [`docs/frontend-ui-system.md`](docs/frontend-ui-system.md).
+
+The short version: colour, radius and fonts are chosen by an editor and injected at
+runtime, so never hardcode a hex or a `neutral-*` class in client UI; use the type
+scale (`text-h2`, `text-body-sm`) rather than `text-lg`/`text-3xl`; take radius from
+the scale; a shadow means the element floats, so static panels use a hairline; and
+`Section` owns the vertical rhythm, not the block inside it.
+
 14. **`reusability-and-theme-consistency.mdc`** - Reusability and Theme Consistency
 
     - Prefer semantic theme variables over hardcoded color values

@@ -1,3 +1,5 @@
+> **Historical. The current block set and design rules are in [`docs/frontend-ui-system.md`](../frontend-ui-system.md).**
+
 # Blocks & Components Audit — Payload Page Builder
 
 > **Audience:** UI/UX + Payload implementation agent  
