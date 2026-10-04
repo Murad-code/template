@@ -2,11 +2,8 @@
 
 import { endOfDay, startOfDay } from 'date-fns'
 import { useMemo } from 'react'
-import dayjs, { type Dayjs } from 'dayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
+import { Calendar } from '@/components/ui/calendar'
 import type { BlockedRange } from '@/utilities/getBlockedRanges'
 import {
   getBookingHoursForDate,
@@ -48,75 +45,35 @@ export function BookingCalendar({
       }))
   }, [blockedRanges])
 
-  const selectedDate = selected ? dayjs(parseLocalDay(selected)) : null
+  const selectedDate = selected ? parseLocalDay(selected) : undefined
 
-  const shouldDisableDate = (value: Dayjs) => {
-    const date = startOfDay(value.toDate())
+  const isDisabled = (value: Date) => {
+    const date = startOfDay(value)
     if (date < startOfDay(new Date())) return true
 
     const isBlockedRange = blockedDateRanges.some((range) => date >= range.from && date <= range.to)
     if (isBlockedRange) return true
 
     if (bookingHoursSettings) {
-      const iso = localDateToYmd(date)
-      return getBookingHoursForDate(iso, bookingHoursSettings).closed
+      return getBookingHoursForDate(localDateToYmd(date), bookingHoursSettings).closed
     }
 
     return false
   }
 
   return (
-    <div className="booking-calendar border-border bg-background w-fit rounded-lg border p-3">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar
-          value={selectedDate}
-          onChange={(value) => {
-            if (!value) return
-            onSelect(localDateToYmd(value.toDate()))
-          }}
-          shouldDisableDate={shouldDisableDate}
-          slotProps={{
-            day: {
-              sx: {
-                color: 'var(--foreground)',
-                borderRadius: '9999px',
-                border: 0,
-                transition: 'background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease',
-                '&:not(.Mui-selected):hover': {
-                  backgroundColor: 'color-mix(in srgb, var(--border) 22%, var(--card))',
-                },
-                '&.MuiPickerDay-today:not(.Mui-selected)': {
-                  border: '1px solid var(--primary)',
-                },
-                '&.Mui-selected': {
-                  backgroundColor: 'var(--primary) !important',
-                  color: 'var(--primary-foreground) !important',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.14)',
-                },
-                '&.Mui-selected:hover': {
-                  backgroundColor: 'var(--primary) !important',
-                },
-              },
-            },
-          }}
-          sx={{
-            '& .MuiPickersCalendarHeader-label': {
-              color: 'var(--foreground)',
-              fontWeight: 600,
-            },
-            '& .MuiPickersCalendarHeader-switchViewIcon': {
-              color: 'var(--foreground)',
-            },
-            '& .MuiDayCalendar-weekDayLabel': {
-              color: 'var(--muted-foreground)',
-              fontSize: '0.75rem',
-            },
-            '& .MuiPickersArrowSwitcher-button': {
-              color: 'var(--foreground)',
-            },
-          }}
-        />
-      </LocalizationProvider>
-    </div>
+    <Calendar
+      className="border-border bg-background rounded-lg border p-3"
+      disabled={isDisabled}
+      mode="single"
+      onSelect={(value) => {
+        if (!value) return
+        onSelect(localDateToYmd(value))
+      }}
+      selected={selectedDate}
+      // Nobody books a session in the past, so the calendar should not offer
+      // to navigate there either.
+      startMonth={startOfDay(new Date())}
+    />
   )
 }
