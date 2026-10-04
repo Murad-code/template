@@ -1,6 +1,7 @@
 import type { Block } from 'payload'
 
 import { sectionHeaderFields } from '@/fields/sectionHeader'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const LogoCloud: Block = {
   slug: 'logoCloud',
@@ -10,6 +11,7 @@ export const LogoCloud: Block = {
     singular: 'Logo cloud',
   },
   fields: [
+    ...sectionStyleFields,
     ...sectionHeaderFields,
     {
       name: 'layout',

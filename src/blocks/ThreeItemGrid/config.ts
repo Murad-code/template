@@ -1,8 +1,10 @@
 import type { Block } from 'payload'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const ThreeItemGrid: Block = {
   slug: 'threeItemGrid',
   fields: [
+    ...sectionStyleFields,
     {
       name: 'products',
       type: 'relationship',

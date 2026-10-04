@@ -1,8 +1,10 @@
 import type { Block } from 'payload'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const Carousel: Block = {
   slug: 'carousel',
   fields: [
+    ...sectionStyleFields,
     {
       name: 'populateBy',
       type: 'select',

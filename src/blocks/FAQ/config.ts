@@ -6,6 +6,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const FAQ: Block = {
   slug: 'faq',
@@ -15,6 +16,7 @@ export const FAQ: Block = {
     plural: 'FAQs',
   },
   fields: [
+    ...sectionStyleFields,
     {
       name: 'title',
       type: 'text',

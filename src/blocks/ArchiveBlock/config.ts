@@ -6,11 +6,13 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const Archive: Block = {
   slug: 'archive',
   interfaceName: 'ArchiveBlock',
   fields: [
+    ...sectionStyleFields,
     {
       name: 'introContent',
       type: 'richText',

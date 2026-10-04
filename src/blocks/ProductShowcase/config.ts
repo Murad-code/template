@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 import { link } from '@/fields/link'
 import { sectionHeaderFields } from '@/fields/sectionHeader'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const ProductShowcase: Block = {
   slug: 'productShowcase',
@@ -11,6 +12,7 @@ export const ProductShowcase: Block = {
     singular: 'Product showcase',
   },
   fields: [
+    ...sectionStyleFields,
     ...sectionHeaderFields,
     {
       name: 'layout',

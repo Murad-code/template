@@ -1,9 +1,11 @@
 import type { Block } from 'payload'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const Code: Block = {
   slug: 'code',
   interfaceName: 'CodeBlock',
   fields: [
+    ...sectionStyleFields,
     {
       name: 'language',
       type: 'select',

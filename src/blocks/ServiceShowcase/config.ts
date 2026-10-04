@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 import { link } from '@/fields/link'
 import { sectionHeaderFields } from '@/fields/sectionHeader'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const ServiceShowcase: Block = {
   slug: 'serviceShowcase',
@@ -11,6 +12,7 @@ export const ServiceShowcase: Block = {
     singular: 'Service showcase',
   },
   fields: [
+    ...sectionStyleFields,
     ...sectionHeaderFields,
     {
       name: 'populateBy',

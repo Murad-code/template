@@ -6,11 +6,13 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { sectionStyleFields } from '@/fields/sectionStyle'
 
 export const FormBlock: Block = {
   slug: 'formBlock',
   interfaceName: 'FormBlock',
   fields: [
+    ...sectionStyleFields,
     {
       name: 'form',
       type: 'relationship',
