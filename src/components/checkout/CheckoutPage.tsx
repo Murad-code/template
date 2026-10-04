@@ -111,7 +111,7 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="py-12 w-full items-center justify-center">
         <div className="prose dark:prose-invert text-center max-w-none self-center mb-8">
-          <p>Processing your payment...</p>
+          <p>Processing your payment…</p>
         </div>
         <LoadingSpinner />
       </div>
@@ -169,7 +169,9 @@ export const CheckoutPage: React.FC = () => {
                   <Input
                     disabled={!emailEditable}
                     id="email"
+                    autoComplete="email"
                     name="email"
+                    spellCheck={false}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     type="email"

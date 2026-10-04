@@ -84,6 +84,8 @@ export const FindOrderForm: React.FC<Props> = ({ initialEmail }) => {
           <Input
             id="email"
             {...register('email', { required: 'Email is required.' })}
+            autoComplete="email"
+            spellCheck={false}
             type="email"
           />
           {errors.email && <FormError message={errors.email.message} />}

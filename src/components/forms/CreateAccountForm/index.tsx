@@ -90,6 +90,8 @@ export const CreateAccountForm: React.FC = () => {
           <Input
             id="email"
             {...register('email', { required: 'Email is required.' })}
+            autoComplete="email"
+            spellCheck={false}
             type="email"
           />
           {errors.email && <FormError message={errors.email.message} />}
@@ -102,6 +104,7 @@ export const CreateAccountForm: React.FC = () => {
           <Input
             id="password"
             {...register('password', { required: 'Password is required.' })}
+            autoComplete="new-password"
             type="password"
           />
           {errors.password && <FormError message={errors.password.message} />}
@@ -117,6 +120,7 @@ export const CreateAccountForm: React.FC = () => {
               required: 'Please confirm your password.',
               validate: (value) => value === password.current || 'The passwords do not match',
             })}
+            autoComplete="new-password"
             type="password"
           />
           {errors.passwordConfirm && <FormError message={errors.passwordConfirm.message} />}

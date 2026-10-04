@@ -10,13 +10,13 @@ export default function Error() {
     <div className="container py-28">
       <Card className="mx-auto max-w-xl p-2 text-center">
         <CardContent className="p-8">
-        <h2 className="text-2xl font-bold">Something went wrong</h2>
-        <p className="mt-3 text-muted-foreground">
-          We could not load this page. Please head back to the homepage.
-        </p>
-        <Button asChild className="mx-auto mt-6 rounded-full px-6 py-3 text-sm tracking-wide">
-          <Link href="/">Go to Home</Link>
-        </Button>
+          <h2 className="text-2xl font-bold">Something went wrong</h2>
+          <p className="mt-3 text-muted-foreground">
+            We could not load this page. Please head back to the homepage.
+          </p>
+          <Button asChild className="mx-auto mt-6 rounded-full px-6 py-3 text-sm tracking-wide">
+            <Link href="/">Go to Home</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>

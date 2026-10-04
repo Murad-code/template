@@ -108,7 +108,11 @@ export async function POST(request: Request): Promise<Response> {
           headers: { 'Content-Type': 'application/json' },
         })
       }
-      if (metaSlotOfferingId != null && slotOfferingId != null && metaSlotOfferingId !== slotOfferingId) {
+      if (
+        metaSlotOfferingId != null &&
+        slotOfferingId != null &&
+        metaSlotOfferingId !== slotOfferingId
+      ) {
         return new Response(JSON.stringify({ error: 'Payment does not match slot selection' }), {
           status: 400,
           headers: { 'Content-Type': 'application/json' },
@@ -166,7 +170,8 @@ export async function POST(request: Request): Promise<Response> {
     })
   }
 
-  const linkedProductField = (service as { linkedProduct?: number | { id: number } | null }).linkedProduct
+  const linkedProductField = (service as { linkedProduct?: number | { id: number } | null })
+    .linkedProduct
   const linkedProductId =
     typeof linkedProductField === 'object' && linkedProductField && 'id' in linkedProductField
       ? linkedProductField.id
@@ -259,11 +264,13 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const cancelToken = createBookingCancelToken(bookingId)
-  const bookingWithService = await payload.findByID({
-    collection: 'bookings',
-    id: bookingId,
-    depth: 1,
-  }).catch(() => doc)
+  const bookingWithService = await payload
+    .findByID({
+      collection: 'bookings',
+      id: bookingId,
+      depth: 1,
+    })
+    .catch(() => doc)
   sendBookingConfirmationEmail({
     payload,
     booking: bookingWithService as Booking,

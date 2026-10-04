@@ -51,7 +51,9 @@ export const LoginForm: React.FC = () => {
         <FormItem>
           <Label htmlFor="email">Email</Label>
           <Input
+            autoComplete="email"
             id="email"
+            spellCheck={false}
             type="email"
             {...register('email', { required: 'Email is required.' })}
           />
@@ -61,6 +63,7 @@ export const LoginForm: React.FC = () => {
         <FormItem>
           <Label htmlFor="password">Password</Label>
           <Input
+            autoComplete="current-password"
             id="password"
             type="password"
             {...register('password', { required: 'Please provide a password.' })}
@@ -68,7 +71,7 @@ export const LoginForm: React.FC = () => {
           {errors.password && <FormError message={errors.password.message} />}
         </FormItem>
 
-        <div className="text-primary/70 mb-6 prose prose-a:hover:text-primary dark:prose-invert">
+        <div className="text-body-sm text-muted-foreground">
           <p>
             Forgot your password?{' '}
             <Link href={`/recover-password${allParams}`}>Click here to reset it</Link>

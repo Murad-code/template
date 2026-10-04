@@ -160,7 +160,7 @@ export default async function BookPage({ searchParams }: BookPageProps) {
             defaultValue={normalizedQuery}
             id="booking-search"
             name="q"
-            placeholder="Try consultation, coaching, strategy..."
+            placeholder="Try consultation, coaching, strategy…"
             type="text"
           />
         </div>

@@ -2,7 +2,10 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getSiteConfig } from '@/config/site'
 import { toDateOnlyString } from '@/utilities/dateOnly'
-import { countActiveBookingsOnSlotOffering, validateSlotOfferingForBooking } from '@/utilities/bookingSlotOffering'
+import {
+  countActiveBookingsOnSlotOffering,
+  validateSlotOfferingForBooking,
+} from '@/utilities/bookingSlotOffering'
 
 export async function POST(request: Request): Promise<Response> {
   const { bookingEnabled } = getSiteConfig()
@@ -14,7 +17,14 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const body = await request.json().catch(() => ({}))
-  const { serviceId, slotDate: rawDate, slotTime, guestEmail, guestName, slotOfferingId: rawOffering } = body
+  const {
+    serviceId,
+    slotDate: rawDate,
+    slotTime,
+    guestEmail,
+    guestName,
+    slotOfferingId: rawOffering,
+  } = body
   if (!serviceId || !rawDate || !guestEmail) {
     return new Response(JSON.stringify({ error: 'Missing serviceId, slotDate, or guestEmail' }), {
       status: 400,
@@ -30,8 +40,7 @@ export async function POST(request: Request): Promise<Response> {
     })
   }
 
-  const slotOfferingId =
-    rawOffering != null && rawOffering !== '' ? Number(rawOffering) : undefined
+  const slotOfferingId = rawOffering != null && rawOffering !== '' ? Number(rawOffering) : undefined
   if (rawOffering != null && rawOffering !== '' && Number.isNaN(slotOfferingId)) {
     return new Response(JSON.stringify({ error: 'Invalid slotOfferingId' }), {
       status: 400,
@@ -41,10 +50,13 @@ export async function POST(request: Request): Promise<Response> {
 
   const slotTimeStr = typeof slotTime === 'string' ? slotTime.trim() : ''
   if (slotOfferingId != null && !slotTimeStr) {
-    return new Response(JSON.stringify({ error: 'slotTime is required for a managed slot waitlist' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({ error: 'slotTime is required for a managed slot waitlist' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
   }
 
   const payload = await getPayload({ config: configPromise })
@@ -82,10 +94,13 @@ export async function POST(request: Request): Promise<Response> {
       .catch(() => null)) as { capacity?: number } | null
     const cap = doc?.capacity != null && doc.capacity > 0 ? doc.capacity : 1
     if (used < cap) {
-      return new Response(JSON.stringify({ error: 'This slot is not full; book normally instead.' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({ error: 'This slot is not full; book normally instead.' }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
     }
   }
 

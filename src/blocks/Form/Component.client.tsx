@@ -118,7 +118,7 @@ export const FormBlockClient: React.FC<FormBlockClientProps> = (props) => {
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
             <RichText data={confirmationMessage} />
           )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
+          {isLoading && !hasSubmitted && <p>Loading, please wait…</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
             <form id={String(formID)} onSubmit={handleSubmit(onSubmit)}>

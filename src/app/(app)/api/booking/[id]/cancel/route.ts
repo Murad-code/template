@@ -38,7 +38,9 @@ export async function POST(
   }
 
   const payload = await getPayload({ config: configPromise })
-  const existing = await payload.findByID({ collection: 'bookings', id: urlId, depth: 0 }).catch(() => null)
+  const existing = await payload
+    .findByID({ collection: 'bookings', id: urlId, depth: 0 })
+    .catch(() => null)
   if (!existing) {
     return new Response(JSON.stringify({ error: 'Booking not found' }), {
       status: 404,

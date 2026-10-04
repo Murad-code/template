@@ -45,7 +45,7 @@ export const Search: React.FC<Props> = ({ className }) => {
         defaultValue={query}
         key={query}
         name="search"
-        placeholder="Search for products..."
+        placeholder="Search for products…"
         type="text"
       />
       <div className="absolute right-0 top-0 mr-3 flex h-full items-center gap-2">

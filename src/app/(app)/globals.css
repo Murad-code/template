@@ -208,6 +208,38 @@
 }
 
 @layer base {
+  html {
+    /* Tells the browser to render native scrollbars, form controls and the
+       `<select>` menu in the right mode. Follows the attribute `InitTheme`
+       sets before first paint rather than the OS preference, so an explicit
+       choice in the footer is respected. */
+    color-scheme: light;
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  /* Suppresses the 300ms tap delay without disabling pinch zoom. */
+  a,
+  button,
+  [role='button'],
+  input,
+  label,
+  select,
+  summary,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  /* Figures line up column to column: prices in a cart, durations in a list,
+     the stat band on the home page. */
+  .font-mono,
+  [class*='text-label'],
+  .spec-list {
+    font-variant-numeric: tabular-nums;
+  }
+
   body {
     font-family: var(--font-sans);
     font-size: var(--text-body);

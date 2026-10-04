@@ -25,7 +25,10 @@ function overlaps(
   bookStartMins: number,
   bookDurationMins: number,
 ): boolean {
-  return slotStartMins < bookStartMins + bookDurationMins && bookStartMins < slotStartMins + slotDurationMins
+  return (
+    slotStartMins < bookStartMins + bookDurationMins &&
+    bookStartMins < slotStartMins + slotDurationMins
+  )
 }
 
 export async function GET(request: Request): Promise<Response> {
@@ -96,7 +99,10 @@ export async function GET(request: Request): Promise<Response> {
     }
   }
 
-  const dayHours = getBookingHoursForDate(date, settings as Parameters<typeof getBookingHoursForDate>[1])
+  const dayHours = getBookingHoursForDate(
+    date,
+    settings as Parameters<typeof getBookingHoursForDate>[1],
+  )
   if (dayHours.closed) {
     return Response.json([] as SlotOptionJson[])
   }
@@ -122,13 +128,13 @@ export async function GET(request: Request): Promise<Response> {
 
   const available = generated.filter((slot) => {
     const slotMins = timeToMinutes(slot)
-    const blockedByBooking = (existing as { slotTime?: string; service?: { durationMinutes?: number } }[]).some(
-      (b) => {
-        const bookStart = b.slotTime ? timeToMinutes(b.slotTime) : 0
-        const bookDuration = b.service?.durationMinutes ?? slotDuration
-        return overlaps(slotMins, slotDuration, bookStart, bookDuration)
-      },
-    )
+    const blockedByBooking = (
+      existing as { slotTime?: string; service?: { durationMinutes?: number } }[]
+    ).some((b) => {
+      const bookStart = b.slotTime ? timeToMinutes(b.slotTime) : 0
+      const bookDuration = b.service?.durationMinutes ?? slotDuration
+      return overlaps(slotMins, slotDuration, bookStart, bookDuration)
+    })
     return !blockedByBooking
   })
 

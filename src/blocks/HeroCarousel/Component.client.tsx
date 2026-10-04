@@ -253,7 +253,7 @@ export const HeroCarouselClient: React.FC<{
                     >
                       <span
                         className={cn(
-                          'block h-2 rounded-full transition-all duration-300',
+                          'block h-2 rounded-full transition-[width,background-color] duration-300',
                           position === index
                             ? 'bg-accent w-9'
                             : 'bg-foreground/45 group-hover:bg-foreground/80 w-2',

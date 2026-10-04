@@ -68,6 +68,8 @@ export const ForgotPasswordForm: React.FC = () => {
               <Input
                 id="email"
                 {...register('email', { required: 'Please provide your email.' })}
+                autoComplete="email"
+                spellCheck={false}
                 type="email"
               />
               {errors.email && <FormError message={errors.email.message} />}

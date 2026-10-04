@@ -26,11 +26,11 @@ export async function POST(
   const amountCents = typeof body.amount === 'number' ? Math.round(body.amount) : undefined
   const reason = typeof body.reason === 'string' ? body.reason : undefined
 
-  const order = await payload.findByID({
+  const order = (await payload.findByID({
     collection: 'orders',
     id: orderId,
     depth: 2,
-  }) as Order & { refundedAt?: string; refundAmount?: number }
+  })) as Order & { refundedAt?: string; refundAmount?: number }
 
   if (!order) {
     return new Response(JSON.stringify({ error: 'Order not found' }), {
@@ -40,10 +40,10 @@ export async function POST(
   }
 
   if (order.status === 'refunded') {
-    return new Response(
-      JSON.stringify({ error: 'Order is already refunded' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: 'Order is already refunded' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   const transactions = order.transactions as Transaction[] | undefined
@@ -53,34 +53,34 @@ export async function POST(
   const paymentIntentId = succeededTx?.stripe?.paymentIntentID
 
   if (!paymentIntentId) {
-    return new Response(
-      JSON.stringify({ error: 'No successful payment found for this order' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: 'No successful payment found for this order' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   const secretKey = process.env.STRIPE_SECRET_KEY
   if (!secretKey) {
-    return new Response(
-      JSON.stringify({ error: 'Stripe is not configured' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: 'Stripe is not configured' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   const stripe = new Stripe(secretKey)
   const orderTotalCents = order.amount ?? 0
   const refundAmount = amountCents ?? orderTotalCents
   if (refundAmount <= 0) {
-    return new Response(
-      JSON.stringify({ error: 'Invalid refund amount' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: 'Invalid refund amount' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
   if (refundAmount > orderTotalCents) {
-    return new Response(
-      JSON.stringify({ error: 'Refund amount cannot exceed order total' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: 'Refund amount cannot exceed order total' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   try {
@@ -94,10 +94,10 @@ export async function POST(
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Stripe refund failed'
     payload.logger.error({ err, orderId }, 'Stripe refund failed')
-    return new Response(
-      JSON.stringify({ error: message }),
-      { status: 402, headers: { 'Content-Type': 'application/json' } },
-    )
+    return new Response(JSON.stringify({ error: message }), {
+      status: 402,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   const req = await createLocalReq({ user }, payload)
@@ -115,13 +115,13 @@ export async function POST(
   })
 
   try {
-    const updatedOrder = await payload.findByID({
+    const updatedOrder = (await payload.findByID({
       collection: 'orders',
       id: orderId,
       depth: 2,
       req,
       overrideAccess: false,
-    }) as Order & { refundedAt?: string; refundAmount?: number }
+    })) as Order & { refundedAt?: string; refundAmount?: number }
     if (updatedOrder) {
       await sendRefundConfirmationEmail({ order: updatedOrder, req })
     }
@@ -129,8 +129,8 @@ export async function POST(
     payload.logger.error({ err, orderId }, 'Failed to send refund confirmation email')
   }
 
-  return new Response(
-    JSON.stringify({ success: true, refundAmount }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } },
-  )
+  return new Response(JSON.stringify({ success: true, refundAmount }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  })
 }

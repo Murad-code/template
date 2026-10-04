@@ -38,7 +38,12 @@ import {
 import React from 'react'
 import './globals.css'
 
-const InterFont = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false })
+const InterFont = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: false,
+})
 const SourceSans3Font = Source_Sans_3({
   subsets: ['latin'],
   variable: '--font-source-sans-3',
@@ -69,7 +74,12 @@ const PlayfairDisplayFont = Playfair_Display({
   display: 'swap',
   preload: false,
 })
-const LoraFont = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap', preload: false })
+const LoraFont = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
+  preload: false,
+})
 const MerriweatherFont = Merriweather({
   subsets: ['latin'],
   weight: ['300', '400', '700', '900'],

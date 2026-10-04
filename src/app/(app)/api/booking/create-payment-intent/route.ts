@@ -20,11 +20,16 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const body = await request.json().catch(() => ({}))
-  const { serviceId, slotDate, slotTime, guestEmail, guestName, slotOfferingId: rawSlotOffering } = body
+  const {
+    serviceId,
+    slotDate,
+    slotTime,
+    guestEmail,
+    guestName,
+    slotOfferingId: rawSlotOffering,
+  } = body
   const slotOfferingId =
-    rawSlotOffering != null && rawSlotOffering !== ''
-      ? Number(rawSlotOffering)
-      : undefined
+    rawSlotOffering != null && rawSlotOffering !== '' ? Number(rawSlotOffering) : undefined
   if (rawSlotOffering != null && rawSlotOffering !== '' && Number.isNaN(slotOfferingId)) {
     return new Response(JSON.stringify({ error: 'Invalid slotOfferingId' }), {
       status: 400,
