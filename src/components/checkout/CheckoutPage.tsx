@@ -4,18 +4,17 @@ import { Message } from '@/components/Message'
 import { Price } from '@/components/Price'
 import { ProductItem } from '@/components/ProductItem'
 import { Button } from '@/components/ui/button'
-import { SurfaceCard } from '@/components/ui/surface-card'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/providers/Auth'
-import { useTheme } from '@/providers/Theme'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 
-import { cssVariables } from '@/cssVariables'
+import { useStripeAppearance } from '@/components/checkout/useStripeAppearance'
 import { CheckoutForm } from '@/components/forms/CheckoutForm'
 import { useAddresses, useCart, usePayments } from '@payloadcms/plugin-ecommerce/client/react'
 import { CheckoutAddresses } from '@/components/checkout/CheckoutAddresses'
@@ -35,7 +34,7 @@ export const CheckoutPage: React.FC = () => {
   const router = useRouter()
   const { cart } = useCart()
   const [error, setError] = useState<null | string>(null)
-  const { theme } = useTheme()
+  const stripeAppearance = useStripeAppearance()
   /**
    * State to manage the email input for guest checkout.
    */
@@ -48,7 +47,6 @@ export const CheckoutPage: React.FC = () => {
   const [billingAddress, setBillingAddress] = useState<Partial<Address>>()
   const [billingAddressSameAsShipping, setBillingAddressSameAsShipping] = useState(true)
   const [isProcessingPayment, setProcessingPayment] = useState(false)
-  const [stripeFontFamily, setStripeFontFamily] = useState('ui-sans-serif, system-ui, sans-serif')
 
   const cartIsEmpty = !cart || !cart.items || !cart.items.length
 
@@ -75,14 +73,6 @@ export const CheckoutPage: React.FC = () => {
       setBillingAddressSameAsShipping(true)
       setEmail('')
       setEmailEditable(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    const rootStyles = getComputedStyle(document.documentElement)
-    const configuredSans = rootStyles.getPropertyValue('--site-font-sans').trim()
-    if (configuredSans) {
-      setStripeFontFamily(configuredSans)
     }
   }, [])
 
@@ -138,256 +128,240 @@ export const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-stretch justify-stretch my-8 md:flex-row grow gap-10 md:gap-6 lg:gap-8">
-      <div className="basis-full lg:basis-2/3 flex flex-col gap-8 justify-stretch">
-        <h2 className="font-medium text-3xl">Contact</h2>
-        {!user && (
-          <SurfaceCard className="w-full gap-4 rounded-lg bg-accent p-4">
-            <div>
-              <Button asChild variant="outline">
-                <Link href="/login">Log in</Link>
-              </Button>
-              <p className="mt-0">
-                <span className="mx-2">or</span>
-                <Link href="/create-account">create an account</Link>
-              </p>
-            </div>
-          </SurfaceCard>
-        )}
-        {user ? (
-          <SurfaceCard className="gap-4 rounded-lg bg-accent p-4">
-            <div>
-              <p>{user.email}</p>{' '}
-              <p>
-                Not you?{' '}
-                <Link className="underline" href="/logout">
-                  Log out
-                </Link>
-              </p>
-            </div>
-          </SurfaceCard>
-        ) : (
-          <SurfaceCard className="gap-4 rounded-lg bg-accent p-4">
-            <div>
-              <p className="mb-4">Enter your email to checkout as a guest.</p>
+    <div className="my-10 grow sm:my-14">
+      <h1 className="text-h1 mb-10">Checkout</h1>
 
-              <FormItem className="mb-6">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  disabled={!emailEditable}
-                  id="email"
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  type="email"
+      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+        <div className="flex flex-col gap-10">
+          <h2 className="text-h3">Contact</h2>
+          {!user && (
+            <Card className="w-full gap-4 p-5">
+              <div>
+                <Button asChild variant="outline">
+                  <Link href="/login">Log in</Link>
+                </Button>
+                <p className="mt-0">
+                  <span className="mx-2">or</span>
+                  <Link href="/create-account">create an account</Link>
+                </p>
+              </div>
+            </Card>
+          )}
+          {user ? (
+            <Card className="gap-4 p-5">
+              <div>
+                <p>{user.email}</p>{' '}
+                <p>
+                  Not you?{' '}
+                  <Link className="underline" href="/logout">
+                    Log out
+                  </Link>
+                </p>
+              </div>
+            </Card>
+          ) : (
+            <Card className="gap-4 p-5">
+              <div>
+                <p className="mb-4">Enter your email to checkout as a guest.</p>
+
+                <FormItem className="mb-6">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    disabled={!emailEditable}
+                    id="email"
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    type="email"
+                  />
+                </FormItem>
+
+                <Button
+                  disabled={!email || !emailEditable}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setEmailEditable(false)
+                  }}
+                  variant="default"
+                >
+                  Continue as guest
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          <h2 className="text-h3">Address</h2>
+
+          {billingAddress ? (
+            <div>
+              <AddressItem
+                actions={
+                  <Button
+                    variant={'secondary'}
+                    disabled={Boolean(paymentData)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setBillingAddress(undefined)
+                    }}
+                  >
+                    Remove
+                  </Button>
+                }
+                address={billingAddress}
+              />
+            </div>
+          ) : user ? (
+            <CheckoutAddresses heading="Billing address" setAddress={setBillingAddress} />
+          ) : (
+            <CreateAddressModal
+              disabled={!email || Boolean(emailEditable)}
+              callback={(address) => {
+                setBillingAddress(address)
+              }}
+              skipSubmission={true}
+            />
+          )}
+
+          <div className="flex gap-4 items-center">
+            <Checkbox
+              id="shippingTheSameAsBilling"
+              checked={billingAddressSameAsShipping}
+              disabled={Boolean(paymentData || (!user && (!email || Boolean(emailEditable))))}
+              onCheckedChange={(state) => {
+                setBillingAddressSameAsShipping(state as boolean)
+              }}
+            />
+            <Label htmlFor="shippingTheSameAsBilling">Shipping is the same as billing</Label>
+          </div>
+
+          {!billingAddressSameAsShipping && (
+            <>
+              {shippingAddress ? (
+                <div>
+                  <AddressItem
+                    actions={
+                      <Button
+                        variant={'secondary'}
+                        disabled={Boolean(paymentData)}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setShippingAddress(undefined)
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    }
+                    address={shippingAddress}
+                  />
+                </div>
+              ) : user ? (
+                <CheckoutAddresses
+                  heading="Shipping address"
+                  description="Please select a shipping address."
+                  setAddress={setShippingAddress}
                 />
-              </FormItem>
+              ) : (
+                <CreateAddressModal
+                  callback={(address) => {
+                    setShippingAddress(address)
+                  }}
+                  disabled={!email || Boolean(emailEditable)}
+                  skipSubmission={true}
+                />
+              )}
+            </>
+          )}
+
+          {!paymentData && (
+            <Button
+              className="self-start"
+              disabled={!canGoToPayment}
+              onClick={(e) => {
+                e.preventDefault()
+                void initiatePaymentIntent('stripe')
+              }}
+            >
+              Go to payment
+            </Button>
+          )}
+
+          {!paymentData?.['clientSecret'] && error && (
+            <div className="my-8">
+              <Message error={error} />
 
               <Button
-                disabled={!email || !emailEditable}
                 onClick={(e) => {
                   e.preventDefault()
-                  setEmailEditable(false)
+                  router.refresh()
                 }}
                 variant="default"
               >
-                Continue as guest
+                Try again
               </Button>
             </div>
-          </SurfaceCard>
-        )}
+          )}
 
-        <h2 className="font-medium text-3xl">Address</h2>
-
-        {billingAddress ? (
-          <div>
-            <AddressItem
-              actions={
-                <Button
-                  variant={'secondary'}
-                  disabled={Boolean(paymentData)}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setBillingAddress(undefined)
+          <Suspense fallback={<React.Fragment />}>
+            {/* @ts-ignore */}
+            {paymentData && paymentData?.['clientSecret'] && (
+              <div className="pb-16">
+                <h2 className="text-h3">Payment</h2>
+                {error && <p>{`Error: ${error}`}</p>}
+                <Elements
+                  options={{
+                    appearance: stripeAppearance,
+                    clientSecret: paymentData['clientSecret'] as string,
                   }}
+                  stripe={stripe}
                 >
-                  Remove
-                </Button>
-              }
-              address={billingAddress}
-            />
-          </div>
-        ) : user ? (
-          <CheckoutAddresses heading="Billing address" setAddress={setBillingAddress} />
-        ) : (
-          <CreateAddressModal
-            disabled={!email || Boolean(emailEditable)}
-            callback={(address) => {
-              setBillingAddress(address)
-            }}
-            skipSubmission={true}
-          />
-        )}
-
-        <div className="flex gap-4 items-center">
-          <Checkbox
-            id="shippingTheSameAsBilling"
-            checked={billingAddressSameAsShipping}
-            disabled={Boolean(paymentData || (!user && (!email || Boolean(emailEditable))))}
-            onCheckedChange={(state) => {
-              setBillingAddressSameAsShipping(state as boolean)
-            }}
-          />
-          <Label htmlFor="shippingTheSameAsBilling">Shipping is the same as billing</Label>
+                  <div className="flex flex-col gap-8">
+                    <CheckoutForm
+                      customerEmail={email}
+                      billingAddress={billingAddress}
+                      setProcessingPayment={setProcessingPayment}
+                    />
+                    <Button
+                      variant="ghost"
+                      className="self-start"
+                      onClick={() => setPaymentData(null)}
+                    >
+                      Cancel payment
+                    </Button>
+                  </div>
+                </Elements>
+              </div>
+            )}
+          </Suspense>
         </div>
 
-        {!billingAddressSameAsShipping && (
-          <>
-            {shippingAddress ? (
-              <div>
-                <AddressItem
-                  actions={
-                    <Button
-                      variant={'secondary'}
-                      disabled={Boolean(paymentData)}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setShippingAddress(undefined)
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  }
-                  address={shippingAddress}
-                />
-              </div>
-            ) : user ? (
-              <CheckoutAddresses
-                heading="Shipping address"
-                description="Please select a shipping address."
-                setAddress={setShippingAddress}
-              />
-            ) : (
-              <CreateAddressModal
-                callback={(address) => {
-                  setShippingAddress(address)
-                }}
-                disabled={!email || Boolean(emailEditable)}
-                skipSubmission={true}
-              />
-            )}
-          </>
-        )}
+        {!cartIsEmpty && (
+          <Card className="gap-8 p-6 lg:sticky lg:top-8">
+            <h2 className="text-h3">Your cart</h2>
+            {cart?.items?.map((item, index) => {
+              if (typeof item.product === 'object' && item.product) {
+                const { product, quantity, variant } = item
 
-        {!paymentData && (
-          <Button
-            className="self-start"
-            disabled={!canGoToPayment}
-            onClick={(e) => {
-              e.preventDefault()
-              void initiatePaymentIntent('stripe')
-            }}
-          >
-            Go to payment
-          </Button>
-        )}
+                if (!quantity) return null
 
-        {!paymentData?.['clientSecret'] && error && (
-          <div className="my-8">
-            <Message error={error} />
-
-            <Button
-              onClick={(e) => {
-                e.preventDefault()
-                router.refresh()
-              }}
-              variant="default"
-            >
-              Try again
-            </Button>
-          </div>
-        )}
-
-        <Suspense fallback={<React.Fragment />}>
-          {/* @ts-ignore */}
-          {paymentData && paymentData?.['clientSecret'] && (
-            <div className="pb-16">
-              <h2 className="font-medium text-3xl">Payment</h2>
-              {error && <p>{`Error: ${error}`}</p>}
-              <Elements
-                options={{
-                  appearance: {
-                    theme: 'stripe',
-                    variables: {
-                      borderRadius: '6px',
-                      colorPrimary: '#858585',
-                      gridColumnSpacing: '20px',
-                      gridRowSpacing: '20px',
-                      colorBackground: theme === 'dark' ? '#0a0a0a' : cssVariables.colors.base0,
-                      colorDanger: cssVariables.colors.error500,
-                      colorDangerText: cssVariables.colors.error500,
-                      colorIcon:
-                        theme === 'dark' ? cssVariables.colors.base0 : cssVariables.colors.base1000,
-                      colorText: theme === 'dark' ? '#858585' : cssVariables.colors.base1000,
-                      colorTextPlaceholder: '#858585',
-                      fontFamily: stripeFontFamily,
-                      fontSizeBase: '16px',
-                      fontWeightBold: '600',
-                      fontWeightNormal: '500',
-                      spacingUnit: '4px',
-                    },
-                  },
-                  clientSecret: paymentData['clientSecret'] as string,
-                }}
-                stripe={stripe}
-              >
-                <div className="flex flex-col gap-8">
-                  <CheckoutForm
-                    customerEmail={email}
-                    billingAddress={billingAddress}
-                    setProcessingPayment={setProcessingPayment}
+                return (
+                  <ProductItem
+                    key={index}
+                    product={product}
+                    quantity={quantity}
+                    variant={variant && typeof variant === 'object' ? variant : undefined}
                   />
-                  <Button
-                    variant="ghost"
-                    className="self-start"
-                    onClick={() => setPaymentData(null)}
-                  >
-                    Cancel payment
-                  </Button>
-                </div>
-              </Elements>
+                )
+              }
+              return null
+            })}
+            <hr />
+            <div className="flex justify-between items-center gap-2">
+              <span className="spec-list">Total</span>{' '}
+              <Price amount={cart.subtotal || 0} className="text-h3 font-mono" />
             </div>
-          )}
-        </Suspense>
+          </Card>
+        )}
       </div>
-
-      {!cartIsEmpty && (
-        <SurfaceCard className="basis-full rounded-lg p-8 lg:basis-1/3 lg:pl-8 flex flex-col gap-8">
-          <h2 className="text-3xl font-medium">Your cart</h2>
-          {cart?.items?.map((item, index) => {
-            if (typeof item.product === 'object' && item.product) {
-              const { product, quantity, variant } = item
-
-              if (!quantity) return null
-
-              return (
-                <ProductItem
-                  key={index}
-                  product={product}
-                  quantity={quantity}
-                  variant={variant && typeof variant === 'object' ? variant : undefined}
-                />
-              )
-            }
-            return null
-          })}
-          <hr />
-          <div className="flex justify-between items-center gap-2">
-            <span className="uppercase">Total</span>{' '}
-            <Price className="text-3xl font-medium" amount={cart.subtotal || 0} />
-          </div>
-        </SurfaceCard>
-      )}
     </div>
   )
 }
