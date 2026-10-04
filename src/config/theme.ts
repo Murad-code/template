@@ -148,9 +148,6 @@ function semanticSurfaceVars(): string {
     '--border-subtle: var(--border);',
     '--border-strong: color-mix(in srgb, var(--border) 70%, var(--foreground));',
     '--focus-ring: var(--ring);',
-    '--elevation-soft: 0 2px 6px color-mix(in srgb, #000 10%, transparent), 0 1px 2px color-mix(in srgb, #000 8%, transparent);',
-    '--elevation-soft-hover: 0 3px 8px color-mix(in srgb, #000 14%, transparent), 0 1px 2px color-mix(in srgb, #000 10%, transparent);',
-    '--elevation-soft-pressed: inset 0 2px 5px color-mix(in srgb, #000 22%, transparent), 0 1px 2px color-mix(in srgb, #000 8%, transparent);',
   ].join('\n  ')
 }
 

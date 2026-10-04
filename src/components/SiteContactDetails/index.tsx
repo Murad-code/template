@@ -49,7 +49,7 @@ export const SiteContactDetails: React.FC<{ details: SiteContactDetailsData }> =
   if (items.length === 0) return null
 
   return (
-    <div className="rounded-[0.8rem] border border-border bg-surface-soft-panel p-6 lg:p-8">
+    <div className="border-border bg-card rounded-lg border p-6 lg:p-8">
       <h2 className="text-2xl font-semibold tracking-tight">
         {siteName ? `Contact ${siteName}` : 'Get in touch'}
       </h2>

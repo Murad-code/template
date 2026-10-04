@@ -35,17 +35,26 @@ export const ThemeSelector: React.FC = () => {
 
   return (
     <Select onValueChange={onThemeChange} value={value}>
-      <SelectTrigger className="mb-0 h-8 w-auto min-w-24 cursor-pointer gap-2 rounded-md border border-background bg-surface-soft-panel text-text-primary shadow-[var(--elevation-soft)] ring-0 outline-hidden transition-colors hover:bg-surface-raised focus-visible:ring-0 focus-visible:outline-hidden px-3 md:pl-3">
+      <SelectTrigger className="border-border bg-background text-body-sm interactive-focus hover:bg-muted mb-0 h-9 w-auto min-w-24 gap-2 rounded-sm border px-3 transition-colors">
         <SelectValue placeholder="Theme" />
       </SelectTrigger>
-      <SelectContent className="rounded-md border border-background bg-surface-soft-panel text-text-primary shadow-[var(--elevation-soft-hover)]">
-        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="auto">
+      <SelectContent className="border-border bg-popover text-popover-foreground shadow-overlay rounded-md border">
+        <SelectItem
+          className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary"
+          value="auto"
+        >
           Auto
         </SelectItem>
-        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="light">
+        <SelectItem
+          className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary"
+          value="light"
+        >
           Light
         </SelectItem>
-        <SelectItem className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary" value="dark">
+        <SelectItem
+          className="cursor-pointer rounded-sm focus:bg-surface-raised focus:text-text-primary"
+          value="dark"
+        >
           Dark
         </SelectItem>
       </SelectContent>
